@@ -18,6 +18,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
         <!-- 系统模块 -->
         <dependency>
             <groupId>cn.bugstack.ai</groupId>

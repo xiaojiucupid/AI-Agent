@@ -1,6 +1,7 @@
 package cn.bugstack.ai.infrastructure.dao;
 
 import cn.bugstack.ai.infrastructure.dao.po.AiClientModel;
+import cn.bugstack.ai.infrastructure.dao.po.AiClientToolMcp;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -51,4 +52,14 @@ public interface IAiClientModelDao {
      * @return 影响行数
      */
     int deleteById(Long id);
+    
+    /**
+     * 根据客户端ID列表查询模型配置
+     * @param clientIdList 客户端ID列表
+     * @return 模型配置列表
+     */
+    List<AiClientModel> queryModelConfigByClientIds(List<Long> clientIdList);
+
+    List<AiClientToolMcp> queryToolMcpConfigByClientIds(List<Long> clientIdList);
+
 }

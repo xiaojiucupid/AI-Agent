@@ -20,6 +20,31 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  main:
+    allow-bean-definition-overriding: true
+  #  main:
+  #    banner-mode: off
+  #    web-application-type: none
+  ai:
+    #    mcp:
+    #      client:
+    #        request-time: 180
+    #        sse:
+    #          connections:
+    #            server1:
+    #              url: http://localhost:8082
+    #            server2:
+    #              url: http://localhost:8081
+
+    #        stdio:
+    #          servers-configuration: classpath:/mcp-servers-config-2.json
+    # 个人配置，通过 http://127.0.0.1:8090 代理出去
+    openai:
+      base-url: https://apis.itedus.cn
+      #      base-url: https://api.deepseek.com
+      #      base-url: http://127.0.0.1:8090
+      api-key: sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152
+
 # MyBatis 配置
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml

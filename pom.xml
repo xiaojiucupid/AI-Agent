@@ -31,17 +31,17 @@
     </repositories>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <developers>
         <developer>
             <name>xiaofuge</name>
-            <email>184172133@qq.com</email>
+            <email>184171733@qq.com</email>
             <organization>fuzhengwei</organization>
             <organizationUrl>https://github.com/fuzhengwei</organizationUrl>
         </developer>
@@ -62,11 +62,22 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- spring ai 1.0.0-M7 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>1.0.0-M7</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- 扳手工程 -->
             <dependency>
                 <groupId>cn.bugstack.wrench</groupId>
                 <artifactId>xfg-wrench-bom</artifactId>
                 <version>1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>

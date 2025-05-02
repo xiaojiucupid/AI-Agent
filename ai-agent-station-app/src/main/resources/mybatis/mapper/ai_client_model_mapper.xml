@@ -69,4 +69,19 @@
         WHERE id = #{id}
     </delete>
     
+    <!-- 根据客户端ID列表查询模型配置 -->
+    <select id="queryModelConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT m.id, m.model_name, m.base_url, m.api_key, m.completions_path, m.embeddings_path, 
+               m.model_type, m.model_version, m.timeout, m.status, m.create_time, m.update_time
+        FROM ai_client_model m
+        WHERE m.id IN (
+            SELECT DISTINCT c.model_id 
+            FROM ai_client_model_config c 
+            WHERE c.client_id IN
+            <foreach collection="list" item="clientId" open="(" separator="," close=")">
+                #{clientId}
+            </foreach>
+        )
+    </select>
+    
 </mapper>
