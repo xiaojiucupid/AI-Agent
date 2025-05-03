@@ -3,11 +3,14 @@ package cn.bugstack.ai.test;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.infrastructure.dao.IAiClientModelDao;
 import com.alibaba.fastjson.JSON;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -22,6 +25,15 @@ public class ApiTest {
 
     @Autowired(required = false)
     private IAiClientModelDao aiClientModelConfigDao;
+
+    @Resource
+    private ApplicationContext applicationContext;
+
+    @Test
+    public void test_applicationContext(){
+        AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
+
+    }
 
     @Test
     public void test() {
@@ -67,7 +79,6 @@ public class ApiTest {
     public static class McpServerConfig {
 
         private Map<String, ServerConfig> serverConfigMap;
-
 
     }
 

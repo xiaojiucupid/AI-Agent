@@ -30,14 +30,14 @@ public class AiClientModelNode extends AbstractArmorySupport {
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("AiAgent 装配，客户端模型");
-
+    
         List<AiClientModelVO> aiClientModelList = dynamicContext.getValue("aiClientModelList");
-        
+    
         if (aiClientModelList == null || aiClientModelList.isEmpty()) {
             log.warn("没有可用的AI客户端模型配置");
             return null;
         }
-        
+    
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
             // 构建Bean名称
@@ -45,21 +45,9 @@ public class AiClientModelNode extends AbstractArmorySupport {
             
             // 创建OpenAiChatModel对象
             OpenAiChatModel chatModel = createOpenAiChatModel(modelVO);
-            
-            // 注册Bean
-            BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(OpenAiChatModel.class, () -> chatModel);
-            BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
-            beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
-            
-            // 如果Bean已存在，先移除
-            if (beanFactory.containsBeanDefinition(beanName)) {
-                beanFactory.removeBeanDefinition(beanName);
-            }
-            
-            // 注册新的Bean
-            beanFactory.registerBeanDefinition(beanName, beanDefinition);
-
-            log.info("成功注册AI客户端模型Bean: {}", beanName);
+    
+            // 使用父类的通用注册方法
+            registerBean(beanName, OpenAiChatModel.class, chatModel);
         }
         
         return router(requestParameter, dynamicContext);

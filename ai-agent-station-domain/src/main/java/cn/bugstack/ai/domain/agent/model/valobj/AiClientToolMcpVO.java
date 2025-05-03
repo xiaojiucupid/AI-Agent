@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * MCP VO 对象
@@ -59,12 +60,12 @@ public class AiClientToolMcpVO {
 
     /**
      * "mcp-server-weixin": {
-     *   "command": "java",
-     *   "args": [
-     *     "-Dspring.ai.mcp.server.stdio=true",
-     *     "-jar",
-     *     "/Users/fuzhengwei/Applications/apache-maven-3.8.4/repository/cn/bugstack/mcp/mcp-server-weixin/1.0.0/mcp-server-weixin-1.0.0.jar"
-     *   ]
+     * "command": "java",
+     * "args": [
+     * "-Dspring.ai.mcp.server.stdio=true",
+     * "-jar",
+     * "/Users/fuzhengwei/Applications/apache-maven-3.8.4/repository/cn/bugstack/mcp/mcp-server-weixin/1.0.0/mcp-server-weixin-1.0.0.jar"
+     * ]
      */
     @Data
     @Builder
@@ -72,7 +73,7 @@ public class AiClientToolMcpVO {
     @NoArgsConstructor
     public static class TransportConfigStdio {
 
-        private Stdio stdio;
+        private Map<String, Stdio> stdio;
 
         @Data
         public static class Stdio {

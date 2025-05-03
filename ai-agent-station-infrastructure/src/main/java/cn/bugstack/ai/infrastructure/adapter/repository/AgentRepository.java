@@ -4,8 +4,11 @@ import cn.bugstack.ai.domain.agent.adapter.repository.IAgentRepository;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientModelVO;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.infrastructure.dao.IAiClientModelDao;
+import cn.bugstack.ai.infrastructure.dao.IAiClientToolMcpDao;
 import cn.bugstack.ai.infrastructure.dao.po.AiClientModel;
 import cn.bugstack.ai.infrastructure.dao.po.AiClientToolMcp;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 仓储服务
@@ -27,11 +31,14 @@ public class AgentRepository implements IAgentRepository {
     @Resource
     private IAiClientModelDao aiClientModelDao;
 
+    @Resource
+    private IAiClientToolMcpDao aiClientToolMcpDao;
+
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
         // 根据客户端ID列表查询模型配置
         List<AiClientModel> aiClientModels = aiClientModelDao.queryModelConfigByClientIds(clientIdList);
-        
+
         // 将PO对象转换为VO对象
         List<AiClientModelVO> aiClientModelVOList = new ArrayList<>();
         if (null != aiClientModels && !aiClientModels.isEmpty()) {
@@ -49,14 +56,14 @@ public class AgentRepository implements IAgentRepository {
                 aiClientModelVOList.add(vo);
             }
         }
-        
+
         return aiClientModelVOList;
     }
 
     @Override
     public List<AiClientToolMcpVO> queryAiClientToolMcpVOListByClientIds(List<Long> clientIdList) {
-        List<AiClientToolMcp> aiClientToolMcps = aiClientModelDao.queryToolMcpConfigByClientIds(clientIdList);
-        
+        List<AiClientToolMcp> aiClientToolMcps = aiClientToolMcpDao.queryMcpConfigByClientIds(clientIdList);
+
         // 将PO对象转换为VO对象
         List<AiClientToolMcpVO> aiClientToolMcpVOList = new ArrayList<>();
         if (null != aiClientToolMcps && !aiClientToolMcps.isEmpty()) {
@@ -66,11 +73,11 @@ public class AgentRepository implements IAgentRepository {
                 vo.setMcpName(aiClientToolMcp.getMcpName());
                 vo.setTransportType(aiClientToolMcp.getTransportType());
                 vo.setRequestTimeout(aiClientToolMcp.getRequestTimeout());
-                
+
                 // 根据传输类型解析JSON配置
                 String transportType = aiClientToolMcp.getTransportType();
                 String transportConfig = aiClientToolMcp.getTransportConfig();
-                
+
                 try {
                     if ("sse".equals(transportType)) {
                         // 解析SSE配置
@@ -79,8 +86,12 @@ public class AgentRepository implements IAgentRepository {
                         vo.setTransportConfigSse(sseConfig);
                     } else if ("stdio".equals(transportType)) {
                         // 解析STDIO配置
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        AiClientToolMcpVO.TransportConfigStdio stdioConfig = objectMapper.readValue(transportConfig, AiClientToolMcpVO.TransportConfigStdio.class);
+                        Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdio = JSON.parseObject(transportConfig,
+                                new com.alibaba.fastjson.TypeReference<>() {
+                                });
+                        AiClientToolMcpVO.TransportConfigStdio stdioConfig = new AiClientToolMcpVO.TransportConfigStdio();
+                        stdioConfig.setStdio(stdio);
+
                         vo.setTransportConfigStdio(stdioConfig);
                     }
                 } catch (Exception e) {
@@ -89,7 +100,7 @@ public class AgentRepository implements IAgentRepository {
                 aiClientToolMcpVOList.add(vo);
             }
         }
-        
+
         return aiClientToolMcpVOList;
     }
 

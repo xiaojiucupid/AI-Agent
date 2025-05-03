@@ -17,10 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeoutException;
@@ -37,9 +40,6 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
 
     @Resource
     protected ApplicationContext applicationContext;
-
-    // 获取BeanFactory用于注册Bean
-    protected DefaultListableBeanFactory beanFactory;// = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
 
     @Resource
     protected ThreadPoolExecutor threadPoolExecutor;
@@ -90,7 +90,8 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
             }
             case "stdio" -> {
                 AiClientToolMcpVO.TransportConfigStdio transportConfigStdio = aiClientToolMcpVO.getTransportConfigStdio();
-                AiClientToolMcpVO.TransportConfigStdio.Stdio stdio = transportConfigStdio.getStdio();
+                Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdioMap = transportConfigStdio.getStdio();
+                AiClientToolMcpVO.TransportConfigStdio.Stdio stdio = stdioMap.get(aiClientToolMcpVO.getMcpName());
 
                 // https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
                 var stdioParams = ServerParameters.builder(stdio.getCommand())
@@ -105,6 +106,32 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
         }
 
         throw new RuntimeException("err! transportType " + transportType + " not exist!");
+    }
+
+    /**
+     * 通用的Bean注册方法
+     *
+     * @param beanName Bean名称
+     * @param beanClass Bean类型
+     * @param <T> Bean类型
+     */
+    protected <T> void registerBean(String beanName, Class<T> beanClass, T beanInstance) {
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+
+        // 注册Bean
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(beanClass, () -> beanInstance);
+        BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
+        beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
+
+        // 如果Bean已存在，先移除
+        if (beanFactory.containsBeanDefinition(beanName)) {
+            beanFactory.removeBeanDefinition(beanName);
+        }
+
+        // 注册新的Bean
+        beanFactory.registerBeanDefinition(beanName, beanDefinition);
+
+        log.info("成功注册Bean: {}", beanName);
     }
 
 }

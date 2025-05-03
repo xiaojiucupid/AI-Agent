@@ -39,23 +39,11 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
             // 构建Bean名称
             String beanName = "AiClientModel" + mcpVO.getId();
 
-            // 创建OpenAiChatModel对象
+            // 创建McpSyncClient对象
             McpSyncClient mcpSyncClient = createMcpSyncClient(mcpVO);
 
-            // 注册Bean
-            BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(McpSyncClient.class, () -> mcpSyncClient);
-            BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
-            beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
-
-            // 如果Bean已存在，先移除
-            if (beanFactory.containsBeanDefinition(beanName)) {
-                beanFactory.removeBeanDefinition(beanName);
-            }
-
-            // 注册新的Bean
-            beanFactory.registerBeanDefinition(beanName, beanDefinition);
-
-            log.info("成功注册AI客户端模型Bean: {}", beanName);
+            // 使用父类的通用注册方法
+            registerBean(beanName, McpSyncClient.class, mcpSyncClient);
         }
 
         return router(requestParameter, dynamicContext);
@@ -63,7 +51,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return null;
+        return defaultStrategyHandler;
     }
 
 }

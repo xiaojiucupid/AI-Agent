@@ -20,11 +20,11 @@ import java.util.Map;
 @Service
 public class DefaultArmoryStrategyFactory {
 
-    private RootNode rootNode;
+    private final RootNode rootNode;
 
-//    public DefaultArmoryStrategyFactory(RootNode rootNode) {
-//        this.rootNode = rootNode;
-//    }
+    public DefaultArmoryStrategyFactory(RootNode rootNode) {
+        this.rootNode = rootNode;
+    }
 
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> strategyHandler() {
         return rootNode;
