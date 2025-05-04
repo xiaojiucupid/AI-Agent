@@ -1,6 +1,7 @@
 package cn.bugstack.ai.domain.agent.service.armory.node;
 
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
+import cn.bugstack.ai.domain.agent.model.valobj.AiClientAdvisorVO;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientModelVO;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
@@ -38,12 +39,17 @@ public class RootNode extends AbstractArmorySupport {
             return repository.queryAiClientToolMcpVOListByClientIds(requestParameter.getClientIdList());
         }, threadPoolExecutor);
 
+        CompletableFuture<List<AiClientAdvisorVO>> aiClientAdvisorListFuture = CompletableFuture.supplyAsync(() -> {
+            log.info("查询配置数据(ai_client_advisor) {}", requestParameter.getClientIdList());
+            return repository.queryAdvisorConfigByClientIds(requestParameter.getClientIdList());
+        }, threadPoolExecutor);
+
         CompletableFuture.allOf(aiClientModelListFuture)
                 .thenRun(() -> {
                     dynamicContext.setValue("aiClientModelList", aiClientModelListFuture.join());
                     dynamicContext.setValue("aiClientToolMcpList", aiClientToolMcpListFuture.join());
+                    dynamicContext.setValue("aiClientAdvisorList", aiClientAdvisorListFuture.join());
                 }).join();
-
     }
 
     @Override
