@@ -1,9 +1,7 @@
 package cn.bugstack.ai.domain.agent.service.armory.node;
 
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientAdvisorVO;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientModelVO;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
+import cn.bugstack.ai.domain.agent.model.valobj.*;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
@@ -12,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -44,11 +43,23 @@ public class RootNode extends AbstractArmorySupport {
             return repository.queryAdvisorConfigByClientIds(requestParameter.getClientIdList());
         }, threadPoolExecutor);
 
+        CompletableFuture<Map<Long, AiClientSystemPromptVO>> aiSystemPromptConfigFuture = CompletableFuture.supplyAsync(() -> {
+            log.info("查询配置数据(ai_client_system_prompt) {}", requestParameter.getClientIdList());
+            return repository.querySystemPromptConfigByClientIds(requestParameter.getClientIdList());
+        }, threadPoolExecutor);
+
+        CompletableFuture<List<AiClientVO>> aiClientListFuture = CompletableFuture.supplyAsync(() -> {
+            log.info("查询配置数据(ai_client) {}", requestParameter.getClientIdList());
+            return repository.queryAiClientByClientIds(requestParameter.getClientIdList());
+        }, threadPoolExecutor);
+
         CompletableFuture.allOf(aiClientModelListFuture)
                 .thenRun(() -> {
                     dynamicContext.setValue("aiClientModelList", aiClientModelListFuture.join());
                     dynamicContext.setValue("aiClientToolMcpList", aiClientToolMcpListFuture.join());
                     dynamicContext.setValue("aiClientAdvisorList", aiClientAdvisorListFuture.join());
+                    dynamicContext.setValue("aiSystemPromptConfig", aiSystemPromptConfigFuture.join());
+                    dynamicContext.setValue("aiClientList", aiClientListFuture.join());
                 }).join();
     }
 

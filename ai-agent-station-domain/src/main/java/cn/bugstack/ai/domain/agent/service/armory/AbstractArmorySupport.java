@@ -2,28 +2,16 @@ package cn.bugstack.ai.domain.agent.service.armory;
 
 import cn.bugstack.ai.domain.agent.adapter.repository.IAgentRepository;
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientModelVO;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.AbstractMultiThreadStrategyRouter;
-import io.modelcontextprotocol.client.McpClient;
-import io.modelcontextprotocol.client.McpSyncClient;
-import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
-import io.modelcontextprotocol.client.transport.ServerParameters;
-import io.modelcontextprotocol.client.transport.StdioClientTransport;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
-import java.time.Duration;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeoutException;
@@ -81,6 +69,10 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
         beanFactory.registerBeanDefinition(beanName, beanDefinition);
 
         log.info("成功注册Bean: {}", beanName);
+    }
+
+    protected <T> T getBean(String beanName) {
+        return (T) applicationContext.getBean(beanName);
     }
 
 }
