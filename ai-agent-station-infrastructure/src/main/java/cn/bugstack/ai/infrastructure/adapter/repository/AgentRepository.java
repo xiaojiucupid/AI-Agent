@@ -206,7 +206,7 @@ public class AgentRepository implements IAgentRepository {
             
             // 设置系统提示词ID
             if (systemPromptMap.containsKey(clientId)) {
-                clientVO.setSystemPromptId(String.valueOf(systemPromptMap.get(clientId).getId()));
+                clientVO.setSystemPromptId(systemPromptMap.get(clientId).getId());
             }
             
             // 设置模型ID
