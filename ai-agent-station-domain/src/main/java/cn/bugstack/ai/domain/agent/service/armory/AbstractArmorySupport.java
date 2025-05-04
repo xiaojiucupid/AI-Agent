@@ -52,68 +52,17 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
         // 缺省的
     }
 
-    /**
-     * 创建OpenAiChatModel对象
-     *
-     * @param modelVO 模型配置值对象
-     * @return OpenAiChatModel实例
-     */
-    protected OpenAiChatModel createOpenAiChatModel(AiClientModelVO modelVO) {
-        // 构建OpenAiApi
-        OpenAiApi openAiApi = OpenAiApi.builder()
-                .baseUrl(modelVO.getBaseUrl())
-                .apiKey(modelVO.getApiKey())
-                .completionsPath(modelVO.getCompletionsPath())
-                .embeddingsPath(modelVO.getEmbeddingsPath())
-                .build();
-
-        // 构建OpenAiChatModel
-        return OpenAiChatModel.builder()
-                .openAiApi(openAiApi)
-                .defaultOptions(OpenAiChatOptions.builder()
-                        .model(modelVO.getModelName())
-                        .build())
-                .build();
-    }
-
-    protected McpSyncClient createMcpSyncClient(AiClientToolMcpVO aiClientToolMcpVO) {
-        String transportType = aiClientToolMcpVO.getTransportType();
-
-        switch (transportType) {
-            case "sse" -> {
-                AiClientToolMcpVO.TransportConfigSse transportConfigSse = aiClientToolMcpVO.getTransportConfigSse();
-                HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder(transportConfigSse.getBaseUri()).build();
-                McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
-                var init_sse = mcpSyncClient.initialize();
-                log.info("Tool SSE MCP Initialized {}", init_sse);
-                return mcpSyncClient;
-            }
-            case "stdio" -> {
-                AiClientToolMcpVO.TransportConfigStdio transportConfigStdio = aiClientToolMcpVO.getTransportConfigStdio();
-                Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdioMap = transportConfigStdio.getStdio();
-                AiClientToolMcpVO.TransportConfigStdio.Stdio stdio = stdioMap.get(aiClientToolMcpVO.getMcpName());
-
-                // https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
-                var stdioParams = ServerParameters.builder(stdio.getCommand())
-                        .args(stdio.getArgs())
-                        .build();
-                var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
-                        .requestTimeout(Duration.ofSeconds(10)).build();
-                var init_stdio = mcpClient.initialize();
-                log.info("Tool Stdio MCP Initialized {}", init_stdio);
-                return mcpClient;
-            }
-        }
-
-        throw new RuntimeException("err! transportType " + transportType + " not exist!");
+    protected String beanName(Long id) {
+        // 缺省的
+        return "default";
     }
 
     /**
      * 通用的Bean注册方法
      *
-     * @param beanName Bean名称
+     * @param beanName  Bean名称
      * @param beanClass Bean类型
-     * @param <T> Bean类型
+     * @param <T>       Bean类型
      */
     protected <T> void registerBean(String beanName, Class<T> beanClass, T beanInstance) {
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();

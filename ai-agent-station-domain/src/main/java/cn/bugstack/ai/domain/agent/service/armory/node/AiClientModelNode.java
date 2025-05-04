@@ -8,15 +8,15 @@ import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * AI客户端模型
+ *
  * @author Fuzhengwei bugstack.cn @小傅哥
  * 2025-05-02 14:25
  */
@@ -30,32 +30,58 @@ public class AiClientModelNode extends AbstractArmorySupport {
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("AiAgent 装配，客户端模型");
-    
+
         List<AiClientModelVO> aiClientModelList = dynamicContext.getValue("aiClientModelList");
-    
+
         if (aiClientModelList == null || aiClientModelList.isEmpty()) {
             log.warn("没有可用的AI客户端模型配置");
             return null;
         }
-    
+
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
-            // 构建Bean名称
-            String beanName = "AiClientModel" + modelVO.getId();
-            
             // 创建OpenAiChatModel对象
             OpenAiChatModel chatModel = createOpenAiChatModel(modelVO);
-    
+
             // 使用父类的通用注册方法
-            registerBean(beanName, OpenAiChatModel.class, chatModel);
+            registerBean(beanName(modelVO.getId()), OpenAiChatModel.class, chatModel);
         }
-        
+
         return router(requestParameter, dynamicContext);
     }
-    
+
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return aiClientToolMcpNode;
+    }
+
+    @Override
+    protected String beanName(Long id) {
+        return "AiClientModel_" + id;
+    }
+
+    /**
+     * 创建OpenAiChatModel对象
+     *
+     * @param modelVO 模型配置值对象
+     * @return OpenAiChatModel实例
+     */
+    private OpenAiChatModel createOpenAiChatModel(AiClientModelVO modelVO) {
+        // 构建OpenAiApi
+        OpenAiApi openAiApi = OpenAiApi.builder()
+                .baseUrl(modelVO.getBaseUrl())
+                .apiKey(modelVO.getApiKey())
+                .completionsPath(modelVO.getCompletionsPath())
+                .embeddingsPath(modelVO.getEmbeddingsPath())
+                .build();
+
+        // 构建OpenAiChatModel
+        return OpenAiChatModel.builder()
+                .openAiApi(openAiApi)
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model(modelVO.getModelName())
+                        .build())
+                .build();
     }
 
 }

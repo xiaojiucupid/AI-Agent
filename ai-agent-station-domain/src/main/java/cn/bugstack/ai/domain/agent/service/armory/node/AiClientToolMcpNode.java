@@ -1,19 +1,21 @@
 package cn.bugstack.ai.domain.agent.service.armory.node;
 
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
-import cn.bugstack.ai.domain.agent.model.valobj.AiClientModelVO;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
+import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
+import io.modelcontextprotocol.client.transport.ServerParameters;
+import io.modelcontextprotocol.client.transport.StdioClientTransport;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Tool MCP Node
@@ -36,14 +38,11 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
         }
 
         for (AiClientToolMcpVO mcpVO : aiClientToolMcpList) {
-            // 构建Bean名称
-            String beanName = "AiClientModel" + mcpVO.getId();
-
             // 创建McpSyncClient对象
             McpSyncClient mcpSyncClient = createMcpSyncClient(mcpVO);
 
             // 使用父类的通用注册方法
-            registerBean(beanName, McpSyncClient.class, mcpSyncClient);
+            registerBean(beanName(mcpVO.getId()), McpSyncClient.class, mcpSyncClient);
         }
 
         return router(requestParameter, dynamicContext);
@@ -52,6 +51,43 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return defaultStrategyHandler;
+    }
+
+    @Override
+    protected String beanName(Long id) {
+        return "AiClientToolMcp_" + id;
+    }
+
+    protected McpSyncClient createMcpSyncClient(AiClientToolMcpVO aiClientToolMcpVO) {
+        String transportType = aiClientToolMcpVO.getTransportType();
+
+        switch (transportType) {
+            case "sse" -> {
+                AiClientToolMcpVO.TransportConfigSse transportConfigSse = aiClientToolMcpVO.getTransportConfigSse();
+                HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder(transportConfigSse.getBaseUri()).build();
+                McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
+                var init_sse = mcpSyncClient.initialize();
+                log.info("Tool SSE MCP Initialized {}", init_sse);
+                return mcpSyncClient;
+            }
+            case "stdio" -> {
+                AiClientToolMcpVO.TransportConfigStdio transportConfigStdio = aiClientToolMcpVO.getTransportConfigStdio();
+                Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdioMap = transportConfigStdio.getStdio();
+                AiClientToolMcpVO.TransportConfigStdio.Stdio stdio = stdioMap.get(aiClientToolMcpVO.getMcpName());
+
+                // https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
+                var stdioParams = ServerParameters.builder(stdio.getCommand())
+                        .args(stdio.getArgs())
+                        .build();
+                var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
+                        .requestTimeout(Duration.ofSeconds(10)).build();
+                var init_stdio = mcpClient.initialize();
+                log.info("Tool Stdio MCP Initialized {}", init_stdio);
+                return mcpClient;
+            }
+        }
+
+        throw new RuntimeException("err! transportType " + transportType + " not exist!");
     }
 
 }
