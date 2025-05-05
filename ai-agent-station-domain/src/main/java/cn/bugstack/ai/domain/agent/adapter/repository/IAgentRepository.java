@@ -30,4 +30,6 @@ public interface IAgentRepository {
 
     List<Long> queryAllInvalidTaskScheduleIds();
 
+    void createTagOrder(AiRagOrderVO aiRagOrderVO);
+
 }

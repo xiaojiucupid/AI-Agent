@@ -57,6 +57,9 @@ public class AgentRepository implements IAgentRepository {
     @Resource
     private IAiAgentTaskScheduleDao aiAgentTaskScheduleDao;
 
+    @Resource
+    private IAiRagOrderDao aiRagOrderDao;
+
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
         // 根据客户端ID列表查询模型配置
@@ -288,6 +291,14 @@ public class AgentRepository implements IAgentRepository {
     @Override
     public List<Long> queryAllInvalidTaskScheduleIds() {
         return aiAgentTaskScheduleDao.queryAllInvalidTaskScheduleIds();
+    }
+
+    @Override
+    public void createTagOrder(AiRagOrderVO aiRagOrderVO) {
+        AiRagOrder aiRagOrder = new AiRagOrder();
+        aiRagOrder.setRagName(aiRagOrderVO.getRagName());
+        aiRagOrder.setKnowledgeTag(aiRagOrderVO.getKnowledgeTag());
+        aiRagOrderDao.insert(aiRagOrder);
     }
 
 }
