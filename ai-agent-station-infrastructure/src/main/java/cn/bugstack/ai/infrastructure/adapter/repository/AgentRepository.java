@@ -2,10 +2,7 @@ package cn.bugstack.ai.infrastructure.adapter.repository;
 
 import cn.bugstack.ai.domain.agent.adapter.repository.IAgentRepository;
 import cn.bugstack.ai.domain.agent.model.valobj.*;
-import cn.bugstack.ai.infrastructure.dao.IAiClientAdvisorDao;
-import cn.bugstack.ai.infrastructure.dao.IAiClientModelDao;
-import cn.bugstack.ai.infrastructure.dao.IAiClientSystemPromptDao;
-import cn.bugstack.ai.infrastructure.dao.IAiClientToolMcpDao;
+import cn.bugstack.ai.infrastructure.dao.*;
 import cn.bugstack.ai.infrastructure.dao.po.AiClientAdvisor;
 import cn.bugstack.ai.infrastructure.dao.po.AiClientModel;
 import cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPrompt;
@@ -32,6 +29,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository
 public class AgentRepository implements IAgentRepository {
+
+    @Resource
+    private IAiAgentDao aiAgentDao;
 
     @Resource
     private IAiClientModelDao aiClientModelDao;
@@ -118,9 +118,9 @@ public class AgentRepository implements IAgentRepository {
     @Override
     public List<AiClientAdvisorVO> queryAdvisorConfigByClientIds(List<Long> clientIdList) {
         List<AiClientAdvisor> aiClientAdvisors = aiClientAdvisorDao.queryAdvisorConfigByClientIds(clientIdList);
-        
+
         if (null == aiClientAdvisors || aiClientAdvisors.isEmpty()) return Collections.emptyList();
-        
+
         return aiClientAdvisors.stream().map(advisor -> {
             AiClientAdvisorVO vo = AiClientAdvisorVO.builder()
                     .id(advisor.getId())
@@ -128,7 +128,7 @@ public class AgentRepository implements IAgentRepository {
                     .advisorType(advisor.getAdvisorType())
                     .orderNum(advisor.getOrderNum())
                     .build();
-            
+
             // 根据 advisorType 类型转换 extParam
             if (StringUtils.isNotEmpty(advisor.getExtParam())) {
                 try {
@@ -143,7 +143,7 @@ public class AgentRepository implements IAgentRepository {
                     log.error("解析 extParam 失败，advisorId={}，extParam={}", advisor.getId(), advisor.getExtParam(), e);
                 }
             }
-            
+
             return vo;
         }).collect(Collectors.toList());
     }
@@ -152,12 +152,12 @@ public class AgentRepository implements IAgentRepository {
     public Map<Long, AiClientSystemPromptVO> querySystemPromptConfigByClientIds(List<Long> clientIdList) {
         // 从DAO层查询系统提示词配置
         List<AiClientSystemPrompt> aiClientSystemPrompts = aiClientSystemPromptDao.querySystemPromptConfigByClientIds(clientIdList);
-        
+
         // 检查查询结果是否为空
         if (null == aiClientSystemPrompts || aiClientSystemPrompts.isEmpty()) {
             return Collections.emptyMap();
         }
-        
+
         // 将PO对象转换为VO对象，并构建Map结构
         return aiClientSystemPrompts.stream()
                 .map(prompt -> AiClientSystemPromptVO.builder()
@@ -176,44 +176,44 @@ public class AgentRepository implements IAgentRepository {
         if (null == clientIdList || clientIdList.isEmpty()) {
             return Collections.emptyList();
         }
-        
+
         // 查询系统提示词配置
         List<AiClientSystemPrompt> systemPrompts = aiClientSystemPromptDao.querySystemPromptConfigByClientIds(clientIdList);
         Map<Long, AiClientSystemPrompt> systemPromptMap = systemPrompts.stream()
                 .collect(Collectors.toMap(AiClientSystemPrompt::getId, prompt -> prompt, (a, b) -> a));
-        
+
         // 查询模型配置
         List<AiClientModel> models = aiClientModelDao.queryModelConfigByClientIds(clientIdList);
         Map<Long, AiClientModel> modelMap = models.stream()
                 .collect(Collectors.toMap(AiClientModel::getId, model -> model, (a, b) -> a));
-        
+
         // 查询MCP工具配置
         List<AiClientToolMcp> mcps = aiClientToolMcpDao.queryMcpConfigByClientIds(clientIdList);
         Map<Long, List<AiClientToolMcp>> mcpMap = mcps.stream()
                 .collect(Collectors.groupingBy(AiClientToolMcp::getId));
-        
+
         // 查询顾问配置
         List<AiClientAdvisor> advisors = aiClientAdvisorDao.queryAdvisorConfigByClientIds(clientIdList);
         Map<Long, List<AiClientAdvisor>> advisorMap = advisors.stream()
                 .collect(Collectors.groupingBy(AiClientAdvisor::getId));
-        
+
         // 构建AiClientVO列表
         List<AiClientVO> result = new ArrayList<>();
         for (Long clientId : clientIdList) {
             AiClientVO clientVO = AiClientVO.builder()
                     .clientId(clientId)
                     .build();
-            
+
             // 设置系统提示词ID
             if (systemPromptMap.containsKey(clientId)) {
                 clientVO.setSystemPromptId(systemPromptMap.get(clientId).getId());
             }
-            
+
             // 设置模型ID
             if (modelMap.containsKey(clientId)) {
                 clientVO.setModelBeanId(String.valueOf(modelMap.get(clientId).getId()));
             }
-            
+
             // 设置MCP工具ID列表
             if (mcpMap.containsKey(clientId)) {
                 List<String> mcpBeanIdList = mcpMap.get(clientId).stream()
@@ -223,7 +223,7 @@ public class AgentRepository implements IAgentRepository {
             } else {
                 clientVO.setMcpBeanIdList(new ArrayList<>());
             }
-            
+
             // 设置顾问ID列表
             if (advisorMap.containsKey(clientId)) {
                 List<String> advisorBeanIdList = advisorMap.get(clientId).stream()
@@ -233,11 +233,17 @@ public class AgentRepository implements IAgentRepository {
             } else {
                 clientVO.setAdvisorBeanIdList(new ArrayList<>());
             }
-            
+
             result.add(clientVO);
         }
-        
+
         return result;
+    }
+
+    @Override
+    public List<Long> queryAiClientIds() {
+        // 查询所有有效的智能体关联的客户端ID
+        return aiAgentDao.queryValidClientIds();
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.bugstack.ai.domain.agent.service.armory.ext;
+package cn.bugstack.ai.domain.agent.service.armory.factory.element;
 
 import org.springframework.ai.chat.client.advisor.api.*;
 import org.springframework.ai.chat.model.ChatResponse;

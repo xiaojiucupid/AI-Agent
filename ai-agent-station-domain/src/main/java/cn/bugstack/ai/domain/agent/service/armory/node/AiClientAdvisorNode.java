@@ -3,7 +3,7 @@ package cn.bugstack.ai.domain.agent.service.armory.node;
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import cn.bugstack.ai.domain.agent.model.valobj.AiClientAdvisorVO;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
-import cn.bugstack.ai.domain.agent.service.armory.ext.RagAnswerAdvisor;
+import cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import com.alibaba.fastjson.JSON;
@@ -11,7 +11,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
@@ -45,13 +45,10 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         }
 
         for (AiClientAdvisorVO aiClientAdvisorVO : aiClientAdvisorList) {
-
             // 构建顾问访问对象
             Advisor advisor = createAdvisor(aiClientAdvisorVO);
-
             // 注册Bean对象
             registerBean(beanName(aiClientAdvisorVO.getId()), Advisor.class, advisor);
-
         }
 
         return router(requestParameter, dynamicContext);
@@ -71,7 +68,11 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         String advisorType = aiClientAdvisorVO.getAdvisorType();
         switch (advisorType) {
             case "ChatMemory" -> {
-                return new PromptChatMemoryAdvisor(new InMemoryChatMemory());
+                AiClientAdvisorVO.ChatMemory chatMemory = aiClientAdvisorVO.getChatMemory();
+//                return new PromptChatMemoryAdvisor(new InMemoryChatMemory());
+                return new PromptChatMemoryAdvisor(MessageWindowChatMemory.builder()
+                        .maxMessages(chatMemory.getMaxMessages())
+                        .build());
             }
             case "RagAnswer" -> {
                 AiClientAdvisorVO.RagAnswer ragAnswer = aiClientAdvisorVO.getRagAnswer();

@@ -43,7 +43,6 @@ public class AiClientModelNode extends AbstractArmorySupport {
         for (AiClientModelVO modelVO : aiClientModelList) {
             // 创建OpenAiChatModel对象
             OpenAiChatModel chatModel = createOpenAiChatModel(modelVO);
-
             // 使用父类的通用注册方法
             registerBean(beanName(modelVO.getId()), OpenAiChatModel.class, chatModel);
         }

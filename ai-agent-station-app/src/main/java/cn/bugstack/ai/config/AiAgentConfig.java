@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -27,6 +31,49 @@ public class AiAgentConfig {
 //
 //        return SimpleVectorStore.builder(new OpenAiEmbeddingModel(openAiApi)).build();
 //    }
+
+    /**
+     * 为 MyBatis 创建主数据源
+     */
+    @Bean("mybatisDataSource")
+    @Primary
+    public DataSource mybatisDataSource(@Value("${spring.datasource.driver-class-name}") String driverClassName,
+                                       @Value("${spring.datasource.url}") String url,
+                                       @Value("${spring.datasource.username}") String username,
+                                       @Value("${spring.datasource.password}") String password) {
+        return DataSourceBuilder.create()
+                .driverClassName(driverClassName)
+                .url(url)
+                .username(username)
+                .password(password)
+                .build();
+    }
+
+    /**
+     * 配置 MyBatis 的 SqlSessionFactory
+     */
+    @Bean("sqlSessionFactory")
+    public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("mybatisDataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        
+        // 设置MyBatis配置文件位置
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        sqlSessionFactoryBean.setConfigLocation(resolver.getResource("classpath:/mybatis/config/mybatis-config.xml"));
+        
+        // 设置Mapper XML文件位置
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mybatis/mapper/*.xml"));
+        
+        return sqlSessionFactoryBean;
+    }
+
+    /**
+     * 配置 SqlSessionTemplate
+     */
+    @Bean("sqlSessionTemplate")
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactoryBean sqlSessionFactory) throws Exception {
+        return new SqlSessionTemplate(sqlSessionFactory.getObject());
+    }
 
     /**
      * 为 PgVector 创建专用的数据源

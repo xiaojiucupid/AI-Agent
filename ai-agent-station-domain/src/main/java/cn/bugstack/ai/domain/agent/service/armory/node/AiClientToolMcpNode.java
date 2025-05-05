@@ -45,7 +45,6 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
         for (AiClientToolMcpVO mcpVO : aiClientToolMcpList) {
             // 创建McpSyncClient对象
             McpSyncClient mcpSyncClient = createMcpSyncClient(mcpVO);
-
             // 使用父类的通用注册方法
             registerBean(beanName(mcpVO.getId()), McpSyncClient.class, mcpSyncClient);
         }

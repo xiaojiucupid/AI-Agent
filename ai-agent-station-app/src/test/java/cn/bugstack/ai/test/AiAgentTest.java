@@ -1,6 +1,6 @@
 package cn.bugstack.ai.test;
 
-import cn.bugstack.ai.domain.agent.service.armory.ext.RagAnswerAdvisor;
+import cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,10 +15,8 @@ import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -39,8 +37,6 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 
 import java.nio.file.Paths;
