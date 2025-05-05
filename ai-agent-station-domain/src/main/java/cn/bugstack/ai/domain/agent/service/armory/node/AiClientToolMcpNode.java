@@ -5,6 +5,7 @@ import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
+import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
 import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
@@ -33,7 +34,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
 
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        log.info("AiAgent 装配，tool mcp");
+        log.info("Ai Agent 构建，tool mcp 节点 {}", JSON.toJSONString(requestParameter));
 
         List<AiClientToolMcpVO> aiClientToolMcpList = dynamicContext.getValue("aiClientToolMcpList");
         if (aiClientToolMcpList == null || aiClientToolMcpList.isEmpty()) {

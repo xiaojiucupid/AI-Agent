@@ -66,7 +66,7 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>1.0.0-M7</version>
+                <version>1.0.0-M8</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -122,6 +122,13 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.15</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>6.0.0</version>
             </dependency>
 
             <!-- 工程模块 -->

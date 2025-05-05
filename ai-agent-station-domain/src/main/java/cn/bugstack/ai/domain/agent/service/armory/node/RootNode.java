@@ -5,6 +5,7 @@ import cn.bugstack.ai.domain.agent.model.valobj.*;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
+import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,7 @@ public class RootNode extends AbstractArmorySupport {
 
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
+        log.info("Ai Agent 构建，数据加载节点 {}", JSON.toJSONString(requestParameter));
         return router(requestParameter, dynamicContext);
     }
 

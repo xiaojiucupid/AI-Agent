@@ -19,7 +19,6 @@ spring:
     password: 123456
     url: jdbc:mysql://127.0.0.1:3306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   main:
     allow-bean-definition-overriding: true
   #  main:
@@ -39,10 +38,16 @@ spring:
     #        stdio:
     #          servers-configuration: classpath:/mcp-servers-config-2.json
     # 个人配置，通过 http://127.0.0.1:8090 代理出去
+    vectorstore:
+      pgvector:
+        datasource:
+          driver-class-name: org.postgresql.Driver
+          username: postgres
+          password: postgres
+          url: jdbc:postgresql://192.168.1.109:15432/ai-rag-knowledge
+          type: com.zaxxer.hikari.HikariDataSource
     openai:
       base-url: https://apis.itedus.cn
-      #      base-url: https://api.deepseek.com
-      #      base-url: http://127.0.0.1:8090
       api-key: sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152
 
 # MyBatis 配置

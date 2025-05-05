@@ -6,6 +6,7 @@ import cn.bugstack.ai.domain.agent.model.valobj.AiClientVO;
 import cn.bugstack.ai.domain.agent.service.armory.AbstractArmorySupport;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
+import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -31,7 +32,7 @@ public class AiClientNode extends AbstractArmorySupport {
 
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        log.info("AiAgent 装配，对话模型");
+        log.info("Ai Agent 构建，对话模型节点 {}", JSON.toJSONString(requestParameter));
 
         List<AiClientVO> aiClientVOList = dynamicContext.getValue("aiClientList");
 
