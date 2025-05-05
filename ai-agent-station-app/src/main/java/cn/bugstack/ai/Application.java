@@ -1,6 +1,6 @@
 package cn.bugstack.ai;
 
-import cn.bugstack.ai.domain.agent.service.IAiAgentArmoryService;
+import cn.bugstack.ai.domain.agent.service.IAiAgentPreheatService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application implements CommandLineRunner {
 
     @Resource
-    private IAiAgentArmoryService aiAgentArmoryService;
+    private IAiAgentPreheatService aiAgentArmoryService;
 
     public static void main(String[] args){
         SpringApplication.run(Application.class);

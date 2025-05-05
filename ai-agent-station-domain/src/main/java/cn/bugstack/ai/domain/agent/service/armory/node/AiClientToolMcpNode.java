@@ -39,7 +39,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
         List<AiClientToolMcpVO> aiClientToolMcpList = dynamicContext.getValue("aiClientToolMcpList");
         if (aiClientToolMcpList == null || aiClientToolMcpList.isEmpty()) {
             log.warn("没有可用的AI客户端工具配置 MCP");
-            return null;
+            return router(requestParameter, dynamicContext);
         }
 
         for (AiClientToolMcpVO mcpVO : aiClientToolMcpList) {
@@ -69,7 +69,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
             case "sse" -> {
                 AiClientToolMcpVO.TransportConfigSse transportConfigSse = aiClientToolMcpVO.getTransportConfigSse();
                 HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder(transportConfigSse.getBaseUri()).build();
-                McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
+                McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(aiClientToolMcpVO.getRequestTimeout())).build();
                 var init_sse = mcpSyncClient.initialize();
                 log.info("Tool SSE MCP Initialized {}", init_sse);
                 return mcpSyncClient;
@@ -84,7 +84,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
                         .args(stdio.getArgs())
                         .build();
                 var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
-                        .requestTimeout(Duration.ofSeconds(10)).build();
+                        .requestTimeout(Duration.ofSeconds(aiClientToolMcpVO.getRequestTimeout())).build();
                 var init_stdio = mcpClient.initialize();
                 log.info("Tool Stdio MCP Initialized {}", init_stdio);
                 return mcpClient;

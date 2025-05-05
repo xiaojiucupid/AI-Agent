@@ -40,7 +40,11 @@ public class AiClientNode extends AbstractArmorySupport {
 
         for (AiClientVO aiClientVO : aiClientVOList) {
             // 1. 预设话术
-            String defaultSystem = aiClientSystemPromptVOMap.get(aiClientVO.getSystemPromptId()).getPromptContent();
+            String defaultSystem = "AI 智能体";
+            AiClientSystemPromptVO systemPrompt = aiClientSystemPromptVOMap.get(aiClientVO.getSystemPromptId());
+            if (null != systemPrompt) {
+                defaultSystem = systemPrompt.getPromptContent();
+            }
 
             // 2. chatModel
             OpenAiChatModel chatModel = getBean(aiClientVO.getModelBeanName());
@@ -52,7 +56,7 @@ public class AiClientNode extends AbstractArmorySupport {
                 mcpSyncClients.add(getBean(mcpBeanName));
             }
 
-            ToolCallbackProvider toolCallbackProvider = new SyncMcpToolCallbackProvider(mcpSyncClients.toArray(new McpSyncClient[]{}));
+//            ToolCallbackProvider toolCallbackProvider = new SyncMcpToolCallbackProvider(mcpSyncClients.toArray(new McpSyncClient[]{}));
 
             // 4. Advisor
             List<Advisor> advisors = new ArrayList<>();
@@ -66,7 +70,7 @@ public class AiClientNode extends AbstractArmorySupport {
             // 5. 构建对话客户端
             ChatClient chatClient = ChatClient.builder(chatModel)
                     .defaultSystem(defaultSystem)
-                    .defaultTools(toolCallbackProvider)
+                    .defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients.toArray(new McpSyncClient[]{})))
                     .defaultAdvisors(advisorArray)
                     .build();
 

@@ -24,4 +24,6 @@ public interface IAgentRepository {
 
     List<Long> queryAiClientIds();
 
+    List<Long> queryAiClientIdsByAiAgentId(Long aiAgentId);
+
 }

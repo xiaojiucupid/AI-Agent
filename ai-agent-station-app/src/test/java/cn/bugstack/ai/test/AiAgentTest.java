@@ -3,6 +3,7 @@ package cn.bugstack.ai.test;
 import cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -63,7 +64,7 @@ public class AiAgentTest {
     private OpenAiChatModel chatModel;
 
     @Resource
-    private SimpleVectorStore vectorStore;
+    private PgVectorStore vectorStore;
 
     @Value("classpath:data/file.txt")
     private org.springframework.core.io.Resource resource;
@@ -73,14 +74,14 @@ public class AiAgentTest {
     @Before
     public void init_client() {
         // 上传知识库
-        uploadRag();
+//        uploadRag();
 
         chatModel = OpenAiChatModel.builder()
                 .openAiApi(OpenAiApi.builder()
                         .baseUrl("https://apis.itedus.cn")
-                        .apiKey("sk-idJmnRPYTNdemXG5A619C1835b9e4969A43f802f52Bc013c")
-                        .baseUrl("https://azure.itedus.cn")
-                        .apiKey("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")
+                        .apiKey("sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e")
+//                        .baseUrl("https://azure.itedus.cn")
+//                        .apiKey("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")
                         .completionsPath("v1/chat/completions")
                         .embeddingsPath("v1/embeddings")
                         .build())
@@ -332,7 +333,7 @@ public class AiAgentTest {
 
     public McpSyncClient sseMcpClient01() {
 
-        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://113.46.142.175:8102").build();
+        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://192.168.1.109:8102").build();
 
         McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
 
@@ -344,7 +345,7 @@ public class AiAgentTest {
 
     public McpSyncClient sseMcpClient02() {
 
-        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://113.46.142.175:8101").build();
+        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://192.168.1.109:8101").build();
 
         McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
 

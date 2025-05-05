@@ -1,7 +1,8 @@
-package cn.bugstack.ai.domain.agent.service;
+package cn.bugstack.ai.domain.agent.service.preheat;
 
 import cn.bugstack.ai.domain.agent.adapter.repository.IAgentRepository;
 import cn.bugstack.ai.domain.agent.model.entity.AiAgentEngineStarterEntity;
+import cn.bugstack.ai.domain.agent.service.IAiAgentPreheatService;
 import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import jakarta.annotation.Resource;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class AiAgentArmoryService implements IAiAgentArmoryService {
+public class AiAgentPreheatService implements IAiAgentPreheatService {
 
     @Resource
     private DefaultArmoryStrategyFactory defaultArmoryStrategyFactory;

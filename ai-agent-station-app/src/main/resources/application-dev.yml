@@ -1,5 +1,7 @@
 server:
   port: 8091
+  servlet:
+    context-path: /ai-agent-station
 
 # 线程池配置
 thread:

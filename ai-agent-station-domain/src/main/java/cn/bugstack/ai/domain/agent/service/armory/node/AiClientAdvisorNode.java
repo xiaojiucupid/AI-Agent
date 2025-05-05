@@ -41,7 +41,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         List<AiClientAdvisorVO> aiClientAdvisorList = dynamicContext.getValue("aiClientAdvisorList");
         if (aiClientAdvisorList == null || aiClientAdvisorList.isEmpty()) {
             log.warn("没有可用的AI客户端顾问（advisor）配置");
-            return null;
+            return router(requestParameter, dynamicContext);
         }
 
         for (AiClientAdvisorVO aiClientAdvisorVO : aiClientAdvisorList) {

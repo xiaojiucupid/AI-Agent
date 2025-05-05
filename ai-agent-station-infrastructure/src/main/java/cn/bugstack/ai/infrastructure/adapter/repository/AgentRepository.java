@@ -3,10 +3,7 @@ package cn.bugstack.ai.infrastructure.adapter.repository;
 import cn.bugstack.ai.domain.agent.adapter.repository.IAgentRepository;
 import cn.bugstack.ai.domain.agent.model.valobj.*;
 import cn.bugstack.ai.infrastructure.dao.*;
-import cn.bugstack.ai.infrastructure.dao.po.AiClientAdvisor;
-import cn.bugstack.ai.infrastructure.dao.po.AiClientModel;
-import cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPrompt;
-import cn.bugstack.ai.infrastructure.dao.po.AiClientToolMcp;
+import cn.bugstack.ai.infrastructure.dao.po.*;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
@@ -37,13 +34,25 @@ public class AgentRepository implements IAgentRepository {
     private IAiClientModelDao aiClientModelDao;
 
     @Resource
+    private IAiClientModelConfigDao aiClientModelConfigDao;
+
+    @Resource
     private IAiClientToolMcpDao aiClientToolMcpDao;
+
+    @Resource
+    private IAiClientToolConfigDao aiClientToolConfigDao;
 
     @Resource
     private IAiClientAdvisorDao aiClientAdvisorDao;
 
     @Resource
+    private IAiClientAdvisorConfigDao aiClientAdvisorConfigDao;
+
+    @Resource
     private IAiClientSystemPromptDao aiClientSystemPromptDao;
+
+    @Resource
+    private IAiClientSystemPromptConfigDao aiClientSystemPromptConfigDao;
 
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
@@ -77,39 +86,38 @@ public class AgentRepository implements IAgentRepository {
 
         // 将PO对象转换为VO对象
         List<AiClientToolMcpVO> aiClientToolMcpVOList = new ArrayList<>();
-        if (null != aiClientToolMcps && !aiClientToolMcps.isEmpty()) {
-            for (AiClientToolMcp aiClientToolMcp : aiClientToolMcps) {
-                AiClientToolMcpVO vo = new AiClientToolMcpVO();
-                vo.setId(aiClientToolMcp.getId());
-                vo.setMcpName(aiClientToolMcp.getMcpName());
-                vo.setTransportType(aiClientToolMcp.getTransportType());
-                vo.setRequestTimeout(aiClientToolMcp.getRequestTimeout());
+        if (null == aiClientToolMcps || aiClientToolMcps.isEmpty()) return aiClientToolMcpVOList;
+        for (AiClientToolMcp aiClientToolMcp : aiClientToolMcps) {
+            AiClientToolMcpVO vo = new AiClientToolMcpVO();
+            vo.setId(aiClientToolMcp.getId());
+            vo.setMcpName(aiClientToolMcp.getMcpName());
+            vo.setTransportType(aiClientToolMcp.getTransportType());
+            vo.setRequestTimeout(aiClientToolMcp.getRequestTimeout());
 
-                // 根据传输类型解析JSON配置
-                String transportType = aiClientToolMcp.getTransportType();
-                String transportConfig = aiClientToolMcp.getTransportConfig();
+            // 根据传输类型解析JSON配置
+            String transportType = aiClientToolMcp.getTransportType();
+            String transportConfig = aiClientToolMcp.getTransportConfig();
 
-                try {
-                    if ("sse".equals(transportType)) {
-                        // 解析SSE配置
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        AiClientToolMcpVO.TransportConfigSse sseConfig = objectMapper.readValue(transportConfig, AiClientToolMcpVO.TransportConfigSse.class);
-                        vo.setTransportConfigSse(sseConfig);
-                    } else if ("stdio".equals(transportType)) {
-                        // 解析STDIO配置
-                        Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdio = JSON.parseObject(transportConfig,
-                                new com.alibaba.fastjson.TypeReference<>() {
-                                });
-                        AiClientToolMcpVO.TransportConfigStdio stdioConfig = new AiClientToolMcpVO.TransportConfigStdio();
-                        stdioConfig.setStdio(stdio);
+            try {
+                if ("sse".equals(transportType)) {
+                    // 解析SSE配置
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    AiClientToolMcpVO.TransportConfigSse sseConfig = objectMapper.readValue(transportConfig, AiClientToolMcpVO.TransportConfigSse.class);
+                    vo.setTransportConfigSse(sseConfig);
+                } else if ("stdio".equals(transportType)) {
+                    // 解析STDIO配置
+                    Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdio = JSON.parseObject(transportConfig,
+                            new com.alibaba.fastjson.TypeReference<>() {
+                            });
+                    AiClientToolMcpVO.TransportConfigStdio stdioConfig = new AiClientToolMcpVO.TransportConfigStdio();
+                    stdioConfig.setStdio(stdio);
 
-                        vo.setTransportConfigStdio(stdioConfig);
-                    }
-                } catch (Exception e) {
-                    log.error("解析传输配置失败: {}", e.getMessage(), e);
+                    vo.setTransportConfigStdio(stdioConfig);
                 }
-                aiClientToolMcpVOList.add(vo);
+            } catch (Exception e) {
+                log.error("解析传输配置失败: {}", e.getMessage(), e);
             }
+            aiClientToolMcpVOList.add(vo);
         }
 
         return aiClientToolMcpVOList;
@@ -178,24 +186,24 @@ public class AgentRepository implements IAgentRepository {
         }
 
         // 查询系统提示词配置
-        List<AiClientSystemPrompt> systemPrompts = aiClientSystemPromptDao.querySystemPromptConfigByClientIds(clientIdList);
-        Map<Long, AiClientSystemPrompt> systemPromptMap = systemPrompts.stream()
-                .collect(Collectors.toMap(AiClientSystemPrompt::getId, prompt -> prompt, (a, b) -> a));
+        List<AiClientSystemPromptConfig> systemPromptConfigs = aiClientSystemPromptConfigDao.querySystemPromptConfigByClientIds(clientIdList);
+        Map<Long, AiClientSystemPromptConfig> systemPromptConfigMap = systemPromptConfigs.stream().collect(Collectors.toMap(AiClientSystemPromptConfig::getClientId, prompt -> prompt, (a, b) -> a));
 
         // 查询模型配置
-        List<AiClientModel> models = aiClientModelDao.queryModelConfigByClientIds(clientIdList);
-        Map<Long, AiClientModel> modelMap = models.stream()
-                .collect(Collectors.toMap(AiClientModel::getId, model -> model, (a, b) -> a));
+        List<AiClientModelConfig> modelConfigs = aiClientModelConfigDao.queryModelConfigByClientIds(clientIdList);
+        Map<Long, AiClientModelConfig> modelConfigMap = modelConfigs.stream()
+                .collect(Collectors.toMap(AiClientModelConfig::getClientId, model -> model, (a, b) -> a));
 
-        // 查询MCP工具配置
-        List<AiClientToolMcp> mcps = aiClientToolMcpDao.queryMcpConfigByClientIds(clientIdList);
-        Map<Long, List<AiClientToolMcp>> mcpMap = mcps.stream()
-                .collect(Collectors.groupingBy(AiClientToolMcp::getId));
+        // 查询MCP工具配置，暂时只有 mcp，无 function call
+        List<AiClientToolConfig> clientToolConfigs = aiClientToolConfigDao.queryToolConfigByClientIds(clientIdList);
+        Map<Long, List<AiClientToolConfig>> mcpMap = clientToolConfigs.stream()
+                .filter(config -> "mcp".equals(config.getToolType()))
+                .collect(Collectors.groupingBy(AiClientToolConfig::getClientId));
 
         // 查询顾问配置
-        List<AiClientAdvisor> advisors = aiClientAdvisorDao.queryAdvisorConfigByClientIds(clientIdList);
-        Map<Long, List<AiClientAdvisor>> advisorMap = advisors.stream()
-                .collect(Collectors.groupingBy(AiClientAdvisor::getId));
+        List<AiClientAdvisorConfig> advisorConfigs = aiClientAdvisorConfigDao.queryClientAdvisorConfigByClientIds(clientIdList);
+        Map<Long, List<AiClientAdvisorConfig>> advisorConfigMap = advisorConfigs.stream()
+                .collect(Collectors.groupingBy(AiClientAdvisorConfig::getClientId));
 
         // 构建AiClientVO列表
         List<AiClientVO> result = new ArrayList<>();
@@ -205,19 +213,19 @@ public class AgentRepository implements IAgentRepository {
                     .build();
 
             // 设置系统提示词ID
-            if (systemPromptMap.containsKey(clientId)) {
-                clientVO.setSystemPromptId(systemPromptMap.get(clientId).getId());
+            if (systemPromptConfigMap.containsKey(clientId)) {
+                clientVO.setSystemPromptId(systemPromptConfigMap.get(clientId).getSystemPromptId());
             }
 
             // 设置模型ID
-            if (modelMap.containsKey(clientId)) {
-                clientVO.setModelBeanId(String.valueOf(modelMap.get(clientId).getId()));
+            if (modelConfigMap.containsKey(clientId)) {
+                clientVO.setModelBeanId(String.valueOf(modelConfigMap.get(clientId).getModelId()));
             }
 
             // 设置MCP工具ID列表
             if (mcpMap.containsKey(clientId)) {
                 List<String> mcpBeanIdList = mcpMap.get(clientId).stream()
-                        .map(mcp -> String.valueOf(mcp.getId()))
+                        .map(mcp -> String.valueOf(mcp.getToolId()))
                         .collect(Collectors.toList());
                 clientVO.setMcpBeanIdList(mcpBeanIdList);
             } else {
@@ -225,9 +233,9 @@ public class AgentRepository implements IAgentRepository {
             }
 
             // 设置顾问ID列表
-            if (advisorMap.containsKey(clientId)) {
-                List<String> advisorBeanIdList = advisorMap.get(clientId).stream()
-                        .map(advisor -> String.valueOf(advisor.getId()))
+            if (advisorConfigMap.containsKey(clientId)) {
+                List<String> advisorBeanIdList = advisorConfigMap.get(clientId).stream()
+                        .map(advisor -> String.valueOf(advisor.getAdvisorId()))
                         .collect(Collectors.toList());
                 clientVO.setAdvisorBeanIdList(advisorBeanIdList);
             } else {
@@ -244,6 +252,11 @@ public class AgentRepository implements IAgentRepository {
     public List<Long> queryAiClientIds() {
         // 查询所有有效的智能体关联的客户端ID
         return aiAgentDao.queryValidClientIds();
+    }
+
+    @Override
+    public List<Long> queryAiClientIdsByAiAgentId(Long aiAgentId) {
+        return aiAgentDao.queryClientIdsByAgentId(aiAgentId);
     }
 
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bugstack.ai.infrastructure.dao.IAiClientSystemPromptConfigDao">
+
+    <resultMap id="dataMap" type="cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPromptConfig">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="system_prompt_id" property="systemPromptId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <!-- 查询所有系统提示词配置关联 -->
+    <select id="queryAllSystemPromptConfig" resultMap="dataMap">
+        SELECT id, client_id, system_prompt_id, create_time
+        FROM ai_client_system_prompt_config
+        ORDER BY id
+    </select>
+    
+    <!-- 根据ID查询系统提示词配置关联 -->
+    <select id="querySystemPromptConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, system_prompt_id, create_time
+        FROM ai_client_system_prompt_config
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据客户端ID查询系统提示词配置关联 -->
+    <select id="querySystemPromptConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, system_prompt_id, create_time
+        FROM ai_client_system_prompt_config
+        WHERE client_id = #{clientId}
+    </select>
+    
+    <!-- 插入系统提示词配置关联 -->
+    <insert id="insert" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPromptConfig">
+        INSERT INTO ai_client_system_prompt_config (
+            client_id, system_prompt_id, create_time
+        ) VALUES (
+            #{clientId}, #{systemPromptId}, #{createTime}
+        )
+    </insert>
+    
+    <!-- 更新系统提示词配置关联 -->
+    <update id="update" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPromptConfig">
+        UPDATE ai_client_system_prompt_config
+        SET client_id = #{clientId},
+            system_prompt_id = #{systemPromptId}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据ID删除系统提示词配置关联 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_system_prompt_config
+        WHERE id = #{id}
+    </delete>
+    
+    <!-- 根据客户端ID列表查询系统提示词配置关联 -->
+    <select id="querySystemPromptConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT id, client_id, system_prompt_id, create_time
+        FROM ai_client_system_prompt_config
+        WHERE client_id IN 
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+    
+</mapper>

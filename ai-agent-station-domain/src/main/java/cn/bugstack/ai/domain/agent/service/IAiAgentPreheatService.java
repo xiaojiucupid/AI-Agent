@@ -5,7 +5,7 @@ package cn.bugstack.ai.domain.agent.service;
  * @author Fuzhengwei bugstack.cn @小傅哥
  * 2025-05-02 13:26
  */
-public interface IAiAgentArmoryService {
+public interface IAiAgentPreheatService {
 
     /**
      * 服务预热，启动时触达
