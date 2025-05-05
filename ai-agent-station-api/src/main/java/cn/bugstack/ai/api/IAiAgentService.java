@@ -1,5 +1,10 @@
 package cn.bugstack.ai.api;
 
+import cn.bugstack.ai.api.response.Response;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 /**
  * AiAgent 智能体对话服务接口
  * @author Fuzhengwei bugstack.cn @小傅哥
@@ -7,6 +12,8 @@ package cn.bugstack.ai.api;
  */
 public interface IAiAgentService {
 
-    String exec(Long aiAgentId, String message);
+    Response<String> chat(Long aiAgentId, String message);
+
+    Response<Boolean> uploadRagFile(String name, String tag, List<MultipartFile> files);
 
 }
