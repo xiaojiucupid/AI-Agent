@@ -48,7 +48,7 @@ public class AiAgentChatService implements IAiAgentChatService {
                             .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100))
                     .call().content();
 
-            log.info("智能体对话请求，结果 {} {}", aiAgentId, content);
+            log.info("智能体对话进行，客户端ID {}", aiClientId);
         }
 
         log.info("智能体对话请求，结果 {} {}", aiAgentId, content);

@@ -54,6 +54,9 @@ public class AgentRepository implements IAgentRepository {
     @Resource
     private IAiClientSystemPromptConfigDao aiClientSystemPromptConfigDao;
 
+    @Resource
+    private IAiAgentTaskScheduleDao aiAgentTaskScheduleDao;
+
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
         // 根据客户端ID列表查询模型配置
@@ -257,6 +260,34 @@ public class AgentRepository implements IAgentRepository {
     @Override
     public List<Long> queryAiClientIdsByAiAgentId(Long aiAgentId) {
         return aiAgentDao.queryClientIdsByAgentId(aiAgentId);
+    }
+
+    @Override
+    public List<AiAgentTaskScheduleVO> queryAllValidTaskSchedule() {
+        List<AiAgentTaskSchedule> aiAgentTaskSchedules = aiAgentTaskScheduleDao.queryAllValidTaskSchedule();
+        
+        // 检查查询结果是否为空
+        if (null == aiAgentTaskSchedules || aiAgentTaskSchedules.isEmpty()) {
+            return Collections.emptyList();
+        }
+        
+        // 将PO对象转换为VO对象
+        return aiAgentTaskSchedules.stream()
+                .map(schedule -> {
+                    AiAgentTaskScheduleVO vo = new AiAgentTaskScheduleVO();
+                    vo.setId(schedule.getId());
+                    vo.setAgentId(schedule.getAgentId());
+                    vo.setDescription(schedule.getDescription());
+                    vo.setCronExpression(schedule.getCronExpression());
+                    vo.setTaskParam(schedule.getTaskParam());
+                    return vo;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> queryAllInvalidTaskScheduleIds() {
+        return aiAgentTaskScheduleDao.queryAllInvalidTaskScheduleIds();
     }
 
 }

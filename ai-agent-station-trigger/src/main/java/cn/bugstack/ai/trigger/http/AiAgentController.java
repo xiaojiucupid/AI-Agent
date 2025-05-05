@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @CrossOrigin("*")
 @RequestMapping("/api/v1/ai/agent/")
-public class AiAgentService implements IAiAgentService {
+public class AiAgentController implements IAiAgentService {
 
     @Resource
     private IAiAgentChatService aiAgentChatService;

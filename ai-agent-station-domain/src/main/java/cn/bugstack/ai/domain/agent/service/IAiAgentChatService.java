@@ -7,6 +7,9 @@ package cn.bugstack.ai.domain.agent.service;
  */
 public interface IAiAgentChatService {
 
+    /**
+     * 智能体对话
+     */
     String aiAgentChat(Long aiAgentId, String message);
 
 }

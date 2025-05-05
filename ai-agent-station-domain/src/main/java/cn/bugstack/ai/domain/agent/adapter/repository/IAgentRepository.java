@@ -26,4 +26,8 @@ public interface IAgentRepository {
 
     List<Long> queryAiClientIdsByAiAgentId(Long aiAgentId);
 
+    List<AiAgentTaskScheduleVO> queryAllValidTaskSchedule();
+
+    List<Long> queryAllInvalidTaskScheduleIds();
+
 }
