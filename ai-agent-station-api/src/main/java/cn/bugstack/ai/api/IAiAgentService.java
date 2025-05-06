@@ -16,7 +16,7 @@ public interface IAiAgentService {
 
     Response<String> chat(Long aiAgentId, String message);
 
-    Flux<ChatResponse> chatStream(Long modelId, String message);
+    Flux<ChatResponse> chatStream(Long modelId, Long ragId, String message);
 
     Response<Boolean> uploadRagFile(String name, String tag, List<MultipartFile> files);
 

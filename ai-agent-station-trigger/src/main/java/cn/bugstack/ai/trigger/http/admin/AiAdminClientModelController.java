@@ -42,6 +42,17 @@ public class AiAdminClientModelController {
         }
     }
 
+    @RequestMapping(value = "queryAllModelConfig", method = RequestMethod.POST)
+    public ResponseEntity<List<AiClientModel>> queryAllModelConfig() {
+        try {
+            List<AiClientModel> aiClientModelList = aiClientModelDao.queryAllModelConfig();
+            return ResponseEntity.ok(aiClientModelList);
+        } catch (Exception e) {
+            log.error("查询客户端模型列表异常", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     /**
      * 根据ID查询客户端模型
      *

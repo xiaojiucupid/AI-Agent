@@ -62,8 +62,41 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     };
 
+    // 获取模型列表
+    const loadModelOptions = () => {
+        const modelSelect = document.getElementById('aiModel');
+
+        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/queryAllModelConfig', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // 清空现有选项
+                    modelSelect.innerHTML = '';
+
+                    // 添加新选项
+                    data.forEach(item => {
+                        const option = new Option(item.modelName, item.id);
+                        option.setAttribute('model', item.id);
+                        if (item.id === 1) {
+                            option.selected = true;
+                        }
+                        modelSelect.add(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('获取模型列表失败:', error);
+            });
+    };
+
     // 初始化加载
     loadRagOptions();
+    loadModelOptions();
 });
 
 async function createNewChat() {
@@ -262,17 +295,14 @@ function startEventStream(message) {
         currentEventSource.close();
     }
 
-    const ragTag = document.getElementById('ragSelect').value;
+    const ragId = document.getElementById('ragSelect').value;
+    // 判断 ragId 为空的时候，设置为0
+    const ragIdParam = ragId ? ragId : '0';
     const aiModelSelect = document.getElementById('aiModel');
-    const aiModelValue = aiModelSelect.value;
+    const modelId = aiModelSelect.value;
     const aiModelModel = aiModelSelect.options[aiModelSelect.selectedIndex].getAttribute('model');
 
-    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=1&message=${encodeURIComponent(message)}`;
-//    if (ragTag) {
-//        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream_rag?message=${encodeURIComponent(message)}&ragTag=${encodeURIComponent(ragTag)}&model=${encodeURIComponent(aiModelModel)}`;
-//    } else {
-//        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream?message=${encodeURIComponent(message)}&model=${encodeURIComponent(aiModelModel)}`;
-//    }
+    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=${modelId}&ragId=${ragIdParam}&message=${encodeURIComponent(message)}`;
 
     currentEventSource = new EventSource(url);
     let accumulatedContent = '';

@@ -301,4 +301,10 @@ public class AgentRepository implements IAgentRepository {
         aiRagOrderDao.insert(aiRagOrder);
     }
 
+    @Override
+    public String queryRagKnowledgeTag(Long ragId) {
+        AiRagOrder aiRagOrder = aiRagOrderDao.queryRagOrderById(ragId);
+        return aiRagOrder.getKnowledgeTag();
+    }
+
 }
