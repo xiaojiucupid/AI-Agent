@@ -30,6 +30,29 @@
         WHERE client_id = #{clientId}
     </select>
     
+    <!-- 根据条件查询系统提示词配置关联列表 -->
+    <select id="querySystemPromptConfigList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPromptConfig" resultMap="dataMap">
+        SELECT 
+            id, client_id, system_prompt_id, create_time
+        FROM 
+            ai_client_system_prompt_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="systemPromptId != null">
+                AND system_prompt_id = #{systemPromptId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+    
     <!-- 插入系统提示词配置关联 -->
     <insert id="insert" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientSystemPromptConfig">
         INSERT INTO ai_client_system_prompt_config (

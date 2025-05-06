@@ -59,4 +59,6 @@ public interface IAiClientToolMcpDao {
      */
     List<AiClientToolMcp> queryMcpConfigByClientIds(List<Long> clientIdList);
 
+    List<AiClientToolMcp> queryMcpList(AiClientToolMcp aiClientToolMcp);
+
 }

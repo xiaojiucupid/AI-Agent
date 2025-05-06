@@ -34,7 +34,7 @@ public class AiAdminClientToolMcpController {
     @RequestMapping(value = "queryMcpList", method = RequestMethod.POST)
     public ResponseEntity<List<AiClientToolMcp>> queryMcpList(@RequestBody AiClientToolMcp aiClientToolMcp) {
         try {
-            List<AiClientToolMcp> mcpList = aiClientToolMcpDao.queryAllMcpConfig();
+            List<AiClientToolMcp> mcpList = aiClientToolMcpDao.queryMcpList(aiClientToolMcp);
             return ResponseEntity.ok(mcpList);
         } catch (Exception e) {
             log.error("查询MCP工具列表异常", e);

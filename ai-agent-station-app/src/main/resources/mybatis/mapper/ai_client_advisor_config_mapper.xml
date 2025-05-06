@@ -37,6 +37,29 @@
         WHERE advisor_id = #{advisorId}
     </select>
     
+    <!-- 根据条件查询客户端-顾问关联配置列表 -->
+    <select id="queryClientAdvisorConfigList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientAdvisorConfig" resultMap="dataMap">
+        SELECT 
+            id, client_id, advisor_id, create_time
+        FROM 
+            ai_client_advisor_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="advisorId != null">
+                AND advisor_id = #{advisorId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+    
     <!-- 插入客户端-顾问关联配置 -->
     <insert id="insert" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientAdvisorConfig">
         INSERT INTO ai_client_advisor_config (

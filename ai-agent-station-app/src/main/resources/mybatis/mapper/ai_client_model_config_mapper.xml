@@ -70,4 +70,26 @@
         WHERE model_id = #{modelId}
     </select>
     
+    <!-- 根据条件查询客户端模型配置列表 -->
+    <select id="queryModelConfigList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientModelConfig" resultMap="dataMap">
+        SELECT 
+            id, client_id, model_id, create_time
+        FROM 
+            ai_client_model_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="modelId != null">
+                AND model_id = #{modelId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
 </mapper>

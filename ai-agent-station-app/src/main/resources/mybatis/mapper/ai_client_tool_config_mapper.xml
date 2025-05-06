@@ -84,4 +84,30 @@
         FROM ai_client_tool_config
         WHERE tool_type = #{toolType}
     </select>
+    
+    <!-- 根据条件查询客户端工具配置列表 -->
+    <select id="queryToolConfigList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientToolConfig" resultMap="dataMap">
+        SELECT 
+            id, client_id, tool_type, tool_id, create_time
+        FROM 
+            ai_client_tool_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="toolType != null and toolType != ''">
+                AND tool_type = #{toolType}
+            </if>
+            <if test="toolId != null">
+                AND tool_id = #{toolId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
 </mapper>

@@ -34,6 +34,29 @@
         WHERE agent_id = #{agentId}
     </select>
     
+    <!-- 根据条件查询任务调度配置列表 -->
+    <select id="queryTaskScheduleList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgentTaskSchedule" resultMap="dataMap">
+        SELECT 
+            id, agent_id, description, cron_expression, task_param, status, create_time, update_time
+        FROM 
+            ai_agent_task_schedule
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="agentId != null">
+                AND agent_id = #{agentId}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+    
     <!-- 插入任务调度配置 -->
     <insert id="insert" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgentTaskSchedule">
         INSERT INTO ai_agent_task_schedule (

@@ -58,4 +58,7 @@ public interface IAiClientSystemPromptDao {
      * @return 系统提示词列表
      */
     List<AiClientSystemPrompt> querySystemPromptList(AiClientSystemPrompt aiClientSystemPrompt);
+
+    List<AiClientSystemPrompt> querySystemPromptConfigByClientIds(List<Long> clientIdList);
+
 }
