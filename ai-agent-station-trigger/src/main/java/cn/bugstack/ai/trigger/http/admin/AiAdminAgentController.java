@@ -50,7 +50,7 @@ public class AiAdminAgentController implements IAiAdminService {
      * @return AI智能体
      */
     @RequestMapping(value = "queryAiAgentById", method = RequestMethod.GET)
-    public ResponseEntity<AiAgent> queryAiAgentById(@RequestParam Long id) {
+    public ResponseEntity<AiAgent> queryAiAgentById(@RequestParam("id") Long id) {
         try {
             AiAgent aiAgent = aiAgentDao.queryAgentConfigById(id);
             return ResponseEntity.ok(aiAgent);
@@ -104,7 +104,7 @@ public class AiAdminAgentController implements IAiAdminService {
      * @return 结果
      */
     @RequestMapping(value = "deleteAiAgent", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteAiAgent(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteAiAgent(@RequestParam("id") Long id) {
         try {
             int count = aiAgentDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

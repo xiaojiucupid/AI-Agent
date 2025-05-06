@@ -49,7 +49,7 @@ public class AiAdminClientModelController {
      * @return 客户端模型
      */
     @RequestMapping(value = "queryClientModelById", method = RequestMethod.GET)
-    public ResponseEntity<AiClientModel> queryClientModelById(@RequestParam Long id) {
+    public ResponseEntity<AiClientModel> queryClientModelById(@RequestParam("id") Long id) {
         try {
             AiClientModel aiClientModel = aiClientModelDao.queryModelConfigById(id);
             return ResponseEntity.ok(aiClientModel);
@@ -103,7 +103,7 @@ public class AiAdminClientModelController {
      * @return 结果
      */
     @RequestMapping(value = "deleteClientModel", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteClientModel(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteClientModel(@RequestParam("id") Long id) {
         try {
             int count = aiClientModelDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

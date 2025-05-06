@@ -49,7 +49,7 @@ public class AiAdminRagOrderController {
      * @return RAG订单
      */
     @RequestMapping(value = "queryRagOrderById", method = RequestMethod.GET)
-    public ResponseEntity<AiRagOrder> queryRagOrderById(@RequestParam Long id) {
+    public ResponseEntity<AiRagOrder> queryRagOrderById(@RequestParam("id") Long id) {
         try {
             AiRagOrder ragOrder = aiRagOrderDao.queryRagOrderById(id);
             return ResponseEntity.ok(ragOrder);
@@ -103,7 +103,7 @@ public class AiAdminRagOrderController {
      * @return 结果
      */
     @RequestMapping(value = "deleteRagOrder", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteRagOrder(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteRagOrder(@RequestParam("id") Long id) {
         try {
             int count = aiRagOrderDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

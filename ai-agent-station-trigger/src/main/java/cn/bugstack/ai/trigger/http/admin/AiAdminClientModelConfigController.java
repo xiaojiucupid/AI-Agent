@@ -47,7 +47,7 @@ public class AiAdminClientModelConfigController {
      * @return 客户端模型配置
      */
     @RequestMapping(value = "queryClientModelConfigById", method = RequestMethod.GET)
-    public ResponseEntity<AiClientModelConfig> queryClientModelConfigById(@RequestParam Long id) {
+    public ResponseEntity<AiClientModelConfig> queryClientModelConfigById(@RequestParam("id") Long id) {
         try {
             AiClientModelConfig config = aiClientModelConfigDao.queryModelConfigById(id);
             return ResponseEntity.ok(config);
@@ -64,7 +64,7 @@ public class AiAdminClientModelConfigController {
      * @return 模型配置
      */
     @RequestMapping(value = "queryClientModelConfigByClientId", method = RequestMethod.GET)
-    public ResponseEntity<AiClientModelConfig> queryClientModelConfigByClientId(@RequestParam Long clientId) {
+    public ResponseEntity<AiClientModelConfig> queryClientModelConfigByClientId(@RequestParam("clientId") Long clientId) {
         try {
             AiClientModelConfig config = aiClientModelConfigDao.queryModelConfigByClientId(clientId);
             return ResponseEntity.ok(config);
@@ -81,7 +81,7 @@ public class AiAdminClientModelConfigController {
      * @return 客户端模型配置列表
      */
     @RequestMapping(value = "queryClientModelConfigByModelId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiClientModelConfig>> queryClientModelConfigByModelId(@RequestParam Long modelId) {
+    public ResponseEntity<List<AiClientModelConfig>> queryClientModelConfigByModelId(@RequestParam("modelId") Long modelId) {
         try {
             List<AiClientModelConfig> configList = aiClientModelConfigDao.queryModelConfigByModelId(modelId);
             return ResponseEntity.ok(configList);
@@ -133,7 +133,7 @@ public class AiAdminClientModelConfigController {
      * @return 结果
      */
     @RequestMapping(value = "deleteClientModelConfig", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteClientModelConfig(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteClientModelConfig(@RequestParam("id") Long id) {
         try {
             int count = aiClientModelConfigDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

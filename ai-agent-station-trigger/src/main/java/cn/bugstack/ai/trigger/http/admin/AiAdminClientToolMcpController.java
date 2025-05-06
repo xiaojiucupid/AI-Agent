@@ -49,7 +49,7 @@ public class AiAdminClientToolMcpController {
      * @return MCP配置
      */
     @RequestMapping(value = "queryMcpById", method = RequestMethod.GET)
-    public ResponseEntity<AiClientToolMcp> queryMcpById(@RequestParam Long id) {
+    public ResponseEntity<AiClientToolMcp> queryMcpById(@RequestParam("id") Long id) {
         try {
             AiClientToolMcp mcp = aiClientToolMcpDao.queryMcpConfigById(id);
             return ResponseEntity.ok(mcp);
@@ -103,7 +103,7 @@ public class AiAdminClientToolMcpController {
      * @return 结果
      */
     @RequestMapping(value = "deleteMcp", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteMcp(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteMcp(@RequestParam("id") Long id) {
         try {
             int count = aiClientToolMcpDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

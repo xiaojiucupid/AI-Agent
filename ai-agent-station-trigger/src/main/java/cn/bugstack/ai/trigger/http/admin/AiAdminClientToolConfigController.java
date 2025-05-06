@@ -49,7 +49,7 @@ public class AiAdminClientToolConfigController {
      * @return 客户端工具配置
      */
     @RequestMapping(value = "queryClientToolConfigById", method = RequestMethod.GET)
-    public ResponseEntity<AiClientToolConfig> queryClientToolConfigById(@RequestParam Long id) {
+    public ResponseEntity<AiClientToolConfig> queryClientToolConfigById(@RequestParam("id") Long id) {
         try {
             AiClientToolConfig config = aiClientToolConfigDao.queryToolConfigById(id);
             return ResponseEntity.ok(config);
@@ -66,7 +66,7 @@ public class AiAdminClientToolConfigController {
      * @return 工具配置列表
      */
     @RequestMapping(value = "queryClientToolConfigByClientId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiClientToolConfig>> queryClientToolConfigByClientId(@RequestParam Long clientId) {
+    public ResponseEntity<List<AiClientToolConfig>> queryClientToolConfigByClientId(@RequestParam("clientId") Long clientId) {
         try {
             List<AiClientToolConfig> configList = aiClientToolConfigDao.queryToolConfigByClientId(clientId);
             return ResponseEntity.ok(configList);
@@ -118,7 +118,7 @@ public class AiAdminClientToolConfigController {
      * @return 结果
      */
     @RequestMapping(value = "deleteClientToolConfig", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteClientToolConfig(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteClientToolConfig(@RequestParam("id") Long id) {
         try {
             int count = aiClientToolConfigDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

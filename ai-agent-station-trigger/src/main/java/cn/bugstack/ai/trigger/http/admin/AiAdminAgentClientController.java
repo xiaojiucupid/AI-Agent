@@ -49,7 +49,7 @@ public class AiAdminAgentClientController {
      * @return AI智能体客户端关联
      */
     @RequestMapping(value = "queryAgentClientById", method = RequestMethod.GET)
-    public ResponseEntity<AiAgentClient> queryAgentClientById(@RequestParam Long id) {
+    public ResponseEntity<AiAgentClient> queryAgentClientById(@RequestParam("id") Long id) {
         try {
             AiAgentClient aiAgentClient = aiAgentClientDao.queryAgentClientConfigById(id);
             return ResponseEntity.ok(aiAgentClient);
@@ -66,7 +66,7 @@ public class AiAdminAgentClientController {
      * @return 客户端关联列表
      */
     @RequestMapping(value = "queryAgentClientByAgentId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiAgentClient>> queryAgentClientByAgentId(@RequestParam Long agentId) {
+    public ResponseEntity<List<AiAgentClient>> queryAgentClientByAgentId(@RequestParam("agentId") Long agentId) {
         try {
             List<AiAgentClient> aiAgentClientList = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
             return ResponseEntity.ok(aiAgentClientList);
@@ -83,7 +83,7 @@ public class AiAdminAgentClientController {
      * @return 智能体关联列表
      */
     @RequestMapping(value = "queryAgentClientByClientId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiAgentClient>> queryAgentClientByClientId(@RequestParam Long clientId) {
+    public ResponseEntity<List<AiAgentClient>> queryAgentClientByClientId(@RequestParam("clientId") Long clientId) {
         try {
             List<AiAgentClient> aiAgentClientList = aiAgentClientDao.queryAgentClientConfigByClientId(clientId);
             return ResponseEntity.ok(aiAgentClientList);
@@ -135,7 +135,7 @@ public class AiAdminAgentClientController {
      * @return 结果
      */
     @RequestMapping(value = "deleteAgentClient", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteAgentClient(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteAgentClient(@RequestParam("id") Long id) {
         try {
             int count = aiAgentClientDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

@@ -65,7 +65,7 @@ public class AiAdminClientAdvisorConfigController {
      * @return 顾问配置列表
      */
     @RequestMapping(value = "queryClientAdvisorConfigByClientId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiClientAdvisorConfig>> queryClientAdvisorConfigByClientId(@RequestParam Long clientId) {
+    public ResponseEntity<List<AiClientAdvisorConfig>> queryClientAdvisorConfigByClientId(@RequestParam("clientId") Long clientId) {
         try {
             List<AiClientAdvisorConfig> configList = aiClientAdvisorConfigDao.queryClientAdvisorConfigByClientId(clientId);
             return ResponseEntity.ok(configList);
@@ -117,7 +117,7 @@ public class AiAdminClientAdvisorConfigController {
      * @return 结果
      */
     @RequestMapping(value = "deleteClientAdvisorConfig", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteClientAdvisorConfig(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteClientAdvisorConfig(@RequestParam("id") Long id) {
         try {
             int count = aiClientAdvisorConfigDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

@@ -103,7 +103,7 @@ public class AiAdminAgentTaskScheduleController {
      * @return 结果
      */
     @RequestMapping(value = "deleteTaskSchedule", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteTaskSchedule(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteTaskSchedule(@RequestParam("id") Long id) {
         try {
             int count = aiAgentTaskScheduleDao.deleteById(id);
             return ResponseEntity.ok(count > 0);

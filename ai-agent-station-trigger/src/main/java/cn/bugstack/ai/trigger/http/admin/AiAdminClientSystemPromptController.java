@@ -49,7 +49,7 @@ public class AiAdminClientSystemPromptController {
      * @return 系统提示词
      */
     @RequestMapping(value = "querySystemPromptById", method = RequestMethod.GET)
-    public ResponseEntity<AiClientSystemPrompt> querySystemPromptById(@RequestParam Long id) {
+    public ResponseEntity<AiClientSystemPrompt> querySystemPromptById(@RequestParam("id") Long id) {
         try {
             AiClientSystemPrompt systemPrompt = aiClientSystemPromptDao.querySystemPromptConfigById(id);
             return ResponseEntity.ok(systemPrompt);
@@ -103,7 +103,7 @@ public class AiAdminClientSystemPromptController {
      * @return 结果
      */
     @RequestMapping(value = "deleteSystemPrompt", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> deleteSystemPrompt(@RequestParam Long id) {
+    public ResponseEntity<Boolean> deleteSystemPrompt(@RequestParam("id") Long id) {
         try {
             int count = aiClientSystemPromptDao.deleteById(id);
             return ResponseEntity.ok(count > 0);
