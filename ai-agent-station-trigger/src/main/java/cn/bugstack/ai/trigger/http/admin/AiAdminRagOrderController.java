@@ -42,6 +42,17 @@ public class AiAdminRagOrderController {
         }
     }
 
+    @RequestMapping(value = "queryAllValidRagOrder", method = RequestMethod.POST)
+    public ResponseEntity<List<AiRagOrder>> queryAllValidRagOrder() {
+        try {
+            List<AiRagOrder> ragOrderList = aiRagOrderDao.queryAllValidRagOrder();
+            return ResponseEntity.ok(ragOrderList);
+        } catch (Exception e) {
+            log.error("查询RAG订单列表异常", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     /**
      * 根据ID查询RAG订单
      *

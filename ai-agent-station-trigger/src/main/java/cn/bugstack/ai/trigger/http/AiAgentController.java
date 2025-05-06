@@ -79,6 +79,9 @@ public class AiAgentController implements IAiAgentService {
         }
     }
 
+    /**
+     * http://localhost:8091/ai-agent-station/api/v1/ai/agent/file/upload
+     */
     @RequestMapping(value = "file/upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     @Override
     public Response<Boolean> uploadRagFile(@RequestParam("name") String name, @RequestParam("tag") String tag, @RequestParam("files") List<MultipartFile> files) {

@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -298,6 +295,9 @@ public class AgentRepository implements IAgentRepository {
         AiRagOrder aiRagOrder = new AiRagOrder();
         aiRagOrder.setRagName(aiRagOrderVO.getRagName());
         aiRagOrder.setKnowledgeTag(aiRagOrderVO.getKnowledgeTag());
+        aiRagOrder.setStatus(1);
+        aiRagOrder.setCreateTime(new Date());
+        aiRagOrder.setUpdateTime(new Date());
         aiRagOrderDao.insert(aiRagOrder);
     }
 

@@ -200,10 +200,9 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>用户ID</th>
-                                    <th>订单编号</th>
-                                    <th class="d-none d-md-table-cell">订单金额</th>
-                                    <th>订单状态</th>
+                                    <th>知识库名称</th>
+                                    <th>知识标签</th>
+                                    <th>状态</th>
                                     <th class="d-none d-md-table-cell">创建时间</th>
                                     <th class="d-none d-lg-table-cell">更新时间</th>
                                     <th>操作</th>
@@ -237,24 +236,18 @@
                     <form id="ragOrderForm">
                         <input type="hidden" id="rag-order-id">
                         <div class="mb-3">
-                            <label for="rag-order-user-id" class="form-label">用户ID</label>
-                            <input type="text" class="form-control" id="rag-order-user-id" required>
+                            <label for="rag-name" class="form-label">知识库名称</label>
+                            <input type="text" class="form-control" id="rag-name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="rag-order-number" class="form-label">订单编号</label>
-                            <input type="text" class="form-control" id="rag-order-number" required>
+                            <label for="knowledge-tag" class="form-label">知识标签</label>
+                            <input type="text" class="form-control" id="knowledge-tag" required>
                         </div>
                         <div class="mb-3">
-                            <label for="rag-order-amount" class="form-label">订单金额</label>
-                            <input type="number" class="form-control" id="rag-order-amount" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="rag-order-status" class="form-label">订单状态</label>
-                            <select class="form-select" id="rag-order-status">
-                                <option value="1">待支付</option>
-                                <option value="2">已支付</option>
-                                <option value="3">已取消</option>
-                                <option value="4">已完成</option>
+                            <label for="rag-status" class="form-label">状态</label>
+                            <select class="form-select" id="rag-status">
+                                <option value="1">启用</option>
+                                <option value="0">禁用</option>
                             </select>
                         </div>
                     </form>
@@ -267,7 +260,7 @@
         </div>
     </div>
 
-    <!-- 确认删除模态框 -->
+    <!-- 删除确认模态框 -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -276,7 +269,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>确定要删除这个RAG订单吗？此操作不可恢复。</p>
+                    确定要删除这个RAG订单吗？此操作不可恢复。
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -286,7 +279,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
     <script src="../js/rag-order.js"></script>
     <script src="../js/main.js"></script>

@@ -87,7 +87,7 @@ const RagOrderManager = {
      */
     renderRagOrderList: function(data) {
         if (!data || data.length === 0) {
-            $('#rag-order-list').html('<tr><td colspan="8" class="text-center">暂无数据</td></tr>');
+            $('#rag-order-list').html('<tr><td colspan="7" class="text-center">暂无数据</td></tr>');
             this.total = 0;
             this.pages = 0;
             return;
@@ -104,10 +104,9 @@ const RagOrderManager = {
             html += `
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.userId}</td>
-                    <td>${item.orderNumber}</td>
-                    <td class="d-none d-md-table-cell">${item.orderAmount}</td>
-                    <td>${this.formatOrderStatus(item.orderStatus)}</td>
+                    <td>${item.ragName}</td>
+                    <td>${item.knowledgeTag}</td>
+                    <td>${this.formatStatus(item.status)}</td>
                     <td class="d-none d-md-table-cell">${this.formatDate(item.createTime)}</td>
                     <td class="d-none d-lg-table-cell">${this.formatDate(item.updateTime)}</td>
                     <td>
@@ -128,20 +127,16 @@ const RagOrderManager = {
     },
 
     /**
-     * 格式化订单状态
-     * @param {number} status 订单状态码
-     * @returns {string} 格式化后的订单状态
+     * 格式化状态
+     * @param {number} status 状态码
+     * @returns {string} 格式化后的状态
      */
-    formatOrderStatus: function(status) {
+    formatStatus: function(status) {
         switch (status) {
             case 1:
-                return '<span class="badge bg-warning">待支付</span>';
-            case 2:
-                return '<span class="badge bg-success">已支付</span>';
-            case 3:
-                return '<span class="badge bg-danger">已取消</span>';
-            case 4:
-                return '<span class="badge bg-info">已完成</span>';
+                return '<span class="badge bg-success">启用</span>';
+            case 0:
+                return '<span class="badge bg-danger">禁用</span>';
             default:
                 return '<span class="badge bg-secondary">未知</span>';
         }
@@ -222,14 +217,13 @@ const RagOrderManager = {
             // 编辑模式
             $('#ragOrderModalLabel').text('编辑RAG订单');
             $('#rag-order-id').val(ragOrder.id);
-            $('#rag-order-user-id').val(ragOrder.userId);
-            $('#rag-order-number').val(ragOrder.orderNumber);
-            $('#rag-order-amount').val(ragOrder.orderAmount);
-            $('#rag-order-status').val(ragOrder.orderStatus);
+            $('#rag-name').val(ragOrder.ragName);
+            $('#knowledge-tag').val(ragOrder.knowledgeTag);
+            $('#rag-status').val(ragOrder.status);
         } else {
             // 新增模式
             $('#ragOrderModalLabel').text('新增RAG订单');
-            $('#rag-order-status').val(1); // 默认待支付
+            $('#rag-status').val(1); // 默认启用
         }
 
         // 显示模态框
@@ -260,75 +254,49 @@ const RagOrderManager = {
      */
     saveRagOrder: function() {
         // 表单验证
-        if (!$('#rag-order-user-id').val()) {
-            alert('请输入用户ID');
+        if (!$('#rag-name').val()) {
+            alert('请输入知识库名称');
             return;
         }
-        if (!$('#rag-order-number').val()) {
-            alert('请输入订单编号');
-            return;
-        }
-        if (!$('#rag-order-amount').val()) {
-            alert('请输入订单金额');
+        if (!$('#knowledge-tag').val()) {
+            alert('请输入知识标签');
             return;
         }
 
         const id = $('#rag-order-id').val();
         const params = {
-            userId: parseInt($('#rag-order-user-id').val()),
-            orderNumber: $('#rag-order-number').val(),
-            orderAmount: parseFloat($('#rag-order-amount').val()),
-            orderStatus: parseInt($('#rag-order-status').val())
+            id: id ? parseInt(id) : null,
+            ragName: $('#rag-name').val(),
+            knowledgeTag: $('#knowledge-tag').val(),
+            status: parseInt($('#rag-status').val())
         };
 
-        if (id) {
-            // 编辑
-            params.id = parseInt(id);
-            $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/updateRagOrder',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(params),
-                success: (res) => {
-                    if (res) {
-                        alert('更新成功');
-                        // 关闭模态框
-                        bootstrap.Modal.getInstance(document.getElementById('ragOrderModal')).hide();
-                        // 刷新列表
-                        this.loadRagOrderList();
-                    } else {
-                        alert('更新失败');
-                    }
-                },
-                error: (err) => {
-                    console.error('更新RAG订单失败', err);
-                    alert('更新RAG订单失败');
+        // 根据是否有ID决定是新增还是更新
+        const url = id ? 
+            'http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/updateRagOrder' : 
+            'http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/addRagOrder';
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(params),
+            success: (res) => {
+                if (res) {
+                    // 关闭模态框
+                    bootstrap.Modal.getInstance(document.getElementById('ragOrderModal')).hide();
+                    // 重新加载列表
+                    this.loadRagOrderList();
+                    alert(id ? '更新成功' : '新增成功');
+                } else {
+                    alert(id ? '更新失败' : '新增失败');
                 }
-            });
-        } else {
-            // 新增
-            $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/addRagOrder',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(params),
-                success: (res) => {
-                    if (res) {
-                        alert('新增成功');
-                        // 关闭模态框
-                        bootstrap.Modal.getInstance(document.getElementById('ragOrderModal')).hide();
-                        // 刷新列表
-                        this.loadRagOrderList();
-                    } else {
-                        alert('新增失败');
-                    }
-                },
-                error: (err) => {
-                    console.error('新增RAG订单失败', err);
-                    alert('新增RAG订单失败');
-                }
-            });
-        }
+            },
+            error: (err) => {
+                console.error(id ? '更新RAG订单失败' : '新增RAG订单失败', err);
+                alert(id ? '更新RAG订单失败' : '新增RAG订单失败');
+            }
+        });
     },
 
     /**
@@ -354,11 +322,11 @@ const RagOrderManager = {
             type: 'GET',
             success: (res) => {
                 if (res) {
-                    alert('删除成功');
                     // 关闭模态框
                     bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
-                    // 刷新列表
+                    // 重新加载列表
                     this.loadRagOrderList();
+                    alert('删除成功');
                 } else {
                     alert('删除失败');
                 }

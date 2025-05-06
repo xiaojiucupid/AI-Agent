@@ -36,18 +36,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadRagOptions = () => {
         const ragSelect = document.getElementById('ragSelect');
 
-        fetch('http://localhost:8090/api/v1/rag/query_rag_tag_list')
+        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/queryAllValidRagOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                if (data.code === '0000' && data.data) {
+                if (data) {
                     // 清空现有选项（保留第一个默认选项）
                     while (ragSelect.options.length > 1) {
                         ragSelect.remove(1);
                     }
 
                     // 添加新选项
-                    data.data.forEach(tag => {
-                        const option = new Option(`Rag：${tag}`, tag);
+                    data.forEach(item => {
+                        const option = new Option(`Rag：${item.ragName}`, item.id);
                         ragSelect.add(option);
                     });
                 }
@@ -415,25 +420,31 @@ function clearAllChats() {
 clearAllChatsBtn.addEventListener('click', clearAllChats);
 
 // 上传知识下拉菜单控制
+// 获取上传知识按钮和菜单元素
 const uploadMenuButton = document.getElementById('uploadMenuButton');
 const uploadMenu = document.getElementById('uploadMenu');
 
 // 切换菜单显示
 uploadMenuButton.addEventListener('click', (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    uploadMenu.classList.toggle('hidden');
+    if (uploadMenu.style.display === 'none' || uploadMenu.style.display === '') {
+        uploadMenu.style.display = 'block';
+    } else {
+        uploadMenu.style.display = 'none';
+    }
 });
 
 // 点击外部区域关闭菜单
 document.addEventListener('click', (e) => {
-    if (!uploadMenu.contains(e.target) && e.target !== uploadMenuButton) {
-        uploadMenu.classList.add('hidden');
+    if (!uploadMenu.contains(e.target) && e.target !== uploadMenuButton && !uploadMenuButton.contains(e.target)) {
+        uploadMenu.style.display = 'none';
     }
 });
 
 // 菜单项点击后关闭菜单
 document.querySelectorAll('#uploadMenu a').forEach(item => {
     item.addEventListener('click', () => {
-        uploadMenu.classList.add('hidden');
+        uploadMenu.style.display = 'none';
     });
 });
