@@ -81,4 +81,7 @@ public interface IAiClientAdvisorConfigDao {
      * @return 顾问ID列表
      */
     List<Long> queryAdvisorIdsByClientIds(@Param("clientIdList") List<Long> clientIdList);
+
+    List<AiClientAdvisorConfig> queryClientAdvisorConfigList(AiClientAdvisorConfig aiClientAdvisorConfig);
+
 }

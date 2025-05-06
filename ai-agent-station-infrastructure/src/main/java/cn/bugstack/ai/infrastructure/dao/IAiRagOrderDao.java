@@ -65,4 +65,7 @@ public interface IAiRagOrderDao {
      * @return 知识库配置列表
      */
     List<AiRagOrder> queryAllValidRagOrder();
+
+    List<AiRagOrder> queryRagOrderList(AiRagOrder aiRagOrder);
+
 }

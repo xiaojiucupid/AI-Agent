@@ -81,4 +81,7 @@ public interface IAiClientToolConfigDao {
      * @return 客户端工具配置列表
      */
     List<AiClientToolConfig> queryToolConfigByToolType(String toolType);
+
+    List<AiClientToolConfig> queryToolConfigList(AiClientToolConfig aiClientToolConfig);
+
 }
