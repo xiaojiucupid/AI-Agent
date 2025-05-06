@@ -1,14 +1,17 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
  * 客户端-顾问关联表
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiClientAdvisorConfig {
+public class AiClientAdvisorConfig extends Page {
 
     /**
      * 主键ID

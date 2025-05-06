@@ -1,6 +1,8 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -8,8 +10,9 @@ import java.util.Date;
 /**
  * 系统提示词配置表
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiClientSystemPrompt {
+public class AiClientSystemPrompt extends Page {
 
     /**
      * 主键ID

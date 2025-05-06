@@ -1,6 +1,8 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -10,8 +12,9 @@ import java.util.Date;
  * @author Fuzhengwei bugstack.cn @小傅哥
  * 2025-05-05 10:50
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiClientSystemPromptConfig {
+public class AiClientSystemPromptConfig extends Page {
 
     /**
      * 主键ID

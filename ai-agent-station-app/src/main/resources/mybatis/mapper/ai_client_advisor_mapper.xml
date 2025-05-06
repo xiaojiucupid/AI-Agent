@@ -77,4 +77,30 @@
         ORDER BY a.order_num, a.id
     </select>
     
+    <!-- 根据条件查询顾问列表 -->
+    <select id="queryClientAdvisorList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientAdvisor" resultMap="dataMap">
+        SELECT 
+            id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        FROM 
+            ai_client_advisor
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="advisorName != null and advisorName != ''">
+                AND advisor_name LIKE CONCAT('%', #{advisorName}, '%')
+            </if>
+            <if test="advisorType != null and advisorType != ''">
+                AND advisor_type = #{advisorType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY order_num, create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+    
 </mapper>

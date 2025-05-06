@@ -1,14 +1,17 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 /**
  * MCP客户端配置表
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiClientToolMcp {
+public class AiClientToolMcp extends Page {
 
     /**
      * 主键ID

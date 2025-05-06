@@ -53,17 +53,9 @@ public interface IAiClientSystemPromptDao {
     int deleteById(Long id);
     
     /**
-     * 根据客户端ID查询系统提示词配置（只返回一条记录）
-     * @param clientId 客户端ID
-     * @return 系统提示词配置
+     * 根据条件查询系统提示词列表
+     * @param aiClientSystemPrompt 查询条件
+     * @return 系统提示词列表
      */
-    AiClientSystemPrompt querySystemPromptConfigByClientId(Long clientId);
-
-    /**
-     * 根据多个客户端ID查询系统提示词配置（返回多条记录）
-     * @param clientIds 客户端ID列表
-     * @return 系统提示词配置列表
-     */
-    List<AiClientSystemPrompt> querySystemPromptConfigByClientIds(List<Long> clientIds);
-
+    List<AiClientSystemPrompt> querySystemPromptList(AiClientSystemPrompt aiClientSystemPrompt);
 }

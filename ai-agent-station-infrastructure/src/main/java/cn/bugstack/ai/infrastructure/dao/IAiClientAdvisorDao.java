@@ -59,4 +59,6 @@ public interface IAiClientAdvisorDao {
      */
     List<AiClientAdvisor> queryAdvisorConfigByClientIds(List<Long> clientIdList);
 
+    List<AiClientAdvisor> queryClientAdvisorList(AiClientAdvisor aiClientAdvisor);
+
 }
