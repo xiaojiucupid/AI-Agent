@@ -24,6 +24,11 @@ public class AiAgentTaskSchedule extends Page {
     private Long agentId;
 
     /**
+     * 任务名称
+     */
+    private String taskName;
+
+    /**
      * 任务描述
      */
     private String description;

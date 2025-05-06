@@ -49,7 +49,7 @@ public class AiAdminAgentTaskScheduleController {
      * @return AI代理任务调度
      */
     @RequestMapping(value = "queryTaskScheduleById", method = RequestMethod.GET)
-    public ResponseEntity<AiAgentTaskSchedule> queryTaskScheduleById(@RequestParam Long id) {
+    public ResponseEntity<AiAgentTaskSchedule> queryTaskScheduleById(@RequestParam("id") Long id) {
         try {
             AiAgentTaskSchedule taskSchedule = aiAgentTaskScheduleDao.queryTaskScheduleById(id);
             return ResponseEntity.ok(taskSchedule);

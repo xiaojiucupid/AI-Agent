@@ -87,7 +87,7 @@ const TaskScheduleManager = {
      */
     renderTaskScheduleList: function(data) {
         if (!data || data.length === 0) {
-            $('#task-schedule-list').html('<tr><td colspan="7" class="text-center">暂无数据</td></tr>');
+            $('#task-schedule-list').html('<tr><td colspan="8" class="text-center">暂无数据</td></tr>');
             this.total = 0;
             this.pages = 0;
             return;
@@ -105,6 +105,7 @@ const TaskScheduleManager = {
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.taskName}</td>
+                    <td>${item.agentId}</td>
                     <td class="d-none d-md-table-cell">${item.description || '-'}</td>
                     <td>${item.status === 1 ? '<span class="badge bg-success">启用</span>' : '<span class="badge bg-danger">禁用</span>'}</td>
                     <td class="d-none d-md-table-cell">${this.formatDate(item.createTime)}</td>
@@ -191,6 +192,7 @@ const TaskScheduleManager = {
             $('#taskScheduleModalLabel').text('编辑任务调度');
             $('#task-schedule-id').val(taskSchedule.id);
             $('#task-name').val(taskSchedule.taskName);
+            $('#task-agent-id').val(taskSchedule.agentId);
             $('#task-description').val(taskSchedule.description);
             $('#task-cron').val(taskSchedule.cronExpression);
             $('#task-status').val(taskSchedule.status);
@@ -232,10 +234,17 @@ const TaskScheduleManager = {
             alert('请输入任务名称');
             return;
         }
+        
+        if (!$('#task-agent-id').val()) {
+            alert('请输入智能体ID');
+            return;
+        }
 
         const id = $('#task-schedule-id').val();
         const params = {
+            id: id,
             taskName: $('#task-name').val(),
+            agentId: parseInt($('#task-agent-id').val()),
             description: $('#task-description').val(),
             cronExpression: $('#task-cron').val(),
             status: parseInt($('#task-status').val())

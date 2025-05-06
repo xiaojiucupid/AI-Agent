@@ -370,6 +370,7 @@ DROP TABLE IF EXISTS `ai_agent_task_schedule`;
 CREATE TABLE `ai_agent_task_schedule` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `agent_id` bigint(20) NOT NULL COMMENT '智能体ID',
+  `task_name` varchar(64) DEFAULT NULL COMMENT '任务名称',
   `description` varchar(255) DEFAULT NULL COMMENT '任务描述',
   `cron_expression` varchar(50) NOT NULL COMMENT '时间表达式(如: 0/3 * * * * *)',
   `task_param` text DEFAULT NULL COMMENT '任务入参配置(JSON格式)',
