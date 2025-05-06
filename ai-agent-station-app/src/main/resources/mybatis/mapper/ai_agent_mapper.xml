@@ -95,4 +95,27 @@
         WHERE 
             a.status = 1
     </select>
+    
+    <!-- 根据条件查询智能体列表 -->
+    <select id="queryAiAgentList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgent" resultMap="dataMap">
+        SELECT 
+            id, agent_name, description, status, create_time, update_time
+        FROM 
+            ai_agent
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="agentName != null and agentName != ''">
+                AND agent_name LIKE CONCAT('%', #{agentName}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
 </mapper>

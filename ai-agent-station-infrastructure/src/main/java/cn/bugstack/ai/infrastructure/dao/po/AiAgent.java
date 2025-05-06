@@ -1,14 +1,17 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
  * AI智能体配置表
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiAgent {
+public class AiAgent extends Page {
 
     /**
      * 主键ID

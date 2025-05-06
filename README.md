@@ -8,3 +8,6 @@
   - [DDD 架构设计](https://bugstack.cn/md/road-map/ddd.html)
   - [DDD 建模案例](https://bugstack.cn/md/road-map/ddd-model.html)
 
+## 1. admin
+
+编写查询列表，增加、修改、删除操作，

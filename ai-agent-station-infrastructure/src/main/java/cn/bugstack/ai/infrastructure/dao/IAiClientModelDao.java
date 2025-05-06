@@ -61,5 +61,11 @@ public interface IAiClientModelDao {
     List<AiClientModel> queryModelConfigByClientIds(List<Long> clientIdList);
 
     List<AiClientToolMcp> queryToolMcpConfigByClientIds(List<Long> clientIdList);
-
+    
+    /**
+     * 根据条件查询客户端模型列表
+     * @param aiClientModel 查询条件
+     * @return 客户端模型列表
+     */
+    List<AiClientModel> queryClientModelList(AiClientModel aiClientModel);
 }

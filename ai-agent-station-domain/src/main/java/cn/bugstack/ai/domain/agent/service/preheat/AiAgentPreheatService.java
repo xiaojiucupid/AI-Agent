@@ -9,6 +9,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,6 +33,14 @@ public class AiAgentPreheatService implements IAiAgentPreheatService {
         StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> handler = defaultArmoryStrategyFactory.strategyHandler();
         handler.apply(AiAgentEngineStarterEntity.builder()
                 .clientIdList(aiClientIds)
+                .build(), new DefaultArmoryStrategyFactory.DynamicContext());
+    }
+
+    @Override
+    public void preheat(Long aiClientId) throws Exception {
+        StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> handler = defaultArmoryStrategyFactory.strategyHandler();
+        handler.apply(AiAgentEngineStarterEntity.builder()
+                .clientIdList(Collections.singletonList(aiClientId))
                 .build(), new DefaultArmoryStrategyFactory.DynamicContext());
     }
 

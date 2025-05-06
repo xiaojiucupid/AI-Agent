@@ -12,4 +12,6 @@ public interface IAiAgentPreheatService {
      */
     void preheat() throws Exception;
 
+    void preheat(Long aiClientId) throws Exception;
+
 }

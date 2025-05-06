@@ -1,11 +1,16 @@
 package cn.bugstack.ai.infrastructure.dao.po;
 
+import cn.bugstack.ai.infrastructure.dao.po.base.Page;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.apache.james.mime4j.dom.datetime.DateTime;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class AiClientModel {
+public class AiClientModel extends Page {
 
     /**
      * 主键ID
@@ -60,11 +65,11 @@ public class AiClientModel {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
 }

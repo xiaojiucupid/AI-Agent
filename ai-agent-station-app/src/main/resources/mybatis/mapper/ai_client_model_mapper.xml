@@ -83,5 +83,31 @@
             </foreach>
         )
     </select>
+
+    <select id="queryClientModelList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientModel" resultMap="dataMap">
+        SELECT 
+            id, model_name, base_url, api_key, completions_path, embeddings_path, 
+            model_type, model_version, timeout, status, create_time, update_time
+        FROM 
+            ai_client_model
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="modelName != null and modelName != ''">
+                AND model_name LIKE CONCAT('%', #{modelName}, '%')
+            </if>
+            <if test="modelType != null and modelType != ''">
+                AND model_type = #{modelType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
     
 </mapper>

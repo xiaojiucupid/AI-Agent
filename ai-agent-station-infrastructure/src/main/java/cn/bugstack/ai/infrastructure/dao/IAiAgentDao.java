@@ -72,4 +72,11 @@ public interface IAiAgentDao {
      * @return 客户端ID列表
      */
     List<Long> queryClientIdsByAgentId(@Param("agentId") Long agentId);
+    
+    /**
+     * 根据条件查询智能体列表
+     * @param aiAgent 查询条件
+     * @return 智能体列表
+     */
+    List<AiAgent> queryAiAgentList(AiAgent aiAgent);
 }
