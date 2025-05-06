@@ -8,8 +8,10 @@ import cn.bugstack.ai.types.common.Constants;
 import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,21 @@ public class AiAgentController implements IAiAgentService {
                     .code(Constants.ResponseCode.UN_ERROR.getCode())
                     .info(Constants.ResponseCode.UN_ERROR.getInfo())
                     .build();
+        }
+    }
+
+    /**
+     * curl http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=1&message=hi
+     */
+    @RequestMapping(value = "chat_stream", method = RequestMethod.GET)
+    @Override
+    public Flux<ChatResponse> chatStream(@RequestParam Long modelId, @RequestParam String message) {
+        try {
+            log.info("AiAgent 智能体对话(stream)，请求 {} {}", modelId, message);
+            return aiAgentChatService.aiAgentChatStream(modelId, message);
+        } catch (Exception e) {
+            log.error("AiAgent 智能体对话(stream)，失败 {} {}", modelId, message, e);
+            throw e;
         }
     }
 

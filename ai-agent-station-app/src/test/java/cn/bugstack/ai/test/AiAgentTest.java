@@ -49,8 +49,10 @@ import java.util.function.Function;
 
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
+
 /**
  * 测试
+ *
  * @author Fuzhengwei bugstack.cn @小傅哥
  * 2025-05-05 08:51
  */
@@ -102,9 +104,9 @@ public class AiAgentTest {
         chatClient = ChatClient.builder(chatModel)
                 .defaultSystem("""
                         	 你是一个 AI Agent 智能体，可以根据用户输入信息生成文章，并发送到 CSDN 平台以及完成微信公众号消息通知，今天是 {current_date}。
-                        
+                                                
                         	 你擅长使用Planning模式，帮助用户生成质量更高的文章。
-                        
+                                                
                         	 你的规划应该包括以下几个方面：
                         	 1. 分析用户输入的内容，生成技术文章。
                         	 2. 提取，文章标题（需要含带技术点）、文章内容、文章标签（多个用英文逗号隔开）、文章简述（100字）将以上内容发布文章到CSDN
@@ -137,13 +139,18 @@ public class AiAgentTest {
     }
 
     @Test
+    public void test_chat_stream() {
+
+    }
+
+    @Test
     public void test_client01() {
         ChatClient chatClient01 = ChatClient.builder(chatModel)
                 .defaultSystem("""
                         你是一个专业的AI提示词优化专家。请帮我优化以下prompt，并按照以下格式返回：
-                        
+                                                
                         # Role: [角色名称]
-                        
+                                                
                         ## Profile
                         - language: [语言]
                         - description: [详细的角色描述]
@@ -151,53 +158,53 @@ public class AiAgentTest {
                         - personality: [性格特征]
                         - expertise: [专业领域]
                         - target_audience: [目标用户群]
-                        
+                                                
                         ## Skills
-                        
+                                                
                         1. [核心技能类别]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
-                        
+                                                
                         2. [辅助技能类别]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
                            - [具体技能]: [简要说明]
-                        
+                                                
                         ## Rules
-                        
+                                                
                         1. [基本原则]：
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
-                        
+                                                
                         2. [行为准则]：
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
                            - [具体规则]: [详细说明]
-                        
+                                                
                         3. [限制条件]：
                            - [具体限制]: [详细说明]
                            - [具体限制]: [详细说明]
                            - [具体限制]: [详细说明]
                            - [具体限制]: [详细说明]
-                        
+                                                
                         ## Workflows
-                        
+                                                
                         - 目标: [明确目标]
                         - 步骤 1: [详细说明]
                         - 步骤 2: [详细说明]
                         - 步骤 3: [详细说明]
                         - 预期结果: [说明]
-                        
-                        
+                                                
+                                                
                         ## Initialization
                         作为[角色名称]，你必须遵守上述Rules，按照Workflows执行任务。
-                        
+                                                
                         请基于以上模板，优化并扩展以下prompt，确保内容专业、完整且结构清晰，注意不要携带任何引导词或解释，不要使用代码块包围。
                         """)
                 .defaultAdvisors(
@@ -225,9 +232,9 @@ public class AiAgentTest {
         ChatClient chatClient02 = ChatClient.builder(chatModel)
                 .defaultSystem("""
                         	 你是一个 AI Agent 智能体，可以根据用户输入信息生成文章，并发送到 CSDN 平台以及完成微信公众号消息通知，今天是 {current_date}。
-                        
+                                                
                         	 你擅长使用Planning模式，帮助用户生成质量更高的文章。
-                        
+                                                
                         	 你的规划应该包括以下几个方面：
                         	 1. 分析用户输入的内容，生成技术文章。
                         	 2. 提取，文章标题（需要含带技术点）、文章内容、文章标签（多个用英文逗号隔开）、文章简述（100字）将以上内容发布文章到CSDN
@@ -418,5 +425,6 @@ public class AiAgentTest {
         }
 
     }
+
 
 }

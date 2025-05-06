@@ -1,6 +1,5 @@
 package cn.bugstack.ai.trigger.http.admin;
 
-import cn.bugstack.ai.api.IAiAdminService;
 import cn.bugstack.ai.infrastructure.dao.*;
 import cn.bugstack.ai.infrastructure.dao.po.AiAgent;
 import jakarta.annotation.Resource;
@@ -21,7 +20,7 @@ import java.util.List;
 @RestController()
 @CrossOrigin("*")
 @RequestMapping("/api/v1/ai/admin/agent/")
-public class AiAdminAgentController implements IAiAdminService {
+public class AiAdminAgentController {
 
     @Resource
     private IAiAgentDao aiAgentDao;

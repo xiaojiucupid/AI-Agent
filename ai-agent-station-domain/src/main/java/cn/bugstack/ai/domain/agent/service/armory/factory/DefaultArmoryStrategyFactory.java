@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,10 @@ public class DefaultArmoryStrategyFactory {
 
     public ChatClient chatClient(Long clientId) {
         return (ChatClient) applicationContext.getBean("ChatClient_" + clientId);
+    }
+
+    public ChatModel chatModel(Long modelId) {
+        return (ChatModel) applicationContext.getBean("AiClientModel_" + modelId);
     }
 
     @Data

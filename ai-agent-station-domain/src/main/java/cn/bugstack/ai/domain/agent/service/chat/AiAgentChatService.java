@@ -6,7 +6,14 @@ import cn.bugstack.ai.domain.agent.service.armory.factory.DefaultArmoryStrategyF
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -54,6 +61,18 @@ public class AiAgentChatService implements IAiAgentChatService {
         log.info("智能体对话请求，结果 {} {}", aiAgentId, content);
 
         return content;
+    }
+
+    @Override
+    public Flux<ChatResponse> aiAgentChatStream(Long modelId, String message) {
+        log.info("智能体对话请求，参数 modelId {} message {}", modelId, message);
+
+        // 获取对话模型
+        ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);
+
+        return chatModel.stream(Prompt.builder()
+                        .messages(new UserMessage(message))
+                        .build());
     }
 
 }

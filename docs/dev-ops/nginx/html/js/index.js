@@ -262,12 +262,12 @@ function startEventStream(message) {
     const aiModelValue = aiModelSelect.value;
     const aiModelModel = aiModelSelect.options[aiModelSelect.selectedIndex].getAttribute('model');
 
-    let url;
-    if (ragTag) {
-        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream_rag?message=${encodeURIComponent(message)}&ragTag=${encodeURIComponent(ragTag)}&model=${encodeURIComponent(aiModelModel)}`;
-    } else {
-        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream?message=${encodeURIComponent(message)}&model=${encodeURIComponent(aiModelModel)}`;
-    }
+    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=1&message=${encodeURIComponent(message)}`;
+//    if (ragTag) {
+//        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream_rag?message=${encodeURIComponent(message)}&ragTag=${encodeURIComponent(ragTag)}&model=${encodeURIComponent(aiModelModel)}`;
+//    } else {
+//        url = `http://localhost:8090/api/v1/${aiModelValue}/generate_stream?message=${encodeURIComponent(message)}&model=${encodeURIComponent(aiModelModel)}`;
+//    }
 
     currentEventSource = new EventSource(url);
     let accumulatedContent = '';
