@@ -68,4 +68,6 @@ public interface IAiAgentTaskScheduleDao {
 
     List<Long> queryAllInvalidTaskScheduleIds();
 
+    List<AiAgentTaskSchedule> queryTaskScheduleList(AiAgentTaskSchedule aiAgentTaskSchedule);
+
 }
