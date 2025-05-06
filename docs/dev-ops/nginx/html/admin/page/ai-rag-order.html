@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>AI智能体管理</title>
+    <title>RAG订单管理</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -117,7 +117,7 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="ai-agent.html">
+                            <a class="nav-link" href="ai-agent.html">
                                 <i class="fas fa-robot"></i> AI智能体管理
                             </a>
                         </li>
@@ -167,7 +167,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="ai-rag-order.html">
+                            <a class="nav-link active" href="ai-rag-order.html">
                                 <i class="fas fa-file-invoice-dollar"></i> RAG订单管理
                             </a>
                         </li>
@@ -176,12 +176,12 @@
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <div id="content-agent">
+                <div id="content-rag-order">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">AI智能体管理</h1>
+                        <h1 class="h2">RAG订单管理</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-agent">
-                                <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">新增智能体</span>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-rag-order">
+                                <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">新增订单</span>
                             </button>
                         </div>
                     </div>
@@ -189,8 +189,8 @@
                     <div class="row mb-3">
                         <div class="col-12 col-md-6">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="search-agent-name" placeholder="智能体名称">
-                                <button class="btn btn-outline-secondary" type="button" id="btn-search-agent">搜索</button>
+                                <input type="text" class="form-control" id="search-order-id" placeholder="订单ID">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-search-order">搜索</button>
                             </div>
                         </div>
                     </div>
@@ -200,15 +200,16 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>智能体名称</th>
-                                    <th class="d-none d-md-table-cell">描述</th>
-                                    <th>状态</th>
+                                    <th>用户ID</th>
+                                    <th>订单编号</th>
+                                    <th class="d-none d-md-table-cell">订单金额</th>
+                                    <th>订单状态</th>
                                     <th class="d-none d-md-table-cell">创建时间</th>
                                     <th class="d-none d-lg-table-cell">更新时间</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
-                            <tbody id="agent-list">
+                            <tbody id="rag-order-list">
                                 <!-- 数据将通过JavaScript动态加载 -->
                             </tbody>
                         </table>
@@ -224,37 +225,43 @@
         </div>
     </div>
 
-    <!-- 新增/编辑智能体模态框 -->
-    <div class="modal fade" id="agentModal" tabindex="-1" aria-labelledby="agentModalLabel" aria-hidden="true">
+    <!-- 新增/编辑RAG订单模态框 -->
+    <div class="modal fade" id="ragOrderModal" tabindex="-1" aria-labelledby="ragOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="agentModalLabel">新增智能体</h5>
+                    <h5 class="modal-title" id="ragOrderModalLabel">新增RAG订单</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="agentForm">
-                        <input type="hidden" id="agent-id">
+                    <form id="ragOrderForm">
+                        <input type="hidden" id="rag-order-id">
                         <div class="mb-3">
-                            <label for="agent-name" class="form-label">智能体名称</label>
-                            <input type="text" class="form-control" id="agent-name" required>
+                            <label for="rag-order-user-id" class="form-label">用户ID</label>
+                            <input type="text" class="form-control" id="rag-order-user-id" required>
                         </div>
                         <div class="mb-3">
-                            <label for="agent-description" class="form-label">描述</label>
-                            <textarea class="form-control" id="agent-description" rows="3"></textarea>
+                            <label for="rag-order-number" class="form-label">订单编号</label>
+                            <input type="text" class="form-control" id="rag-order-number" required>
                         </div>
                         <div class="mb-3">
-                            <label for="agent-status" class="form-label">状态</label>
-                            <select class="form-select" id="agent-status">
-                                <option value="1">启用</option>
-                                <option value="0">禁用</option>
+                            <label for="rag-order-amount" class="form-label">订单金额</label>
+                            <input type="number" class="form-control" id="rag-order-amount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rag-order-status" class="form-label">订单状态</label>
+                            <select class="form-select" id="rag-order-status">
+                                <option value="1">待支付</option>
+                                <option value="2">已支付</option>
+                                <option value="3">已取消</option>
+                                <option value="4">已完成</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="btn-save-agent">保存</button>
+                    <button type="button" class="btn btn-primary" id="btn-save-rag-order">保存</button>
                 </div>
             </div>
         </div>
@@ -269,7 +276,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>确定要删除这个智能体吗？此操作不可恢复。</p>
+                    <p>确定要删除这个RAG订单吗？此操作不可恢复。</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -281,7 +288,7 @@
 
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/agent.js"></script>
+    <script src="../js/rag-order.js"></script>
     <script src="../js/main.js"></script>
 </body>
 </html>

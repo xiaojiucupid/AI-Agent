@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>AI智能体管理</title>
+    <title>AI代理任务调度管理</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -117,7 +117,7 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="ai-agent.html">
+                            <a class="nav-link" href="ai-agent.html">
                                 <i class="fas fa-robot"></i> AI智能体管理
                             </a>
                         </li>
@@ -127,7 +127,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="ai-agent-task.html">
+                            <a class="nav-link active" href="ai-agent-task.html">
                                 <i class="fas fa-tasks"></i> AI代理任务调度
                             </a>
                         </li>
@@ -176,12 +176,12 @@
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <div id="content-agent">
+                <div id="content-task-schedule">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">AI智能体管理</h1>
+                        <h1 class="h2">AI代理任务调度管理</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-agent">
-                                <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">新增智能体</span>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-task-schedule">
+                                <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">新增任务调度</span>
                             </button>
                         </div>
                     </div>
@@ -189,8 +189,8 @@
                     <div class="row mb-3">
                         <div class="col-12 col-md-6">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="search-agent-name" placeholder="智能体名称">
-                                <button class="btn btn-outline-secondary" type="button" id="btn-search-agent">搜索</button>
+                                <input type="text" class="form-control" id="search-task-name" placeholder="任务名称">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-search-task">搜索</button>
                             </div>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>智能体名称</th>
+                                    <th>任务名称</th>
                                     <th class="d-none d-md-table-cell">描述</th>
                                     <th>状态</th>
                                     <th class="d-none d-md-table-cell">创建时间</th>
@@ -208,7 +208,7 @@
                                     <th>操作</th>
                                 </tr>
                             </thead>
-                            <tbody id="agent-list">
+                            <tbody id="task-schedule-list">
                                 <!-- 数据将通过JavaScript动态加载 -->
                             </tbody>
                         </table>
@@ -224,28 +224,32 @@
         </div>
     </div>
 
-    <!-- 新增/编辑智能体模态框 -->
-    <div class="modal fade" id="agentModal" tabindex="-1" aria-labelledby="agentModalLabel" aria-hidden="true">
+    <!-- 新增/编辑任务调度模态框 -->
+    <div class="modal fade" id="taskScheduleModal" tabindex="-1" aria-labelledby="taskScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="agentModalLabel">新增智能体</h5>
+                    <h5 class="modal-title" id="taskScheduleModalLabel">新增任务调度</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="agentForm">
-                        <input type="hidden" id="agent-id">
+                    <form id="taskScheduleForm">
+                        <input type="hidden" id="task-schedule-id">
                         <div class="mb-3">
-                            <label for="agent-name" class="form-label">智能体名称</label>
-                            <input type="text" class="form-control" id="agent-name" required>
+                            <label for="task-name" class="form-label">任务名称</label>
+                            <input type="text" class="form-control" id="task-name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="agent-description" class="form-label">描述</label>
-                            <textarea class="form-control" id="agent-description" rows="3"></textarea>
+                            <label for="task-description" class="form-label">描述</label>
+                            <textarea class="form-control" id="task-description" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="agent-status" class="form-label">状态</label>
-                            <select class="form-select" id="agent-status">
+                            <label for="task-cron" class="form-label">Cron表达式</label>
+                            <input type="text" class="form-control" id="task-cron">
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-status" class="form-label">状态</label>
+                            <select class="form-select" id="task-status">
                                 <option value="1">启用</option>
                                 <option value="0">禁用</option>
                             </select>
@@ -254,7 +258,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="btn-save-agent">保存</button>
+                    <button type="button" class="btn btn-primary" id="btn-save-task-schedule">保存</button>
                 </div>
             </div>
         </div>
@@ -269,7 +273,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>确定要删除这个智能体吗？此操作不可恢复。</p>
+                    <p>确定要删除这个任务调度吗？此操作不可恢复。</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -281,7 +285,7 @@
 
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/agent.js"></script>
+    <script src="../js/agent-task.js"></script>
     <script src="../js/main.js"></script>
 </body>
 </html>

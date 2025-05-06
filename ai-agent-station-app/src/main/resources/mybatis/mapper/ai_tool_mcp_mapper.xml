@@ -35,7 +35,7 @@
     </select>
     
     <!-- 根据条件查询MCP配置列表 -->
-    <select id="queryMcpConfigList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientToolMcp" resultMap="dataMap">
+    <select id="queryMcpList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiClientToolMcp" resultMap="dataMap">
         SELECT 
             id, mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
         FROM 
