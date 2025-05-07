@@ -15,6 +15,6 @@ public interface IAiAgentChatService {
      */
     String aiAgentChat(Long aiAgentId, String message);
 
-    Flux<ChatResponse> aiAgentChatStream(Long modelId, Long ragId, String message);
+    Flux<ChatResponse> aiAgentChatStream(Long aiAgentId, Long ragId, String message);
 
 }

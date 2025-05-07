@@ -34,4 +34,6 @@ public interface IAgentRepository {
 
     String queryRagKnowledgeTag(Long ragId);
 
+    Long queryAiClientModelIdByAgentId(Long aiAgentId);
+
 }

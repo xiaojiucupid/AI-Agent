@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="agent_name" property="agentName"/>
         <result column="description" property="description"/>
+        <result column="channel" property="channel"/>
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -13,21 +14,27 @@
     
     <!-- 查询所有智能体配置 -->
     <select id="queryAllAgentConfig" resultMap="dataMap">
-        SELECT id, agent_name, description, status, create_time, update_time
+        SELECT id, agent_name, channel, description, status, create_time, update_time
         FROM ai_agent
         ORDER BY id
+    </select>
+
+    <select id="queryAllAgentConfigByChannel" resultType="java.lang.String" resultMap="dataMap">
+        SELECT id, agent_name, channel, description, status, create_time, update_time
+        FROM ai_agent
+        WHERE channel = #{channel}
     </select>
     
     <!-- 根据ID查询智能体配置 -->
     <select id="queryAgentConfigById" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_name, description, status, create_time, update_time
+        SELECT id, agent_name, channel, description, status, create_time, update_time
         FROM ai_agent
         WHERE id = #{id}
     </select>
     
     <!-- 根据智能体名称查询配置 -->
     <select id="queryAgentConfigByName" parameterType="java.lang.String" resultMap="dataMap">
-        SELECT id, agent_name, description, status, create_time, update_time
+        SELECT id, agent_name, channel, description, status, create_time, update_time
         FROM ai_agent
         WHERE agent_name = #{agentName}
     </select>
@@ -35,7 +42,7 @@
     <!-- 插入智能体配置 -->
     <insert id="insert" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgent">
         INSERT INTO ai_agent (
-            agent_name, description, status, create_time, update_time
+            agent_name, channel, description, status, create_time, update_time
         ) VALUES (
             #{agentName}, #{description}, #{status}, #{createTime}, #{updateTime}
         )
@@ -45,6 +52,7 @@
     <update id="update" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgent">
         UPDATE ai_agent
         SET agent_name = #{agentName},
+            channel = #{channel},
             description = #{description},
             status = #{status},
             update_time = #{updateTime}
@@ -99,7 +107,7 @@
     <!-- 根据条件查询智能体列表 -->
     <select id="queryAiAgentList" parameterType="cn.bugstack.ai.infrastructure.dao.po.AiAgent" resultMap="dataMap">
         SELECT 
-            id, agent_name, description, status, create_time, update_time
+            id, agent_name, channel, description, status, create_time, update_time
         FROM 
             ai_agent
         <where>

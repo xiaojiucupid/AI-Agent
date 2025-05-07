@@ -11,6 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -112,7 +113,7 @@ public class IAiClientModelDaoTest {
         String newModelName = "updated_model_" + System.currentTimeMillis();
         config.setModelName(newModelName);
         config.setBaseUrl("https://updated-api.example.com");
-        config.setUpdateTime(LocalDateTime.now());
+        config.setUpdateTime(new Date());
 
         // 执行更新
         int rows = aiClientModelConfigDao.update(config);
@@ -164,8 +165,8 @@ public class IAiClientModelDaoTest {
         config.setModelVersion("gpt-4.1-mini");
         config.setTimeout(30);
         config.setStatus(1);
-        config.setCreateTime(LocalDateTime.now());
-        config.setUpdateTime(LocalDateTime.now());
+        config.setCreateTime(new Date());
+        config.setUpdateTime(new Date());
         return config;
     }
 }

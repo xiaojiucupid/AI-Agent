@@ -79,4 +79,7 @@ public interface IAiAgentDao {
      * @return 智能体列表
      */
     List<AiAgent> queryAiAgentList(AiAgent aiAgent);
+
+    List<AiAgent> queryAllAgentConfigByChannel(String chatStream);
+
 }

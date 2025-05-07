@@ -62,41 +62,46 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     };
 
-    // 获取模型列表
-    const loadModelOptions = () => {
-        const modelSelect = document.getElementById('aiModel');
-
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/queryAllModelConfig', {
+    // 获取AI代理列表
+    function fetchAiAgents() {
+        // 发送请求获取AI代理列表
+        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/queryAllAgentConfigListByChannel', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'channel=chat_stream'
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    // 清空现有选项
-                    modelSelect.innerHTML = '';
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不正常');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const aiAgentSelect = document.getElementById('aiAgent');
+            // 清空现有选项，保留默认选项
+            aiAgentSelect.innerHTML = '<option value="">请选择智能体</option>';
 
-                    // 添加新选项
-                    data.forEach(item => {
-                        const option = new Option(item.modelName, item.id);
-                        option.setAttribute('model', item.id);
-                        if (item.id === 1) {
-                            option.selected = true;
-                        }
-                        modelSelect.add(option);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('获取模型列表失败:', error);
+            // 添加从服务器获取的选项
+            data.forEach(agent => {
+                const option = document.createElement('option');
+                option.value = agent.id;
+                option.textContent = agent.agentName;
+                aiAgentSelect.appendChild(option);
             });
-    };
+        })
+        .catch(error => {
+            console.error('获取AI代理列表失败:', error);
+        });
+    }
 
     // 初始化加载
     loadRagOptions();
-    loadModelOptions();
+
+    // 获取AI代理列表
+    fetchAiAgents();
+
 });
 
 async function createNewChat() {
@@ -298,11 +303,11 @@ function startEventStream(message) {
     const ragId = document.getElementById('ragSelect').value;
     // 判断 ragId 为空的时候，设置为0
     const ragIdParam = ragId ? ragId : '0';
-    const aiModelSelect = document.getElementById('aiModel');
-    const modelId = aiModelSelect.value;
-    const aiModelModel = aiModelSelect.options[aiModelSelect.selectedIndex].getAttribute('model');
+    const aiAgentSelect = document.getElementById('aiAgent');
+    const aiAgentId = aiAgentSelect.value;
+    const aiModelModel = aiAgentSelect.options[aiAgentSelect.selectedIndex].getAttribute('model');
 
-    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=${modelId}&ragId=${ragIdParam}&message=${encodeURIComponent(message)}`;
+    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?aiAgentId=${aiAgentId}&ragId=${ragIdParam}&message=${encodeURIComponent(message)}`;
 
     currentEventSource = new EventSource(url);
     let accumulatedContent = '';

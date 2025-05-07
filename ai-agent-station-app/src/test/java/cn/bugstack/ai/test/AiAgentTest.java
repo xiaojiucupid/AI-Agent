@@ -1,8 +1,11 @@
 package cn.bugstack.ai.test;
 
 import cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -45,6 +48,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
@@ -98,6 +102,7 @@ public class AiAgentTest {
                                         .description("王大瓜")
                                         .inputType(TestFunctionInput.class)
                                         .build())
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()).getToolCallbacks())
                         .build())
                 .build();
 
@@ -113,7 +118,7 @@ public class AiAgentTest {
                         	 3. 获取发送到 CSDN 文章的 URL 地址。
                         	 4. 微信公众号消息通知，平台：CSDN、主题：为文章标题、描述：为文章简述、跳转地址：从发布文章到CSDN获取 URL 地址
                         """)
-                .defaultTools(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()))
+                .defaultToolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()))
                 .defaultAdvisors(
                         new PromptChatMemoryAdvisor(new InMemoryChatMemory()),
 //                        new MessageChatMemoryAdvisor(new InMemoryChatMemory()),
@@ -139,8 +144,48 @@ public class AiAgentTest {
     }
 
     @Test
-    public void test_chat_stream() {
+    public void test_chat_stream() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
 
+        OpenAiChatModel chatModel = OpenAiChatModel.builder()
+                .openAiApi(OpenAiApi.builder()
+                        .baseUrl("https://apis.itedus.cn")
+                        .apiKey("sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e")
+//                        .baseUrl("https://azure.itedus.cn")
+//                        .apiKey("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")
+                        .completionsPath("v1/chat/completions")
+                        .embeddingsPath("v1/embeddings")
+                        .build())
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model("gpt-4.1")
+                        .toolCallbacks(
+                                FunctionToolCallback.builder("test",
+                                                (Function<TestFunctionInput, String>) testFunctionInput -> {
+                                                    log.info("函数请求:{}", testFunctionInput.getInput());
+                                                    return "王大瓜今天入职啦!";
+                                                })
+                                        .description("王大瓜")
+                                        .inputType(TestFunctionInput.class)
+                                        .build())
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()).getToolCallbacks())
+                        .build())
+                .build();
+
+        Flux<ChatResponse> stream = chatModel.stream(Prompt.builder().messages(new UserMessage("有哪些工具可以使用")).build());
+
+        stream.subscribe(
+                chatResponse -> {
+                    AssistantMessage output = chatResponse.getResult().getOutput();
+                    log.info("测试结果: {}", JSON.toJSONString(output));
+                },
+                Throwable::printStackTrace,
+                () -> {
+                    countDownLatch.countDown();
+                    System.out.println("Stream completed");
+                }
+        );
+
+        countDownLatch.await();
     }
 
     @Test

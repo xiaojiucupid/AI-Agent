@@ -68,4 +68,5 @@ public interface IAiClientModelDao {
      * @return 客户端模型列表
      */
     List<AiClientModel> queryClientModelList(AiClientModel aiClientModel);
+
 }

@@ -2,6 +2,9 @@ package cn.bugstack.ai.domain.agent.model.valobj;
 
 import lombok.*;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Ai 客户端模型值对象
  * @author Fuzhengwei bugstack.cn @小傅哥
@@ -57,5 +60,26 @@ public class AiClientModelVO {
      * 超时时间(秒)
      */
     private Integer timeout;
+
+    /**
+     * 工具配置
+     */
+    private List<AIClientModelToolConfigVO> aiClientModelToolConfigs;
+
+    @Data
+    public static class AIClientModelToolConfigVO {
+
+        /** 主键ID */
+        private Integer id;
+        /** 模型ID */
+        private Long modelId;
+        /** 工具类型(mcp/function call) */
+        private String toolType;
+        /** MCP ID/ function call ID */
+        private Long toolId;
+        /** 创建时间 */
+        private Date createTime;
+
+    }
 
 }

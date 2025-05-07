@@ -34,6 +34,9 @@ public class AgentRepository implements IAgentRepository {
     private IAiClientModelConfigDao aiClientModelConfigDao;
 
     @Resource
+    private IAIClientModelToolConfigDao aiClientModelToolConfigDao;
+
+    @Resource
     private IAiClientToolMcpDao aiClientToolMcpDao;
 
     @Resource
@@ -61,23 +64,48 @@ public class AgentRepository implements IAgentRepository {
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
         // 根据客户端ID列表查询模型配置
         List<AiClientModel> aiClientModels = aiClientModelDao.queryModelConfigByClientIds(clientIdList);
+        if (null == aiClientModels || aiClientModels.isEmpty()) return new ArrayList<>();
+
+        // 使用lambda表达式获取所有AiClientModel的id属性列表
+        List<Long> modelIds = aiClientModels.stream().map(AiClientModel::getId).toList();
+
+        // 查询模型工具配;
+        List<AIClientModelToolConfig> aiClientModelToolConfigs = aiClientModelToolConfigDao.queryModelToolConfigByModelIds(modelIds);
+        // 将List转换为Map，key为modeId
+        Map<Long, List<AIClientModelToolConfig>> toolConfigMap = aiClientModelToolConfigs.stream()
+                .collect(Collectors.groupingBy(AIClientModelToolConfig::getModelId));
 
         // 将PO对象转换为VO对象
         List<AiClientModelVO> aiClientModelVOList = new ArrayList<>();
-        if (null != aiClientModels && !aiClientModels.isEmpty()) {
-            for (AiClientModel aiClientModel : aiClientModels) {
-                AiClientModelVO vo = new AiClientModelVO();
-                vo.setId(aiClientModel.getId());
-                vo.setModelName(aiClientModel.getModelName());
-                vo.setBaseUrl(aiClientModel.getBaseUrl());
-                vo.setApiKey(aiClientModel.getApiKey());
-                vo.setCompletionsPath(aiClientModel.getCompletionsPath());
-                vo.setEmbeddingsPath(aiClientModel.getEmbeddingsPath());
-                vo.setModelType(aiClientModel.getModelType());
-                vo.setModelVersion(aiClientModel.getModelVersion());
-                vo.setTimeout(aiClientModel.getTimeout());
-                aiClientModelVOList.add(vo);
+        for (AiClientModel aiClientModel : aiClientModels) {
+            AiClientModelVO vo = new AiClientModelVO();
+            vo.setId(aiClientModel.getId());
+            vo.setModelName(aiClientModel.getModelName());
+            vo.setBaseUrl(aiClientModel.getBaseUrl());
+            vo.setApiKey(aiClientModel.getApiKey());
+            vo.setCompletionsPath(aiClientModel.getCompletionsPath());
+            vo.setEmbeddingsPath(aiClientModel.getEmbeddingsPath());
+            vo.setModelType(aiClientModel.getModelType());
+            vo.setModelVersion(aiClientModel.getModelVersion());
+            vo.setTimeout(aiClientModel.getTimeout());
+
+            // 设置工具配置
+            List<AIClientModelToolConfig> toolConfigs = toolConfigMap.getOrDefault(aiClientModel.getId(), Collections.emptyList());
+            if (!toolConfigs.isEmpty()) {
+                List<AiClientModelVO.AIClientModelToolConfigVO> toolConfigVOs = new ArrayList<>();
+                for (AIClientModelToolConfig toolConfig : toolConfigs) {
+                    AiClientModelVO.AIClientModelToolConfigVO toolConfigVO = new AiClientModelVO.AIClientModelToolConfigVO();
+                    toolConfigVO.setId(toolConfig.getId());
+                    toolConfigVO.setModelId(toolConfig.getModelId());
+                    toolConfigVO.setToolType(toolConfig.getToolType());
+                    toolConfigVO.setToolId(toolConfig.getToolId());
+                    toolConfigVO.setCreateTime(toolConfig.getCreateTime());
+                    toolConfigVOs.add(toolConfigVO);
+                }
+                vo.setAiClientModelToolConfigs(toolConfigVOs);
             }
+
+            aiClientModelVOList.add(vo);
         }
 
         return aiClientModelVOList;
@@ -265,12 +293,12 @@ public class AgentRepository implements IAgentRepository {
     @Override
     public List<AiAgentTaskScheduleVO> queryAllValidTaskSchedule() {
         List<AiAgentTaskSchedule> aiAgentTaskSchedules = aiAgentTaskScheduleDao.queryAllValidTaskSchedule();
-        
+
         // 检查查询结果是否为空
         if (null == aiAgentTaskSchedules || aiAgentTaskSchedules.isEmpty()) {
             return Collections.emptyList();
         }
-        
+
         // 将PO对象转换为VO对象
         return aiAgentTaskSchedules.stream()
                 .map(schedule -> {
@@ -305,6 +333,11 @@ public class AgentRepository implements IAgentRepository {
     public String queryRagKnowledgeTag(Long ragId) {
         AiRagOrder aiRagOrder = aiRagOrderDao.queryRagOrderById(ragId);
         return aiRagOrder.getKnowledgeTag();
+    }
+
+    @Override
+    public Long queryAiClientModelIdByAgentId(Long aiAgentId) {
+        return aiClientModelConfigDao.queryAiClientModelIdByAgentId(aiAgentId);
     }
 
 }

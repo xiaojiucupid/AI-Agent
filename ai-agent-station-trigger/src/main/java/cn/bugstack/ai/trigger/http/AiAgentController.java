@@ -69,12 +69,12 @@ public class AiAgentController implements IAiAgentService {
      */
     @RequestMapping(value = "chat_stream", method = RequestMethod.GET)
     @Override
-    public Flux<ChatResponse> chatStream(@RequestParam("modelId") Long modelId, @RequestParam("ragId") Long ragId, @RequestParam("message") String message) {
+    public Flux<ChatResponse> chatStream(@RequestParam("aiAgentId") Long aiAgentId, @RequestParam("ragId") Long ragId, @RequestParam("message") String message) {
         try {
-            log.info("AiAgent 智能体对话(stream)，请求 {} {} {}", modelId, ragId, message);
-            return aiAgentChatService.aiAgentChatStream(modelId, ragId, message);
+            log.info("AiAgent 智能体对话(stream)，请求 {} {} {}", aiAgentId, ragId, message);
+            return aiAgentChatService.aiAgentChatStream(aiAgentId, ragId, message);
         } catch (Exception e) {
-            log.error("AiAgent 智能体对话(stream)，失败 {} {} {}", modelId, ragId, message, e);
+            log.error("AiAgent 智能体对话(stream)，失败 {} {} {}", aiAgentId, ragId, message, e);
             throw e;
         }
     }

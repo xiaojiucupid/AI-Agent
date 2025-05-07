@@ -29,7 +29,7 @@ import java.util.List;
 public class AiClientAdvisorNode extends AbstractArmorySupport {
 
     @Resource
-    private AiClientNode aiClientNode;
+    private AiClientModelNode aiClientModelNode;
 
     @Resource
     private VectorStore vectorStore;
@@ -56,7 +56,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return aiClientNode;
+        return aiClientModelNode;
     }
 
     @Override

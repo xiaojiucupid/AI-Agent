@@ -56,8 +56,6 @@ public class AiClientNode extends AbstractArmorySupport {
                 mcpSyncClients.add(getBean(mcpBeanName));
             }
 
-//            ToolCallbackProvider toolCallbackProvider = new SyncMcpToolCallbackProvider(mcpSyncClients.toArray(new McpSyncClient[]{}));
-
             // 4. Advisor
             List<Advisor> advisors = new ArrayList<>();
             List<String> advisorBeanNameList = aiClientVO.getAdvisorBeanNameList();

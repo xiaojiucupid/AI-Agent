@@ -42,6 +42,17 @@ public class AiAdminAgentController {
         }
     }
 
+    @RequestMapping(value = "queryAllAgentConfigListByChannel", method = RequestMethod.POST)
+    public ResponseEntity<List<AiAgent>> queryAllAgentConfig(@RequestParam("channel") String channel) {
+        try {
+            List<AiAgent> aiAgentList = aiAgentDao.queryAllAgentConfigByChannel(channel);
+            return ResponseEntity.ok(aiAgentList);
+        } catch (Exception e) {
+            log.error("查询AI智能体列表异常", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     /**
      * 根据ID查询AI智能体
      *
@@ -112,4 +123,5 @@ public class AiAdminAgentController {
             return ResponseEntity.status(500).build();
         }
     }
+
 }

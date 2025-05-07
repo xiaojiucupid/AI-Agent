@@ -92,4 +92,12 @@
             LIMIT #{offset}, #{limit}
         </if>
     </select>
+
+    <select id="queryAiClientModelIdByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT model_id
+        FROM ai_client_model_config
+        WHERE client_id = (select client_id from ai_agent_client where agent_id = #{aiAgentId} limit 1)
+        LIMIT 1
+    </select>
+
 </mapper>

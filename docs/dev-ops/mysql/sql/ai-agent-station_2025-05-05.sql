@@ -31,12 +31,13 @@ CREATE TABLE `ai_agent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `agent_name` varchar(50) NOT NULL COMMENT '智能体名称',
   `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `channel` varchar(32) DEFAULT NULL COMMENT '渠道类型(agent，chat_stream)',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_agent_name` (`agent_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI智能体配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='AI智能体配置表';
 
 LOCK TABLES `ai_agent` WRITE;
 /*!40000 ALTER TABLE `ai_agent` DISABLE KEYS */;
@@ -223,6 +224,14 @@ VALUES
 /*!40000 ALTER TABLE `ai_client_model_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
+CREATE TABLE `ai_client_model_tool_config` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mode_id` bigint(20) DEFAULT NULL COMMENT '模型ID',
+  `tool_type` varchar(20) DEFAULT NULL COMMENT '工具类型(mcp/function call)',
+  `tool_id` bigint(20) DEFAULT NULL COMMENT 'MCP ID/ function call ID',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI客户端，零部件；模型工具配置';
 
 # 转储表 ai_client_system_prompt
 # ------------------------------------------------------------

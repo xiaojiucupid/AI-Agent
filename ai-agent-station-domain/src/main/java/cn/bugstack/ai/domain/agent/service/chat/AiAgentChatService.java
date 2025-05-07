@@ -75,8 +75,11 @@ public class AiAgentChatService implements IAiAgentChatService {
     }
 
     @Override
-    public Flux<ChatResponse> aiAgentChatStream(Long modelId, Long ragId, String message) {
-        log.info("智能体对话请求，参数 modelId {} message {}", modelId, message);
+    public Flux<ChatResponse> aiAgentChatStream(Long aiAgentId, Long ragId, String message) {
+        log.info("智能体对话请求，参数 aiAgentId {} message {}", aiAgentId, message);
+
+        // 查询模型ID
+        Long modelId = repository.queryAiClientModelIdByAgentId(aiAgentId);
 
         // 获取对话模型
         ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);

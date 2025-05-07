@@ -25,7 +25,7 @@ import java.util.concurrent.TimeoutException;
 public class RootNode extends AbstractArmorySupport {
 
     @Resource
-    private AiClientModelNode aiClientModelNode;
+    private AiClientToolMcpNode aiClientToolMcpNode;
 
     @Override
     protected void multiThread(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws ExecutionException, InterruptedException, TimeoutException {
@@ -72,7 +72,7 @@ public class RootNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return aiClientModelNode;
+        return aiClientToolMcpNode;
     }
 
 }

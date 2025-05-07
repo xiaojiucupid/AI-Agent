@@ -65,4 +65,7 @@ public interface IAiClientModelConfigDao {
      * @return 客户端模型配置列表
      */
     List<AiClientModelConfig> queryModelConfigByModelId(Long modelId);
+
+    Long queryAiClientModelIdByAgentId(Long aiAgentId);
+
 }

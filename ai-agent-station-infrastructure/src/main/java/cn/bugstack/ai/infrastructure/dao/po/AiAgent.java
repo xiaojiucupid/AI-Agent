@@ -29,6 +29,11 @@ public class AiAgent extends Page {
     private String description;
 
     /**
+     * 渠道类型(agent，chat_stream)
+     */
+    private String channel;
+
+    /**
      * 状态(0:禁用,1:启用)
      */
     private Integer status;
