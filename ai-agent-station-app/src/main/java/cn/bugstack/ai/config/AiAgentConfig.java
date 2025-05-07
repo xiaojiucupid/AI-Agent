@@ -1,5 +1,6 @@
 package cn.bugstack.ai.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
@@ -40,13 +41,25 @@ public class AiAgentConfig {
     public DataSource mybatisDataSource(@Value("${spring.datasource.driver-class-name}") String driverClassName,
                                        @Value("${spring.datasource.url}") String url,
                                        @Value("${spring.datasource.username}") String username,
-                                       @Value("${spring.datasource.password}") String password) {
-        return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
-                .url(url)
-                .username(username)
-                .password(password)
-                .build();
+                                       @Value("${spring.datasource.password}") String password,
+                                       @Value("${spring.datasource.hikari.maximum-pool-size:10}") int maximumPoolSize,
+                                       @Value("${spring.datasource.hikari.minimum-idle:5}") int minimumIdle,
+                                       @Value("${spring.datasource.hikari.idle-timeout:30000}") long idleTimeout,
+                                       @Value("${spring.datasource.hikari.connection-timeout:30000}") long connectionTimeout,
+                                       @Value("${spring.datasource.hikari.max-lifetime:1800000}") long maxLifetime) {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        // 连接池配置
+        dataSource.setMaximumPoolSize(maximumPoolSize);
+        dataSource.setMinimumIdle(minimumIdle);
+        dataSource.setIdleTimeout(idleTimeout);
+        dataSource.setConnectionTimeout(connectionTimeout);
+        dataSource.setMaxLifetime(maxLifetime);
+        dataSource.setPoolName("MainHikariPool");
+        return dataSource;
     }
 
     /**
@@ -82,13 +95,23 @@ public class AiAgentConfig {
     public DataSource pgVectorDataSource(@Value("${spring.ai.vectorstore.pgvector.datasource.driver-class-name}") String driverClassName,
                                          @Value("${spring.ai.vectorstore.pgvector.datasource.url}") String url,
                                          @Value("${spring.ai.vectorstore.pgvector.datasource.username}") String username,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.password}") String password) {
-        return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
-                .url(url)
-                .username(username)
-                .password(password)
-                .build();
+                                         @Value("${spring.ai.vectorstore.pgvector.datasource.password}") String password,
+                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.maximum-pool-size:5}") int maximumPoolSize,
+                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.minimum-idle:2}") int minimumIdle,
+                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.idle-timeout:30000}") long idleTimeout,
+                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.connection-timeout:30000}") long connectionTimeout) {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        // 连接池配置
+        dataSource.setMaximumPoolSize(maximumPoolSize);
+        dataSource.setMinimumIdle(minimumIdle);
+        dataSource.setIdleTimeout(idleTimeout);
+        dataSource.setConnectionTimeout(connectionTimeout);
+        dataSource.setPoolName("PgVectorHikariPool");
+        return dataSource;
     }
 
     /**
