@@ -36,15 +36,15 @@ public class AiAgentController implements IAiAgentService {
      * AI代理执行方法，用于处理用户输入的消息并返回AI代理的回复
      * <p>
      * 示例请求:
-     * curl -X GET "http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat?aiAgentId=1&message=生成一篇文章" -H "Content-Type: application/json"
+     * curl -X GET "http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_agent?aiAgentId=1&message=生成一篇文章" -H "Content-Type: application/json"
      *
      * @param aiAgentId AI代理ID，用于标识使用哪个AI代理
      * @param message   用户输入的消息内容
      * @return AI代理的回复内容
      */
-    @RequestMapping(value = "chat", method = RequestMethod.GET)
+    @RequestMapping(value = "chat_agent", method = RequestMethod.GET)
     @Override
-    public Response<String> chat(@RequestParam("aiAgentId") Long aiAgentId, @RequestParam("message") String message) {
+    public Response<String> chatAgent(@RequestParam("aiAgentId") Long aiAgentId, @RequestParam("message") String message) {
         try {
             log.info("AiAgent 智能体对话，请求 {} {}", aiAgentId, message);
             String content = aiAgentChatService.aiAgentChat(aiAgentId, message);

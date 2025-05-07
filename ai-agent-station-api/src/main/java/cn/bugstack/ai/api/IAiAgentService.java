@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IAiAgentService {
 
-    Response<String> chat(Long aiAgentId, String message);
+    Response<String> chatAgent(Long aiAgentId, String message);
 
     Flux<ChatResponse> chatStream(Long modelId, Long ragId, String message);
 
