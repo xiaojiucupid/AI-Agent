@@ -167,11 +167,16 @@ public class AiAgentTest {
                                         .description("王大瓜")
                                         .inputType(TestFunctionInput.class)
                                         .build())
-                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()).getToolCallbacks())
+//                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient01(), sseMcpClient02()).getToolCallbacks())
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(stdioMcpClient()).getToolCallbacks())
                         .build())
                 .build();
 
-        Flux<ChatResponse> stream = chatModel.stream(Prompt.builder().messages(new UserMessage("有哪些工具可以使用")).build());
+        Flux<ChatResponse> stream = chatModel.stream(Prompt.builder()
+                .messages(new UserMessage("""
+                        	 在 /Users/fuzhengwei/Desktop 创建文件 file02.txt
+                        """))
+                .build());
 
         stream.subscribe(
                 chatResponse -> {
@@ -412,7 +417,7 @@ public class AiAgentTest {
         // based on
         // https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
         var stdioParams = ServerParameters.builder("npx")
-                .args("-y", "@modelcontextprotocol/server-filesystem", getDbPath())
+                .args("-y", "@modelcontextprotocol/server-filesystem", "/Users/fuzhengwei/Desktop", "/Users/fuzhengwei/Desktop")
                 .build();
 
         var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))

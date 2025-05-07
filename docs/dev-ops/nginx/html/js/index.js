@@ -283,13 +283,13 @@ function appendMessage(content, isAssistant = false, saveToStorage = true) {
         // 确保读取和保存完整的数据结构
         const chatData = JSON.parse(localStorage.getItem(`chat_${currentChatId}`) || '{"name": "新聊天", "messages": []}');
         chatData.messages.push({ content, isAssistant });
-        
+
         // 如果是用户的第一条消息，将其作为聊天名称
         if (!isAssistant && chatData.messages.length === 1) {
             const nameContent = content.length > 20 ? content.substring(0, 20) + '...' : content;
             chatData.name = nameContent;
         }
-        
+
         localStorage.setItem(`chat_${currentChatId}`, JSON.stringify(chatData));
         updateChatList(); // 更新聊天列表以显示新名称
     }
