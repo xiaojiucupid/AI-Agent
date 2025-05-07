@@ -107,6 +107,7 @@ const TaskScheduleManager = {
                     <td>${item.taskName}</td>
                     <td>${item.agentId}</td>
                     <td class="d-none d-md-table-cell">${item.description || '-'}</td>
+                    <td class="d-none d-md-table-cell">${item.taskParam || '-'}</td>
                     <td>${item.status === 1 ? '<span class="badge bg-success">启用</span>' : '<span class="badge bg-danger">禁用</span>'}</td>
                     <td class="d-none d-md-table-cell">${this.formatDate(item.createTime)}</td>
                     <td class="d-none d-lg-table-cell">${this.formatDate(item.updateTime)}</td>
@@ -195,6 +196,7 @@ const TaskScheduleManager = {
             $('#task-agent-id').val(taskSchedule.agentId);
             $('#task-description').val(taskSchedule.description);
             $('#task-cron').val(taskSchedule.cronExpression);
+            $('#task-param').val(taskSchedule.taskParam);
             $('#task-status').val(taskSchedule.status);
         } else {
             // 新增模式
@@ -247,6 +249,7 @@ const TaskScheduleManager = {
             agentId: parseInt($('#task-agent-id').val()),
             description: $('#task-description').val(),
             cronExpression: $('#task-cron').val(),
+            taskParam: $('#task-param').val(),
             status: parseInt($('#task-status').val())
         };
 
