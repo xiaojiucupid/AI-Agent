@@ -80,16 +80,22 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             const aiAgentSelect = document.getElementById('aiAgent');
-            // 清空现有选项，保留默认选项
-            aiAgentSelect.innerHTML = '<option value="">请选择智能体</option>';
+            // 清空现有选项
+            aiAgentSelect.innerHTML = '';
 
             // 添加从服务器获取的选项
-            data.forEach(agent => {
-                const option = document.createElement('option');
-                option.value = agent.id;
-                option.textContent = agent.agentName;
-                aiAgentSelect.appendChild(option);
-            });
+            if (data && data.length > 0) {
+                data.forEach((agent, index) => {
+                    const option = document.createElement('option');
+                    option.value = agent.id;
+                    option.textContent = agent.agentName;
+                    // 如果是第一个选项，设置为选中状态
+                    if (index === 0) {
+                        option.selected = true;
+                    }
+                    aiAgentSelect.appendChild(option);
+                });
+            }
         })
         .catch(error => {
             console.error('获取AI代理列表失败:', error);
@@ -300,6 +306,11 @@ function startEventStream(message) {
         currentEventSource.close();
     }
 
+    // 显示加载指示器
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.classList.remove('hidden');
+    submitBtn.disabled = true;
+
     const ragId = document.getElementById('ragSelect').value;
     // 判断 ragId 为空的时候，设置为0
     const ragIdParam = ragId ? ragId : '0';
@@ -355,18 +366,31 @@ function startEventStream(message) {
                         chatData.messages.push({ content: finalContent, isAssistant: true });
                         localStorage.setItem(`chat_${currentChatId}`, JSON.stringify(chatData));
                     }
+                    
+                    // 隐藏加载指示器
+                    loadingSpinner.classList.add('hidden');
+                    submitBtn.disabled = false;
                 }
             } else {
                 currentEventSource.close();
+                // 隐藏加载指示器
+                loadingSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
             }
         } catch (e) {
             console.error('Error parsing event data:', e);
+            // 发生错误时也隐藏加载指示器
+            loadingSpinner.classList.add('hidden');
+            submitBtn.disabled = false;
         }
     };
 
     currentEventSource.onerror = function(error) {
         console.error('EventSource error:', error);
         currentEventSource.close();
+        // 发生错误时隐藏加载指示器
+        loadingSpinner.classList.add('hidden');
+        submitBtn.disabled = false;
     };
 }
 
