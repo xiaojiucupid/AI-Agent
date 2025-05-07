@@ -7,7 +7,7 @@
 #
 # 主机: 127.0.0.1 (MySQL 5.6.39)
 # 数据库: ai-agent-station
-# 生成时间: 2025-05-05 05:44:13 +0000
+# 生成时间: 2025-05-07 05:44:47 +0000
 # ************************************************************
 
 
@@ -37,16 +37,17 @@ CREATE TABLE `ai_agent` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_agent_name` (`agent_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='AI智能体配置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI智能体配置表';
 
 LOCK TABLES `ai_agent` WRITE;
 /*!40000 ALTER TABLE `ai_agent` DISABLE KEYS */;
 
-INSERT INTO `ai_agent` (`id`, `agent_name`, `description`, `status`, `create_time`, `update_time`)
+INSERT INTO `ai_agent` (`id`, `agent_name`, `description`, `channel`, `status`, `create_time`, `update_time`)
 VALUES
-	(1,'自动发帖服务01','CSDN自动发帖，微信公众号通知。',1,'2025-05-04 19:48:05','2025-05-05 13:38:03'),
-	(2,'自动发帖服务02','CSDN自动发帖，微信公众号通知。',1,'2025-05-05 12:36:27','2025-05-05 13:38:04'),
-	(3,'文件服务测试01','操作本地文件',1,'2025-05-05 13:15:34','2025-05-05 13:15:34');
+	(1,'自动发帖服务01','CSDN自动发帖，微信公众号通知。','agent',1,'2025-05-04 19:48:05','2025-05-07 09:20:40'),
+	(2,'自动发帖服务02','CSDN自动发帖，微信公众号通知。','agent',1,'2025-05-05 12:36:27','2025-05-07 09:20:37'),
+	(3,'文件服务测试01','操作本地文件','agent',1,'2025-05-05 13:15:34','2025-05-07 09:20:37'),
+	(4,'智能对话体（MCP）','自动发帖，工具服务','chat_stream',1,'2025-05-07 09:18:57','2025-05-07 09:20:32');
 
 /*!40000 ALTER TABLE `ai_agent` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -75,9 +76,40 @@ VALUES
 	(1,1,1,1,'2025-05-04 07:34:46'),
 	(2,1,2,2,'2025-05-04 07:34:46'),
 	(3,2,2,1,'2025-05-05 12:36:41'),
-	(4,3,3,1,'2025-05-05 12:36:41');
+	(4,3,3,1,'2025-05-05 12:36:41'),
+	(5,4,4,1,'2025-05-07 10:28:59');
 
 /*!40000 ALTER TABLE `ai_agent_client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# 转储表 ai_agent_task_schedule
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ai_agent_task_schedule`;
+
+CREATE TABLE `ai_agent_task_schedule` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `agent_id` bigint(20) NOT NULL COMMENT '智能体ID',
+  `task_name` varchar(64) DEFAULT NULL COMMENT '任务名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '任务描述',
+  `cron_expression` varchar(50) NOT NULL COMMENT '时间表达式(如: 0/3 * * * * *)',
+  `task_param` text COMMENT '任务入参配置(JSON格式)',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态(0:无效,1:有效)',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_agent_id` (`agent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='智能体任务调度配置表';
+
+LOCK TABLES `ai_agent_task_schedule` WRITE;
+/*!40000 ALTER TABLE `ai_agent_task_schedule` DISABLE KEYS */;
+
+INSERT INTO `ai_agent_task_schedule` (`id`, `agent_id`, `task_name`, `description`, `cron_expression`, `task_param`, `status`, `create_time`, `update_time`)
+VALUES
+	(1,1,'自动发帖','自动发帖和通知','0 0/30 * * * ?','发布CSDN文章',1,'2025-05-05 15:58:58','2025-05-07 12:09:33');
+
+/*!40000 ALTER TABLE `ai_agent_task_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -104,7 +136,8 @@ INSERT INTO `ai_client` (`id`, `client_name`, `description`, `status`, `create_t
 VALUES
 	(1,'提示词优化','提示词优化，分为角色、动作、规则、目标等。',1,'2025-05-04 19:47:56','2025-05-05 10:02:55'),
 	(2,'自动发帖和通知','自动生成CSDN文章，发送微信公众号消息通知',1,'2025-05-05 10:05:43','2025-05-05 10:09:20'),
-	(3,'文件操作服务','文件操作服务',1,'2025-05-05 13:15:57','2025-05-05 13:16:03');
+	(3,'文件操作服务','文件操作服务',1,'2025-05-05 13:15:57','2025-05-05 13:16:03'),
+	(4,'流式对话客户端','流式对话客户端',1,'2025-05-07 09:21:04','2025-05-07 09:21:04');
 
 /*!40000 ALTER TABLE `ai_client` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -184,8 +217,7 @@ CREATE TABLE `ai_client_model` (
   `status` tinyint(1) DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_model_name` (`model_name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI接口模型配置表';
 
 LOCK TABLES `ai_client_model` WRITE;
@@ -193,7 +225,8 @@ LOCK TABLES `ai_client_model` WRITE;
 
 INSERT INTO `ai_client_model` (`id`, `model_name`, `base_url`, `api_key`, `completions_path`, `embeddings_path`, `model_type`, `model_version`, `timeout`, `status`, `create_time`, `update_time`)
 VALUES
-	(1,'gpt-4.1','https://apis.itedus.cn','sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-05 12:17:01');
+	(1,'智能体对话','https://apis.itedus.cn','sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:22:46'),
+	(2,'流式对话','https://apis.itedus.cn','sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:21:59');
 
 /*!40000 ALTER TABLE `ai_client_model` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -219,19 +252,39 @@ INSERT INTO `ai_client_model_config` (`id`, `client_id`, `model_id`, `create_tim
 VALUES
 	(1,1,1,'2025-05-02 17:23:22'),
 	(2,2,1,'2025-05-02 17:23:22'),
-	(3,3,1,'2025-05-05 13:16:18');
+	(3,3,1,'2025-05-05 13:16:18'),
+	(4,4,2,'2025-05-07 09:22:25');
 
 /*!40000 ALTER TABLE `ai_client_model_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+# 转储表 ai_client_model_tool_config
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ai_client_model_tool_config`;
+
 CREATE TABLE `ai_client_model_tool_config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `mode_id` bigint(20) DEFAULT NULL COMMENT '模型ID',
+  `model_id` bigint(20) DEFAULT NULL COMMENT '模型ID',
   `tool_type` varchar(20) DEFAULT NULL COMMENT '工具类型(mcp/function call)',
   `tool_id` bigint(20) DEFAULT NULL COMMENT 'MCP ID/ function call ID',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI客户端，零部件；模型工具配置';
+
+LOCK TABLES `ai_client_model_tool_config` WRITE;
+/*!40000 ALTER TABLE `ai_client_model_tool_config` DISABLE KEYS */;
+
+INSERT INTO `ai_client_model_tool_config` (`id`, `model_id`, `tool_type`, `tool_id`, `create_time`)
+VALUES
+	(1,2,'mcp',1,'2025-05-02 17:23:22'),
+	(2,2,'mcp',2,'2025-05-02 17:23:22'),
+	(3,2,'mcp',3,'2025-05-02 17:23:22');
+
+/*!40000 ALTER TABLE `ai_client_model_tool_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 # 转储表 ai_client_system_prompt
 # ------------------------------------------------------------
@@ -256,7 +309,9 @@ LOCK TABLES `ai_client_system_prompt` WRITE;
 INSERT INTO `ai_client_system_prompt` (`id`, `prompt_name`, `prompt_content`, `description`, `status`, `create_time`, `update_time`)
 VALUES
 	(1,'提示词优化','你是一个专业的AI提示词优化专家。请帮我优化以下prompt，并按照以下格式返回：\n\n# Role: [角色名称]\n\n## Profile\n\n- language: [语言]\n- description: [详细的角色描述]\n- background: [角色背景]\n- personality: [性格特征]\n- expertise: [专业领域]\n- target_audience: [目标用户群]\n\n## Skills\n\n1. [核心技能类别]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n2. [辅助技能类别]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n   - [具体技能]: [简要说明]\n\n## Rules\n\n1. [基本原则]：\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n2. [行为准则]：\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n   - [具体规则]: [详细说明]\n3. [限制条件]：\n   - [具体限制]: [详细说明]\n   - [具体限制]: [详细说明]\n   - [具体限制]: [详细说明]\n   - [具体限制]: [详细说明]\n\n## Workflows\n\n- 目标: [明确目标]\n- 步骤 1: [详细说明]\n- 步骤 2: [详细说明]\n- 步骤 3: [详细说明]\n- 预期结果: [说明]\n\n## Initialization\n\n作为[角色名称]，你必须遵守上述Rules，按照Workflows执行任务。\n请基于以上模板，优化并扩展以下prompt，确保内容专业、完整且结构清晰，注意不要携带任何引导词或解释，不要使用代码块包围。','提示词优化，拆分执行动作',1,'2025-05-04 21:14:24','2025-05-05 10:04:25'),
-	(3,'发帖和消息通知介绍','你是一个 AI Agent 智能体，可以根据用户输入信息生成文章，并发送到 CSDN 平台以及完成微信公众号消息通知，今天是 {current_date}。\n\n你擅长使用Planning模式，帮助用户生成质量更高的文章。\n\n你的规划应该包括以下几个方面：\n1. 分析用户输入的内容，生成技术文章。\n2. 提取，文章标题（需要含带技术点）、文章内容、文章标签（多个用英文逗号隔开）、文章简述（100字）将以上内容发布文章到CSDN\n3. 获取发送到 CSDN 文章的 URL 地址。\n4. 微信公众号消息通知，平台：CSDN、主题：为文章标题、描述：为文章简述、跳转地址：为发布文章到CSDN获取 URL地址 CSDN文章链接 https 开头的地址。','提示词优化，拆分执行动作',1,'2025-05-04 21:14:24','2025-05-05 10:10:42');
+	(3,'发帖和消息通知介绍','你是一个 AI Agent 智能体，可以根据用户输入信息生成文章，并发送到 CSDN 平台以及完成微信公众号消息通知，今天是 {current_date}。\n\n你擅长使用Planning模式，帮助用户生成质量更高的文章。\n\n你的规划应该包括以下几个方面：\n1. 分析用户输入的内容，生成技术文章。\n2. 提取，文章标题（需要含带技术点）、文章内容、文章标签（多个用英文逗号隔开）、文章简述（100字）将以上内容发布文章到CSDN\n3. 获取发送到 CSDN 文章的 URL 地址。\n4. 微信公众号消息通知，平台：CSDN、主题：为文章标题、描述：为文章简述、跳转地址：为发布文章到CSDN获取 URL地址 CSDN文章链接 https 开头的地址。','提示词优化，拆分执行动作',1,'2025-05-04 21:14:24','2025-05-05 10:10:42'),
+	(4,'CSDN发布文章','我需要你帮我生成一篇文章，要求如下；\n                                \n                1. 场景为互联网大厂java求职者面试\n                2. 面试管提问 Java 核心知识、JUC、JVM、多线程、线程池、HashMap、ArrayList、Spring、SpringBoot、MyBatis、Dubbo、RabbitMQ、xxl-job、Redis、MySQL、Linux、Docker、设计模式、DDD等不限于此的各项技术问题。\n                3. 按照故事场景，以严肃的面试官和搞笑的水货程序员谢飞机进行提问，谢飞机对简单问题可以回答，回答好了面试官还会夸赞。复杂问题胡乱回答，回答的不清晰。\n                4. 每次进行3轮提问，每轮可以有3-5个问题。这些问题要有技术业务场景上的衔接性，循序渐进引导提问。最后是面试官让程序员回家等通知类似的话术。\n                5. 提问后把问题的答案，写到文章最后，最后的答案要详细讲述出技术点，让小白可以学习下来。\n                                \n                根据以上内容，不要阐述其他信息，请直接提供；文章标题、文章内容、文章标签（多个用英文逗号隔开）、文章简述（100字）\n                                \n                将以上内容发布文章到CSDN。','CSDN发布文章',1,'2025-05-07 12:05:36','2025-05-07 12:05:36'),
+	(5,'文章操作测试','在 /Users/fuzhengwei/Desktop 创建文件 file01.txt','文件操作测试',1,'2025-05-07 12:06:03','2025-05-07 12:06:08');
 
 /*!40000 ALTER TABLE `ai_client_system_prompt` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -363,6 +418,17 @@ CREATE TABLE `ai_rag_order` (
   UNIQUE KEY `uk_rag_name` (`rag_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识库配置表';
 
+LOCK TABLES `ai_rag_order` WRITE;
+/*!40000 ALTER TABLE `ai_rag_order` DISABLE KEYS */;
+
+INSERT INTO `ai_rag_order` (`id`, `rag_name`, `knowledge_tag`, `status`, `create_time`, `update_time`)
+VALUES
+	(1,'生成文章提示词','生成文章提示词',1,'2025-05-05 13:14:42','2025-05-06 20:14:23');
+
+/*!40000 ALTER TABLE `ai_rag_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -370,33 +436,3 @@ CREATE TABLE `ai_rag_order` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-# 转储表 ai_agent_task_schedule
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `ai_agent_task_schedule`;
-
-CREATE TABLE `ai_agent_task_schedule` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `agent_id` bigint(20) NOT NULL COMMENT '智能体ID',
-  `task_name` varchar(64) DEFAULT NULL COMMENT '任务名称',
-  `description` varchar(255) DEFAULT NULL COMMENT '任务描述',
-  `cron_expression` varchar(50) NOT NULL COMMENT '时间表达式(如: 0/3 * * * * *)',
-  `task_param` text DEFAULT NULL COMMENT '任务入参配置(JSON格式)',
-  `status` tinyint(1) DEFAULT '1' COMMENT '状态(0:无效,1:有效)',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_agent_id` (`agent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='智能体任务调度配置表';
-
-LOCK TABLES `ai_agent_task_schedule` WRITE;
-/*!40000 ALTER TABLE `ai_agent_task_schedule` DISABLE KEYS */;
-
-INSERT INTO `ai_agent_task_schedule` (`id`, `agent_id`, `description`, `cron_expression`, `status`, `create_time`, `update_time`)
-VALUES
-	(1, 1, 'CSDN自动发帖定时任务', '0/3 * * * * *', 1, '2025-05-05 14:00:00', '2025-05-05 14:00:00'),
-	(2, 2, '微信公众号通知定时任务', '0 0/5 * * * *', 1, '2025-05-05 14:01:00', '2025-05-05 14:01:00');
-
-/*!40000 ALTER TABLE `ai_agent_task_schedule` ENABLE KEYS */;
-UNLOCK TABLES;
