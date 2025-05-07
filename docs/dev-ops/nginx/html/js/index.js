@@ -102,12 +102,67 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 获取提示词列表
+    function fetchPromptTemplates() {
+        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/queryAllSystemPromptConfig', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不正常');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const promptSelect = document.getElementById('promptSelect');
+            // 清空现有选项（保留第一个默认选项）
+            while (promptSelect.options.length > 1) {
+                promptSelect.remove(1);
+            }
+
+            // 添加从服务器获取的选项
+            if (data && data.length > 0) {
+                data.forEach(prompt => {
+                    const option = document.createElement('option');
+                    option.value = prompt.promptContent;
+                    option.textContent = prompt.promptName;
+                    promptSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('获取提示词列表失败:', error);
+        });
+    }
+
     // 初始化加载
     loadRagOptions();
-
     // 获取AI代理列表
     fetchAiAgents();
+    // 获取提示词列表
+    fetchPromptTemplates();
 
+    // 添加提示词选择事件监听
+    const promptSelect = document.getElementById('promptSelect');
+    promptSelect.addEventListener('change', function() {
+        const selectedPrompt = this.value;
+        if (selectedPrompt) {
+            const messageInput = document.getElementById('messageInput');
+            // 如果输入框已有内容，则在内容前添加提示词
+            if (messageInput.value.trim()) {
+                messageInput.value = selectedPrompt + '\n\n' + messageInput.value;
+            } else {
+                messageInput.value = selectedPrompt;
+            }
+            // 重置选择框
+            this.value = '';
+            // 聚焦到输入框
+            messageInput.focus();
+        }
+    });
 });
 
 async function createNewChat() {

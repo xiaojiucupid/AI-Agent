@@ -42,6 +42,17 @@ public class AiAdminClientSystemPromptController {
         }
     }
 
+    @RequestMapping(value = "queryAllSystemPromptConfig", method = RequestMethod.POST)
+    public ResponseEntity<List<AiClientSystemPrompt>> queryAllSystemPromptConfig() {
+        try {
+            List<AiClientSystemPrompt> systemPromptList = aiClientSystemPromptDao.queryAllSystemPromptConfig();
+            return ResponseEntity.ok(systemPromptList);
+        } catch (Exception e) {
+            log.error("查询系统提示词列表异常", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     /**
      * 根据ID查询系统提示词
      *

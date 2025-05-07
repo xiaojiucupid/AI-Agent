@@ -161,11 +161,9 @@
                                     placeholder="输入您的问题或指令..." autofocus></textarea>
                         <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                             <div class="flex items-center gap-2">
-                                <button class="p-2 text-gray-500 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors duration-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </button>
+                                <select id="promptSelect" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-300 focus:border-primary-500 outline-none transition-all duration-200">
+                                    <option value="">选择提示词模板</option>
+                                </select>
                             </div>
                             <button
                                     id="submitBtn"
