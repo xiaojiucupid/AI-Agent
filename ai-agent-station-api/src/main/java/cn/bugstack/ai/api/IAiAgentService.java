@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface IAiAgentService {
 
+    Response<Boolean> preheat(Long aiClientId);
+
     Response<String> chatAgent(Long aiAgentId, String message);
 
     Flux<ChatResponse> chatStream(Long aiAgentId, Long ragId, String message);

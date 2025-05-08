@@ -3,6 +3,7 @@ package cn.bugstack.ai.trigger.http;
 import cn.bugstack.ai.api.IAiAgentService;
 import cn.bugstack.ai.api.response.Response;
 import cn.bugstack.ai.domain.agent.service.IAiAgentChatService;
+import cn.bugstack.ai.domain.agent.service.IAiAgentPreheatService;
 import cn.bugstack.ai.domain.agent.service.IAiAgentRagService;
 import cn.bugstack.ai.types.common.Constants;
 import com.alibaba.fastjson.JSON;
@@ -31,6 +32,35 @@ public class AiAgentController implements IAiAgentService {
 
     @Resource
     private IAiAgentRagService aiAgentRagService;
+
+    @Resource
+    private IAiAgentPreheatService aiAgentPreheatService;
+
+    /**
+     * AI代理预热
+     * curl --request GET \
+     *   --url 'http://localhost:8091/ai-agent-station/api/v1/ai/agent/preheat?aiAgentId=1'
+     */
+    @RequestMapping(value = "preheat", method = RequestMethod.GET)
+    @Override
+    public Response<Boolean> preheat(@RequestParam("aiAgentId") Long aiClientId) {
+        try {
+            log.info("预热装配 AiAgent {}", aiClientId);
+            aiAgentPreheatService.preheat(aiClientId);
+            return Response.<Boolean>builder()
+                    .code(Constants.ResponseCode.SUCCESS.getCode())
+                    .info(Constants.ResponseCode.SUCCESS.getInfo())
+                    .data(true)
+                    .build();
+        } catch (Exception e) {
+            log.error("预热装配 AiAgent {}", aiClientId,e);
+            return Response.<Boolean>builder()
+                    .code(Constants.ResponseCode.UN_ERROR.getCode())
+                    .info(Constants.ResponseCode.UN_ERROR.getInfo())
+                    .data(false)
+                    .build();
+        }
+    }
 
     /**
      * AI代理执行方法，用于处理用户输入的消息并返回AI代理的回复

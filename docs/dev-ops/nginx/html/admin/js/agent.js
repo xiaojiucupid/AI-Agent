@@ -12,6 +12,8 @@ const AgentManager = {
     pages: 0,
     // 待删除的智能体ID
     deleteAgentId: null,
+    // 待预热的智能体ID
+    preheatAgentId: null,
 
     /**
      * 初始化
@@ -116,6 +118,9 @@ const AgentManager = {
                             </button>
                             <button class="btn btn-sm btn-outline-danger btn-action" onclick="AgentManager.showDeleteModal(${item.id})">
                                 <i class="fas fa-trash"></i><span class="d-none d-md-inline"> 删除</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info btn-action" onclick="AgentManager.preheatAgent(${item.id})">
+                                <i class="fas fa-fire"></i><span class="d-none d-md-inline"> 预热</span>
                             </button>
                         </div>
                     </td>
@@ -329,15 +334,63 @@ const AgentManager = {
     },
 
     /**
+     * 预热智能体
+     * @param {number} id 智能体ID
+     */
+    preheatAgent: function(id) {
+        this.preheatAgentId = id;
+        
+        // 显示加载动画
+        $('#loading-overlay').show();
+        
+        // 调用预热接口
+        $.ajax({
+            url: `http://localhost:8091/ai-agent-station/api/v1/ai/agent/preheat?aiAgentId=${id}`,
+            type: 'GET',
+            success: (res) => {
+                // 隐藏加载动画
+                $('#loading-overlay').hide();
+                
+                // 显示预热结果
+                if (res && res.code === '0000') {
+                    $('#preheat-result-message').html('<div class="alert alert-success">预热成功！</div>');
+                } else {
+                    $('#preheat-result-message').html(`<div class="alert alert-danger">预热失败：${res.info || '未知错误'}</div>`);
+                }
+                
+                // 显示结果模态框
+                const modal = new bootstrap.Modal(document.getElementById('preheatResultModal'));
+                modal.show();
+            },
+            error: (err) => {
+                // 隐藏加载动画
+                $('#loading-overlay').hide();
+                
+                // 显示错误信息
+                $('#preheat-result-message').html('<div class="alert alert-danger">预热失败：网络错误或服务器异常</div>');
+                
+                // 显示结果模态框
+                const modal = new bootstrap.Modal(document.getElementById('preheatResultModal'));
+                modal.show();
+                
+                console.error('预热智能体失败', err);
+            }
+        });
+    },
+
+    /**
      * 格式化日期
      * @param {string} dateStr 日期字符串
      * @returns {string} 格式化后的日期字符串
      */
     formatDate: function(dateStr) {
-        if (!dateStr) {
-            return '-';
-        }
+        if (!dateStr) return '-';
         const date = new Date(dateStr);
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+        return date.toLocaleString();
     }
 };
+
+// 页面加载完成后初始化
+$(document).ready(function() {
+    AgentManager.init();
+});
