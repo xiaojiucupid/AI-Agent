@@ -1,0 +1,86 @@
+package cn.bugstack.ai.test.mcp;
+
+import cn.bugstack.ai.test.AiAgentTest;
+import com.alibaba.fastjson.JSON;
+import io.modelcontextprotocol.client.McpClient;
+import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.transport.ServerParameters;
+import io.modelcontextprotocol.client.transport.StdioClientTransport;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.Duration;
+import java.util.function.Function;
+
+/**
+ * @author Fuzhengwei bugstack.cn @小傅哥
+ * 2025-05-10 08:11
+ */
+@Slf4j
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class MCPTest {
+
+    /**
+     * ╔═════════════════════════════════════════════════════════════════════════╗
+     * ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+     * ║ Please run the following command to download new browsers:              ║
+     * ║                                                                         ║
+     * ║     npx playwright install                                              ║
+     * ║                                                                         ║
+     * ║ <3 Playwright Team                                                      ║
+     * ╚═════════════════════════════════════════════════════════════════════════╝
+     */
+    @Test
+    public void test() {
+        OpenAiChatModel chatModel = OpenAiChatModel.builder()
+                .openAiApi(OpenAiApi.builder()
+                        .baseUrl("https://apis.itedus.cn")
+                        .apiKey("sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e")
+//                        .baseUrl("https://azure.itedus.cn")
+//                        .apiKey("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")
+                        .completionsPath("v1/chat/completions")
+                        .embeddingsPath("v1/embeddings")
+                        .build())
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model("gpt-4.1")
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(stdioMcpClient()).getToolCallbacks())
+                        .build())
+                .build();
+
+        ChatResponse call = chatModel.call(Prompt.builder().messages(new UserMessage("小傅哥博客做什么的")).build());
+        log.info("测试结果:{}", JSON.toJSONString(call.getResult()));
+    }
+
+    public McpSyncClient stdioMcpClient() {
+
+        // https://github.com/jae-jae/fetcher-mcp
+        var stdioParams = ServerParameters.builder("npx")
+                .args("-y",
+                        "fetcher-mcp")
+                .build();
+
+        var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
+                .requestTimeout(Duration.ofSeconds(50)).build();
+
+        var init = mcpClient.initialize();
+
+        System.out.println("Stdio MCP Initialized: " + init);
+
+        return mcpClient;
+
+    }
+
+
+}
