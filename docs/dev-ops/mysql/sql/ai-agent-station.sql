@@ -7,7 +7,7 @@
 #
 # 主机: 127.0.0.1 (MySQL 5.6.39)
 # 数据库: ai-agent-station
-# 生成时间: 2025-05-07 05:44:47 +0000
+# 生成时间: 2025-05-16 13:09:35 +0000
 # ************************************************************
 
 
@@ -280,7 +280,8 @@ INSERT INTO `ai_client_model_tool_config` (`id`, `model_id`, `tool_type`, `tool_
 VALUES
 	(1,2,'mcp',1,'2025-05-02 17:23:22'),
 	(2,2,'mcp',2,'2025-05-02 17:23:22'),
-	(3,2,'mcp',3,'2025-05-02 17:23:22');
+	(3,2,'mcp',3,'2025-05-02 17:23:22'),
+	(5,2,'mcp',4,'2025-05-02 17:23:22');
 
 /*!40000 ALTER TABLE `ai_client_model_tool_config` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -365,7 +366,8 @@ INSERT INTO `ai_client_tool_config` (`id`, `client_id`, `tool_type`, `tool_id`, 
 VALUES
 	(1,2,'mcp',1,'2025-05-04 07:31:54'),
 	(2,2,'mcp',2,'2025-05-04 07:31:54'),
-	(3,3,'mcp',3,'2025-05-05 13:16:31');
+	(3,3,'mcp',3,'2025-05-05 13:16:31'),
+	(5,4,'mcp',4,'2025-05-05 13:16:31');
 
 /*!40000 ALTER TABLE `ai_client_tool_config` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -396,7 +398,8 @@ INSERT INTO `ai_client_tool_mcp` (`id`, `mcp_name`, `transport_type`, `transport
 VALUES
 	(1,'CSDN自动发帖','sse','{\n	\"baseUri\":\"http://192.168.1.109:8101\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:52'),
 	(2,'微信公众号消息通知','sse','{\n	\"baseUri\":\"http://192.168.1.109:8102\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:57'),
-	(3,'filesystem','stdio','{\n    \"filesystem\": {\n        \"command\": \"npx\",\n        \"args\": [\n            \"-y\",\n            \"@modelcontextprotocol/server-filesystem\",\n            \"/Users/fuzhengwei/Desktop\",\n            \"/Users/fuzhengwei/Desktop\"\n        ]\n    }\n}',180,1,'2025-05-05 13:14:42','2025-05-05 13:27:46');
+	(3,'filesystem','stdio','{\n    \"filesystem\": {\n        \"command\": \"npx\",\n        \"args\": [\n            \"-y\",\n            \"@modelcontextprotocol/server-filesystem\",\n            \"/Users/fuzhengwei/Desktop\",\n            \"/Users/fuzhengwei/Desktop\"\n        ]\n    }\n}',180,1,'2025-05-05 13:14:42','2025-05-05 13:27:46'),
+	(4,'g-search','stdio','{\n    \"g-search\": {\n        \"command\": \"npx\",\n        \"args\": [\n            \"-y\",\n            \"g-search-mcp\"\n        ]\n    }\n}',180,1,'2025-05-05 13:14:42','2025-05-10 08:23:58');
 
 /*!40000 ALTER TABLE `ai_client_tool_mcp` ENABLE KEYS */;
 UNLOCK TABLES;

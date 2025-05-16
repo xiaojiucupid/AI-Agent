@@ -47,3 +47,4 @@ build/
 /ai-agent-station-types/pom.xml.versionsBackup
 /.idea/
 /docs/md/.$ai-agent-station.drawio.bkp
+/ai-agent-station-app/.local-config
