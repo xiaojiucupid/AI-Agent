@@ -22,18 +22,18 @@
 - 注册，CSDN 平台，用于自动推送 MCP 发帖服务 [https://www.csdn.net/](https://www.csdn.net/) 
 - 需要使用 OpenAi 模型，推荐 gpt-4.1、gpt-4.1-mini
 
-```java
+---
+
 OpenAi 渠道对接说明：
 
-1. 进入 https://openai.itedus.cn/#/mall 购买最低的这个，就够测试用。（如果大量使用，可以买token更多的，实惠）
+1. 进入 [https://openai.itedus.cn/#/mall](https://openai.itedus.cn/#/mall) 购买最低的这个，就够测试用。（如果大量使用，可以买token更多的，实惠）
 
-2. 购买后在左下角设置里，点击【查看接口】「base-url: https://apis.itedus.cn」
+2. 购买后在左下角设置里，点击【`查看接口`】「base-url: https://apis.itedus.cn」api-key，从`查看接口`获取，sk 开头的。
 
 3. 你可以把点击查看接口的内容，导入到 ApiPost、ApiFox 等工具进行调用验证。
 
 支持；gpt-4o、gpt-4.1、gpt-4.1-mini、claude-3-7-sonnet-20250219
 建议；gpt-4.1、gpt-4.1-mini，效果更好，速度更快，消耗更低。
-```
 
 ## 2. 部署脚本
 
