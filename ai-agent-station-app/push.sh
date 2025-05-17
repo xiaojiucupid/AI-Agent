@@ -9,7 +9,7 @@ set -e
 ALIYUN_REGISTRY="registry.cn-hangzhou.aliyuncs.com"
 NAMESPACE="fuzhengwei"
 IMAGE_NAME="ai-agent-station-app"
-IMAGE_TAG="1.6"
+IMAGE_TAG="1.0.0"
 
 # 读取本地配置文件
 if [ -f ".local-config" ]; then
