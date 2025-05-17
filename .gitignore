@@ -48,3 +48,5 @@ build/
 /.idea/
 /docs/md/.$ai-agent-station.drawio.bkp
 /ai-agent-station-app/.local-config
+/browser-state-0.json
+/browser-state-0-fingerprint.json

@@ -2,8 +2,9 @@
 
 ## 1. 前置说明
 
-- 云服务器 [https://618.gaga.plus](https://618.gaga.plus) 2c4g 系统镜像 centos 7.9 / 应用镜像 docker - 防火墙开放端口；9000、8091
+- 云服务器 [https://618.gaga.plus](https://618.gaga.plus) 2c4g 系统镜像 centos 7.9 / 应用镜像 docker - 防火墙开放端口；9000、8091。用云服务器公网IP，替换 dev-ops/nginx/html 下，admin，js，里面的接口IP地址。搜索，192.168.1.109 替换你的 IP
 - Docker 安装（含 docker-compose） [https://bugstack.cn/md/road-map/docker.html](https://bugstack.cn/md/road-map/docker.html)
+- 需要使用 OpenAi 模型，推荐 gpt-4.1、gpt-4.1-mini
 
 ## 2. 脚本说明
 
