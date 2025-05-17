@@ -28,7 +28,7 @@ OpenAi 渠道对接说明：
 
 1. 进入 [https://openai.itedus.cn/#/mall](https://openai.itedus.cn/#/mall) 购买最低的这个，就够测试用。（如果大量使用，可以买token更多的，实惠）
 
-2. 购买后在左下角设置里，点击【`查看接口`】「base-url: https://apis.itedus.cn」api-key，从`查看接口`获取，sk 开头的。
+2. 购买后在左下角设置里，点击【`查看接口`】base-url: https://apis.itedus.cn api-key，从`查看接口`获取，sk 开头的。
 
 3. 你可以把点击查看接口的内容，导入到 ApiPost、ApiFox 等工具进行调用验证。
 
