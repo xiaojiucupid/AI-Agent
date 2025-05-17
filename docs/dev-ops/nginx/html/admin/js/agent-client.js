@@ -83,7 +83,7 @@ const AgentClientManager = {
         };
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -103,7 +103,7 @@ const AgentClientManager = {
      */
     loadAgentClientByAgentId: function(agentId) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientByAgentId?agentId=${agentId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientByAgentId?agentId=${agentId}`,
             type: 'GET',
             success: (res) => {
                 this.renderAgentClientList(res);
@@ -122,7 +122,7 @@ const AgentClientManager = {
      */
     loadAgentClientByClientId: function(clientId) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientByClientId?clientId=${clientId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientByClientId?clientId=${clientId}`,
             type: 'GET',
             success: (res) => {
                 this.renderAgentClientList(res);
@@ -261,7 +261,7 @@ const AgentClientManager = {
      */
     editAgentClient: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/queryAgentClientById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showAgentClientModal(res);
@@ -309,7 +309,7 @@ const AgentClientManager = {
      */
     addAgentClient: function(agentClient) {
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/addAgentClient',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/addAgentClient',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(agentClient),
@@ -337,7 +337,7 @@ const AgentClientManager = {
      */
     updateAgentClient: function(agentClient) {
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/updateAgentClient',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/updateAgentClient',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(agentClient),
@@ -378,7 +378,7 @@ const AgentClientManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/client/deleteAgentClient?id=${this.deleteAgentClientId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/client/deleteAgentClient?id=${this.deleteAgentClientId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

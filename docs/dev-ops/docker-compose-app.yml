@@ -4,12 +4,11 @@ version: '3.8'
 # 你需要修改system为你自身系统的仓库名
 services:
   # 部署前端项目
-  nginx:
+  ai-agent-station-front:
     image: registry.cn-hangzhou.aliyuncs.com/xfg-studio/nginx:latest
-    container_name: nginx
+    container_name: ai-agent-station-front
     restart: always
     ports:
-      - '443:443'
       - '80:80'
     volumes:
       - ./nginx/html:/usr/share/nginx/html
@@ -38,7 +37,7 @@ services:
       - my-network
 
   mcp-server-weixin-app:
-    #    image: fuzhengwei/  mcp-server-weixin-app:1.1
+    #    image: fuzhengwei/mcp-server-weixin-app:1.1
     image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/mcp-server-weixin-app:1.1
     container_name: mcp-server-weixin-app
     restart: always
@@ -62,8 +61,13 @@ services:
     networks:
       - my-network
 
+  # 注意；因为 ai agent 配置了联网能力，需要部署应用后，手动安装 playwright
+  # 进入后端；docker exec -it ai-agent-station-app /bin/bash
+  # 手动安装（1）；npx playwright@1.52.0 install-deps
+  # 手动安装（1）；npx playwright@1.52.0 install
   ai-agent-station-app:
-    image: registry.cn-hangzhou.aliyuncs.com/xfg-studio/ai-agent-station-app:1.0
+    image: fuzhengwei/ai-agent-station-app:1.0.0
+#    image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/ai-agent-station-app:1.6
     container_name: ai-agent-station-app
     restart: on-failure
     ports:
@@ -73,16 +77,17 @@ services:
       - SERVER_PORT=8091
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=123456
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/big_market?serverTimezone=UTC&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ai-agent-station?serverTimezone=UTC&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Shanghai
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_USERNAME=postgres
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_PASSWORD=postgres
-      - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:15432/ai-rag-knowledge
+      - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:5432/ai-rag-knowledge
       - SPRING_OPENAI_BASE_URL=https://apis.itedus.cn
       - SPRING_OPENAI_API_KEY=sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152
     volumes:
       - ./log:/data/log
+      - ./mcp:/Users/fuzhengwei/Desktop
     logging:
       driver: "json-file"
       options:

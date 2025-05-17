@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadRagOptions = () => {
         const ragSelect = document.getElementById('ragSelect');
 
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/queryAllValidRagOrder', {
+        fetch('http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/queryAllValidRagOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 获取AI代理列表
     function fetchAiAgents() {
         // 发送请求获取AI代理列表
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/queryAllAgentConfigListByChannel', {
+        fetch('http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/queryAllAgentConfigListByChannel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 获取提示词列表
     function fetchPromptTemplates() {
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/queryAllSystemPromptConfig', {
+        fetch('http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/queryAllSystemPromptConfig', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -373,7 +373,7 @@ function startEventStream(message) {
     const aiAgentId = aiAgentSelect.value;
     const aiModelModel = aiAgentSelect.options[aiAgentSelect.selectedIndex].getAttribute('model');
 
-    let url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?aiAgentId=${aiAgentId}&ragId=${ragIdParam}&message=${encodeURIComponent(message)}`;
+    let url = `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/agent/chat_stream?aiAgentId=${aiAgentId}&ragId=${ragIdParam}&message=${encodeURIComponent(message)}`;
 
     currentEventSource = new EventSource(url);
     let accumulatedContent = '';

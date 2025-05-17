@@ -66,7 +66,7 @@ const ClientAdvisorConfigManager = {
         };
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/queryClientAdvisorConfigList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/queryClientAdvisorConfigList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -211,7 +211,7 @@ const ClientAdvisorConfigManager = {
      */
     editAdvisorConfig: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/queryClientAdvisorConfigById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/queryClientAdvisorConfigById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showAdvisorConfigModal(res);
@@ -249,7 +249,7 @@ const ClientAdvisorConfigManager = {
             // 编辑模式
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/updateClientAdvisorConfig',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/updateClientAdvisorConfig',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -272,7 +272,7 @@ const ClientAdvisorConfigManager = {
         } else {
             // 新增模式
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/addClientAdvisorConfig',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/addClientAdvisorConfig',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -314,7 +314,7 @@ const ClientAdvisorConfigManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/deleteClientAdvisorConfig?id=${this.deleteAdvisorConfigId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/config/deleteClientAdvisorConfig?id=${this.deleteAdvisorConfigId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

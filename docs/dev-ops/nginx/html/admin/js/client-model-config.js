@@ -67,14 +67,14 @@ const ClientModelConfigManager = {
      * 加载客户端模型配置列表
      */
     loadClientModelConfigList: function() {
-        let url = 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigList';
+        let url = 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigList';
         let params = {};
         
         // 根据搜索类型构建查询参数
         if (this.searchType === 'clientId' && this.searchValue) {
-            url = `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigByClientId?clientId=${this.searchValue}`;
+            url = `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigByClientId?clientId=${this.searchValue}`;
         } else if (this.searchType === 'modelId' && this.searchValue) {
-            url = `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigByModelId?modelId=${this.searchValue}`;
+            url = `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigByModelId?modelId=${this.searchValue}`;
         } else {
             // 默认查询所有
             params = {
@@ -263,7 +263,7 @@ const ClientModelConfigManager = {
      */
     editClientModelConfig: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/queryClientModelConfigById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showClientModelConfigModal(res);
@@ -300,8 +300,8 @@ const ClientModelConfigManager = {
 
         // 判断是新增还是更新
         const url = params.id ? 
-            'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/updateClientModelConfig' : 
-            'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/addClientModelConfig';
+            'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/updateClientModelConfig' : 
+            'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/addClientModelConfig';
 
         $.ajax({
             url: url,
@@ -346,7 +346,7 @@ const ClientModelConfigManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/config/deleteClientModelConfig?id=${this.deleteClientModelConfigId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/config/deleteClientModelConfig?id=${this.deleteClientModelConfigId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

@@ -66,7 +66,7 @@ const SystemPromptManager = {
         };
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/querySystemPromptList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/querySystemPromptList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -215,7 +215,7 @@ const SystemPromptManager = {
      */
     editSystemPrompt: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/querySystemPromptById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/querySystemPromptById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showSystemPromptModal(res);
@@ -253,7 +253,7 @@ const SystemPromptManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/updateSystemPrompt',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/updateSystemPrompt',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -277,7 +277,7 @@ const SystemPromptManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/addSystemPrompt',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/addSystemPrompt',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -320,7 +320,7 @@ const SystemPromptManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/deleteSystemPrompt?id=${this.deleteSystemPromptId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/deleteSystemPrompt?id=${this.deleteSystemPromptId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

@@ -66,7 +66,7 @@ const TaskScheduleManager = {
         };
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/task/queryTaskScheduleList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/task/queryTaskScheduleList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -215,7 +215,7 @@ const TaskScheduleManager = {
      */
     editTaskSchedule: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/task/queryTaskScheduleById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/task/queryTaskScheduleById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showTaskScheduleModal(res);
@@ -257,7 +257,7 @@ const TaskScheduleManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/task/updateTaskSchedule',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/task/updateTaskSchedule',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -280,7 +280,7 @@ const TaskScheduleManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/task/addTaskSchedule',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/task/addTaskSchedule',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -322,7 +322,7 @@ const TaskScheduleManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/task/deleteTaskSchedule?id=${this.deleteTaskScheduleId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/task/deleteTaskSchedule?id=${this.deleteTaskScheduleId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

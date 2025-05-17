@@ -225,8 +225,8 @@ LOCK TABLES `ai_client_model` WRITE;
 
 INSERT INTO `ai_client_model` (`id`, `model_name`, `base_url`, `api_key`, `completions_path`, `embeddings_path`, `model_type`, `model_version`, `timeout`, `status`, `create_time`, `update_time`)
 VALUES
-	(1,'智能体对话','https://apis.itedus.cn','sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:22:46'),
-	(2,'流式对话','https://apis.itedus.cn','sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:21:59');
+	(1,'智能体对话','https://apis.itedus.cn','sk-d4lJnWOkhyLwmcirE3DeBeB1744d48Bf9e394e4e3578C0Bd','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:22:46'),
+	(2,'流式对话','https://apis.itedus.cn','sk-d4lJnWOkhyLwmcirE3DeBeB1744d48Bf9e394e4e3578C0Bd','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:21:59');
 
 /*!40000 ALTER TABLE `ai_client_model` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -396,8 +396,8 @@ LOCK TABLES `ai_client_tool_mcp` WRITE;
 
 INSERT INTO `ai_client_tool_mcp` (`id`, `mcp_name`, `transport_type`, `transport_config`, `request_timeout`, `status`, `create_time`, `update_time`)
 VALUES
-	(1,'CSDN自动发帖','sse','{\n	\"baseUri\":\"http://192.168.1.109:8101\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:52'),
-	(2,'微信公众号消息通知','sse','{\n	\"baseUri\":\"http://192.168.1.109:8102\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:57'),
+	(1,'CSDN自动发帖','sse','{\n	\"baseUri\":\"http://mcp-server-csdn-app:8101\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:52'),
+	(2,'微信公众号消息通知','sse','{\n	\"baseUri\":\"http://mcp-server-weixin-app:8102\"\n}',180,1,'2025-05-02 18:43:28','2025-05-05 12:07:57'),
 	(3,'filesystem','stdio','{\n    \"filesystem\": {\n        \"command\": \"npx\",\n        \"args\": [\n            \"-y\",\n            \"@modelcontextprotocol/server-filesystem\",\n            \"/Users/fuzhengwei/Desktop\",\n            \"/Users/fuzhengwei/Desktop\"\n        ]\n    }\n}',180,1,'2025-05-05 13:14:42','2025-05-05 13:27:46'),
 	(4,'g-search','stdio','{\n    \"g-search\": {\n        \"command\": \"npx\",\n        \"args\": [\n            \"-y\",\n            \"g-search-mcp\"\n        ]\n    }\n}',180,1,'2025-05-05 13:14:42','2025-05-10 08:23:58');
 
@@ -420,18 +420,6 @@ CREATE TABLE `ai_rag_order` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_rag_name` (`rag_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识库配置表';
-
-LOCK TABLES `ai_rag_order` WRITE;
-/*!40000 ALTER TABLE `ai_rag_order` DISABLE KEYS */;
-
-INSERT INTO `ai_rag_order` (`id`, `rag_name`, `knowledge_tag`, `status`, `create_time`, `update_time`)
-VALUES
-	(1,'生成文章提示词','生成文章提示词',1,'2025-05-05 13:14:42','2025-05-06 20:14:23');
-
-/*!40000 ALTER TABLE `ai_rag_order` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

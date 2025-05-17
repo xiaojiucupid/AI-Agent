@@ -66,7 +66,7 @@ const ClientAdvisorManager = {
         };
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -214,7 +214,7 @@ const ClientAdvisorManager = {
      */
     editClientAdvisor: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showClientAdvisorModal(res);
@@ -254,7 +254,7 @@ const ClientAdvisorManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/updateClientAdvisor',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/updateClientAdvisor',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -277,7 +277,7 @@ const ClientAdvisorManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/addClientAdvisor',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/addClientAdvisor',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -319,7 +319,7 @@ const ClientAdvisorManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/deleteClientAdvisor?id=${this.deleteClientAdvisorId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/advisor/deleteClientAdvisor?id=${this.deleteClientAdvisorId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {

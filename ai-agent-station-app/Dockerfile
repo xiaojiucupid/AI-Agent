@@ -1,5 +1,5 @@
 # 基础镜像
-FROM openjdk:8-jre-slim
+FROM openjdk:17-jdk-slim
 
 # 作者
 MAINTAINER xiaofuge
@@ -10,6 +10,18 @@ ENV PARAMS=""
 # 时区
 ENV TZ=PRC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 安装 Node.js 环境
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest && \
+    apt-get purge -y --auto-remove curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# 验证 Node.js 环境（可选）
+RUN node -v && npm -v
 
 # 添加应用
 ADD target/ai-agent-station-app.jar /ai-agent-station-app.jar

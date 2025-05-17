@@ -80,7 +80,7 @@ const ClientToolConfigManager = {
         }
 
         $.ajax({
-            url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/queryClientToolConfigList',
+            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/queryClientToolConfigList',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -232,7 +232,7 @@ const ClientToolConfigManager = {
      */
     editToolConfig: function(id) {
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/queryClientToolConfigById?id=${id}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/queryClientToolConfigById?id=${id}`,
             type: 'GET',
             success: (res) => {
                 this.showToolConfigModal(res);
@@ -282,7 +282,7 @@ const ClientToolConfigManager = {
             // 编辑模式
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/updateClientToolConfig',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/updateClientToolConfig',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -304,7 +304,7 @@ const ClientToolConfigManager = {
         } else {
             // 新增模式
             $.ajax({
-                url: 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/addClientToolConfig',
+                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/addClientToolConfig',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -345,7 +345,7 @@ const ClientToolConfigManager = {
         }
 
         $.ajax({
-            url: `http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/deleteClientToolConfig?id=${this.deleteToolConfigId}`,
+            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/config/deleteClientToolConfig?id=${this.deleteToolConfigId}`,
             type: 'GET',
             success: (res) => {
                 if (res) {
