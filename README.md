@@ -184,4 +184,5 @@ docker-compose -f docker-compose-app.yml up -d
 <div align="center">
     <img src="https://bugstack.cn/images/article/project/ai-rag-knowledge/ai-agent-station-1-07.png" width="950px">
 </div>
+
 - 部署后，可以尝试使用各项功能模块。更多使用案例视频；[https://www.bilibili.com/video/BV1NoENzsELn](https://www.bilibili.com/video/BV1NoENzsELn)
