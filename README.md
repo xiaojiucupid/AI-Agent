@@ -19,6 +19,7 @@
 - 注册，微信公众号测试平台，用于配置接收 MCP 消息通知 [https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index](https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index) 
 - 注册，CSDN 平台，用于自动推送 MCP 发帖服务 [https://www.csdn.net/](https://www.csdn.net/) 
 - 需要使用 OpenAi 模型，推荐 gpt-4.1、gpt-4.1-mini
+- 项目中用到了，星球里的扳手工程作为设计模式框架；需要下载工程，本地 install 这样就可以引入到 wrench 了（后续项目发布到maven审核完毕后，就不用自己 instal 了）。[https://gitcode.net/KnowledgePlanet/xfg-wrench](https://gitcode.net/KnowledgePlanet/xfg-wrench)
 
 ---
 
