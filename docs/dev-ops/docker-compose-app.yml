@@ -66,7 +66,7 @@ services:
   # 手动安装（1）；npx playwright@1.52.0 install-deps
   # 手动安装（2）；npx playwright@1.52.0 install
   ai-agent-station-app:
-#    image: fuzhengwei/ai-agent-station-app:1.0.0
+#    image: fuzhengwei/ai-agent-station-app:1.0.1
     image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/ai-agent-station-app:1.0.1
     container_name: ai-agent-station-app
     restart: on-failure
