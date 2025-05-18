@@ -67,7 +67,7 @@ services:
   # 手动安装（2）；npx playwright@1.52.0 install
   ai-agent-station-app:
 #    image: fuzhengwei/ai-agent-station-app:1.0.0
-    image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/ai-agent-station-app:1.0.0
+    image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/ai-agent-station-app:1.0.1
     container_name: ai-agent-station-app
     restart: on-failure
     ports:
@@ -82,9 +82,9 @@ services:
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_USERNAME=postgres
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_PASSWORD=postgres
-      - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:5432/ai-rag-knowledge
+      - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:5432/ai-rag-knowledge?connectTimeout=120
       - SPRING_OPENAI_BASE_URL=https://apis.itedus.cn
-      - SPRING_OPENAI_API_KEY=sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152
+      - SPRING_OPENAI_API_KEY=sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aF****联系小傅哥获取
     volumes:
       - ./log:/data/log
       - ./mcp:/Users/fuzhengwei/Desktop

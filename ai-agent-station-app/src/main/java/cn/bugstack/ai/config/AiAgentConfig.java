@@ -110,6 +110,10 @@ public class AiAgentConfig {
         dataSource.setMinimumIdle(minimumIdle);
         dataSource.setIdleTimeout(idleTimeout);
         dataSource.setConnectionTimeout(connectionTimeout);
+        // 确保在启动时连接数据库
+        dataSource.setInitializationFailTimeout(1);  // 设置为1ms，如果连接失败则快速失败
+        dataSource.setConnectionTestQuery("SELECT 1"); // 简单的连接测试查询
+        dataSource.setAutoCommit(true);
         dataSource.setPoolName("PgVectorHikariPool");
         return dataSource;
     }
