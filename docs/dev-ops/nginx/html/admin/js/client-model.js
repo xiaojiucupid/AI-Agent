@@ -66,7 +66,7 @@ const ClientModelManager = {
         };
 
         $.ajax({
-            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/queryClientModelList',
+            url: ApiConfig.getApiUrl('/ai/admin/client/model/queryClientModelList'),
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -210,7 +210,7 @@ const ClientModelManager = {
      */
     editClientModel: function(id) {
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/queryClientModelById?id=${id}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/client/model/queryClientModelById?id=${id}`),
             type: 'GET',
             success: (res) => {
                 this.showClientModelModal(res);
@@ -243,7 +243,7 @@ const ClientModelManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/updateClientModel',
+                url: ApiConfig.getApiUrl('/ai/admin/client/model/updateClientModel'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -266,7 +266,7 @@ const ClientModelManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/addClientModel',
+                url: ApiConfig.getApiUrl('/ai/admin/client/model/addClientModel'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -308,7 +308,7 @@ const ClientModelManager = {
         }
 
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/model/deleteClientModel?id=${this.deleteClientModelId}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/client/model/deleteClientModel?id=${this.deleteClientModelId}`),
             type: 'GET',
             success: (res) => {
                 if (res) {

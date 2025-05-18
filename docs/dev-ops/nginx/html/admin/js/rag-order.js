@@ -66,7 +66,7 @@ const RagOrderManager = {
         };
 
         $.ajax({
-            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/queryRagOrderList',
+            url: ApiConfig.getApiUrl('/ai/admin/rag/queryRagOrderList'),
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -237,7 +237,7 @@ const RagOrderManager = {
      */
     editRagOrder: function(id) {
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/queryRagOrderById?id=${id}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/rag/queryRagOrderById?id=${id}`),
             type: 'GET',
             success: (res) => {
                 this.showRagOrderModal(res);
@@ -273,8 +273,8 @@ const RagOrderManager = {
 
         // 根据是否有ID决定是新增还是更新
         const url = id ? 
-            'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/updateRagOrder' : 
-            'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/addRagOrder';
+            ApiConfig.getApiUrl('/ai/admin/rag/updateRagOrder') : 
+            ApiConfig.getApiUrl('/ai/admin/rag/addRagOrder');
 
         $.ajax({
             url: url,
@@ -318,7 +318,7 @@ const RagOrderManager = {
         }
 
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/rag/deleteRagOrder?id=${this.deleteRagOrderId}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/rag/deleteRagOrder?id=${this.deleteRagOrderId}`),
             type: 'GET',
             success: (res) => {
                 if (res) {

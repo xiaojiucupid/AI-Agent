@@ -1,9 +1,11 @@
 package cn.bugstack.ai.test.mcp;
 
+import cn.bugstack.ai.domain.agent.model.valobj.AiClientToolMcpVO;
 import cn.bugstack.ai.test.AiAgentTest;
 import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
 import io.modelcontextprotocol.client.transport.ServerParameters;
 import io.modelcontextprotocol.client.transport.StdioClientTransport;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,7 @@ public class MCPTest {
         OpenAiChatModel chatModel = OpenAiChatModel.builder()
                 .openAiApi(OpenAiApi.builder()
                         .baseUrl("https://apis.itedus.cn")
-                        .apiKey("sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e")
+                        .apiKey("sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A1AeBc9a8eBaF8E1")
 //                        .baseUrl("https://azure.itedus.cn")
 //                        .apiKey("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")
                         .completionsPath("v1/chat/completions")
@@ -55,7 +57,7 @@ public class MCPTest {
                         .build())
                 .defaultOptions(OpenAiChatOptions.builder()
                         .model("gpt-4.1")
-                        .toolCallbacks(new SyncMcpToolCallbackProvider(stdioMcpClient()).getToolCallbacks())
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient()).getToolCallbacks())
                         .build())
                 .build();
 
@@ -79,6 +81,18 @@ public class MCPTest {
         System.out.println("Stdio MCP Initialized: " + init);
 
         return mcpClient;
+
+    }
+
+    public McpSyncClient sseMcpClient() {
+
+        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://appbuilder.baidu.com/v2/ai_search/mcp")
+                .sseEndpoint("/sse?api_key=Bearer+bce-v3/ALTAK-3zODLb9qHozIftQlGwez5/2696e92781f5bf1ba1870e2958f239fd6dc822a4")
+                .build();
+        McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
+        var init_sse = mcpSyncClient.initialize();
+        log.info("Tool SSE MCP Initialized {}", init_sse);
+        return mcpSyncClient;
 
     }
 

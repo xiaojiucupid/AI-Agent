@@ -6,6 +6,8 @@
     <title>文件上传</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入配置文件 -->
+    <script src="js/config.js"></script>
     <style>
         /* 加载动画 */
         .loader {
@@ -77,7 +79,7 @@
         </div>
     </form>
 </div>
-
+<script src="js/config.js"></script>
 <script>
     const fileListElement = document.querySelector('#fileList ul');
 
@@ -135,7 +137,8 @@
        formData.append('tag', document.getElementById('tag').value);
        files.forEach(file => formData.append('files', file));
 
-       axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/agent/file/upload', formData)
+       // 使用配置文件中的API URL
+       axios.post(ApiConfig.getApiUrl('/ai/agent/file/upload'), formData)
          .then(response => {
            if (response.data.code === '0000') {
              // 成功提示并关闭窗口

@@ -134,7 +134,7 @@
         <p class="text-gray-600">正在解析仓库，请稍候...</p>
     </div>
 </div>
-
+<script src="js/config.js"></script>
 <script>
     // 添加表单输入样式
     document.querySelectorAll('.form-input-focus').forEach(input => {
@@ -209,7 +209,7 @@
         loadingOverlay.style.display = 'flex';
         statusElement.textContent = '';
 
-        fetch('http://localhost:8090/api/v1/rag/analyze_git_repository', {
+        fetch(ApiConfig.getApiUrl('/rag/analyze_git_repository'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

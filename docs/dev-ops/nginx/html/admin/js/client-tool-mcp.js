@@ -66,7 +66,7 @@ const McpManager = {
         };
 
         $.ajax({
-            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/mcp/queryMcpList',
+            url: ApiConfig.getApiUrl('/ai/admin/client/tool/mcp/queryMcpList'),
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -239,7 +239,7 @@ const McpManager = {
      */
     editMcp: function(id) {
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/mcp/queryMcpById?id=${id}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/client/tool/mcp/queryMcpById?id=${id}`),
             type: 'GET',
             success: (res) => {
                 this.showMcpModal(res);
@@ -284,7 +284,7 @@ const McpManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/mcp/updateMcp',
+                url: ApiConfig.getApiUrl('/ai/admin/client/tool/mcp/updateMcp'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -307,7 +307,7 @@ const McpManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/mcp/addMcp',
+                url: ApiConfig.getApiUrl('/ai/admin/client/tool/mcp/addMcp'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -349,7 +349,7 @@ const McpManager = {
         }
 
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/client/tool/mcp/deleteMcp?id=${this.deleteMcpId}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/client/tool/mcp/deleteMcp?id=${this.deleteMcpId}`),
             type: 'GET',
             success: (res) => {
                 if (res) {

@@ -15,7 +15,7 @@
 
 ## 1. 前置说明
 
-- 云服务器 [https://618.gaga.plus](https://618.gaga.plus) 2c4g 系统镜像 centos 7.9 / 应用镜像 docker - 防火墙开放端口；9000、8091、8899。用云服务器公网IP，替换 dev-ops/nginx/html 下，admin，js，里面的接口IP地址。搜索，192.168.1.109 替换你的 IP
+- 云服务器 [https://618.gaga.plus](https://618.gaga.plus) 2c4g 系统镜像 centos 7.9 / 应用镜像 docker - 防火墙开放端口；9000、8091、8899、5050。用云服务器公网IP，替换 dev-ops/nginx/html 下，admin，js，里面的接口IP地址。搜索，192.168.1.109 替换你的 IP
 - SSH&SFT 工具，链接云服务器 [https://termius.com/](https://termius.com/) - `免费的就可以使用`
 - Docker 安装（含 docker-compose） [https://bugstack.cn/md/road-map/docker.html](https://bugstack.cn/md/road-map/docker.html)
 - 注册，微信公众号测试平台，用于配置接收 MCP 消息通知 [https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index](https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index) 
@@ -47,7 +47,71 @@ OpenAi 渠道对接说明：
 - 如果，你只是想部署云服务器进行验证，那么先不需要构建，可以直接使用我已经做好的镜像。
 - 注意，各个服务，mysql、redis、pg等，配置的账号密码，都在 docker-compose-environment-aliyun.yml 中。
 
-### 2.1 修改项，微信配置
+### 2.1 修改项，openai 模型
+
+```java
+ai-agent-station-app:
+   image: fuzhengwei/ai-agent-station-app:1.0.0
+  image: registry.cn-hangzhou.aliyuncs.com/fuzhengwei/ai-agent-station-app:1.0.0
+  container_name: ai-agent-station-app
+  restart: on-failure
+  ports:
+    - "8091:8091"
+  environment:
+    - TZ=PRC
+    - SERVER_PORT=8091
+    - SPRING_DATASOURCE_USERNAME=root
+    - SPRING_DATASOURCE_PASSWORD=123456
+    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ai-agent-station?serverTimezone=UTC&characterEncodi
+    - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+    - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_USERNAME=postgres
+    - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_PASSWORD=postgres
+    - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:5432/ai-rag-knowledge
+    - SPRING_OPENAI_BASE_URL=https://apis.itedus.cn
+    - SPRING_OPENAI_API_KEY=sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6***可以联系小傅哥获取
+  volumes:
+    - ./log:/data/log
+    - ./mcp:/Users/fuzhengwei/Desktop
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+  networks:
+    - my-network
+```
+
+- 如果，postgresql 库链接使用（上传知识库时），可以把 `vector_db:5432` 修改为 `实际公网IP:15432 `，但要把 15432 端口在防火墙开放。
+- SPRING_OPENAI_BASE_URL、SPRING_OPENAI_API_KEY，配置 openai 模型，地址和key。这个是给知识库使用的，是固定的。
+
+### 2.2 修改项，服务端IP
+
+```javascript
+/**
+ * 全局配置文件
+ * 用于集中管理服务器地址等配置信息
+ */
+const ApiConfig = {
+    // 服务器基础地址
+    BASE_URL: 'http://127.0.0.1:8091',
+    
+    // API路径前缀
+    API_PREFIX: '/ai-agent-station/api/v1',
+    
+    // 获取完整API URL
+    getApiUrl: function(path) {
+        return this.BASE_URL + this.API_PREFIX + path;
+    }
+};
+
+// 防止被修改
+Object.freeze(ApiConfig);
+```
+
+- 在 `nginx/html/js/config.js`，修改 BASE_URL 为你地址。
+
+### 2.3 修改项，微信配置
 
 **docker-compose-environment-aliyun.yml 部分配置**
 
@@ -88,7 +152,7 @@ mcp-server-weixin-app:
 	- 模板：`平台：{{platform_name.DATA}} 主题：{{subject_name.DATA}} 说明：{{description_name.DATA}}`
 - WEIXIN_API_TOUSER 获取来源；使用手机扫描【测试号二维码】，之后用户列表就可以拿到你的微信号，填写到这里。这个ID就表示发送给谁。
 
-### 2.2 修改项，CSDN配置
+### 2.4 修改项，CSDN配置
 
 ```java
 mcp-server-csdn-app:
@@ -176,6 +240,7 @@ docker-compose -f docker-compose-app.yml up -d
 
 - 你可以进入项目后台，点击`>_` 即可进入，也可以通过命令 `docker exec -it ai-agent-station-app /bin/bash`
 - 之后分别执行 `npx playwright@1.52.0 install-deps`、`npx playwright@1.52.0 install` 来安装联网。
+- 注意，如果你的云服务器/本地电脑，没有配置访问谷歌搜索的能力，可能联网会超时检索失败。可以在找其他MCP 网络搜索能力替代。
 
 ## 4. 访问页面
 

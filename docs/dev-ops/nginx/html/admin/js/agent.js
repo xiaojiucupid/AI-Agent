@@ -68,7 +68,7 @@ const AgentManager = {
         };
 
         $.ajax({
-            url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/queryAiAgentList',
+            url: ApiConfig.getApiUrl('/ai/admin/agent/queryAiAgentList'),
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(params),
@@ -215,7 +215,7 @@ const AgentManager = {
      */
     editAgent: function(id) {
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/queryAiAgentById?id=${id}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/agent/queryAiAgentById?id=${id}`),
             type: 'GET',
             success: (res) => {
                 this.showAgentModal(res);
@@ -248,7 +248,7 @@ const AgentManager = {
             // 编辑
             params.id = parseInt(id);
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/updateAiAgent',
+                url: ApiConfig.getApiUrl('/ai/admin/agent/updateAiAgent'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -271,7 +271,7 @@ const AgentManager = {
         } else {
             // 新增
             $.ajax({
-                url: 'http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/addAiAgent',
+                url: ApiConfig.getApiUrl('/ai/admin/agent/addAiAgent'),
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(params),
@@ -313,7 +313,7 @@ const AgentManager = {
         }
 
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/admin/agent/deleteAiAgent?id=${this.deleteAgentId}`,
+            url: ApiConfig.getApiUrl(`/ai/admin/agent/deleteAiAgent?id=${this.deleteAgentId}`),
             type: 'GET',
             success: (res) => {
                 if (res) {
@@ -345,7 +345,7 @@ const AgentManager = {
         
         // 调用预热接口
         $.ajax({
-            url: `http://192.168.1.104:8091/ai-agent-station/api/v1/ai/agent/preheat?aiAgentId=${id}`,
+            url: ApiConfig.getApiUrl(`/ai/agent/preheat?aiAgentId=${id}`),
             type: 'GET',
             success: (res) => {
                 // 隐藏加载动画

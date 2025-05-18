@@ -137,10 +137,13 @@ public class AiAgentConfig {
      * SELECT * FROM vector_store_openai
      */
     @Bean("vectorStore")
-    public PgVectorStore pgVectorStore(@Qualifier("pgVectorJdbcTemplate") JdbcTemplate jdbcTemplate) {
+    public PgVectorStore pgVectorStore(@Value("${spring.ai.openai.base-url}") String baseUrl,
+                                       @Value("${spring.ai.openai.api-key}") String apiKey,
+            @Qualifier("pgVectorJdbcTemplate") JdbcTemplate jdbcTemplate) {
+
         OpenAiApi openAiApi = OpenAiApi.builder()
-                .baseUrl("https://apis.itedus.cn")
-                .apiKey("sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152")
+                .baseUrl(baseUrl)
+                .apiKey(apiKey)
                 .build();
 
         OpenAiEmbeddingModel embeddingModel = new OpenAiEmbeddingModel(openAiApi);
