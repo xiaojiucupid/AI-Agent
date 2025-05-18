@@ -1,7 +1,5 @@
 # Ai Agent 智能体，部署说明 v1.0.0
 
-
-
 - docker 使用文档：[https://bugstack.cn/md/road-map/docker.html](https://bugstack.cn/md/road-map/docker.html)
 
 - DDD 教程；
@@ -224,6 +222,7 @@ docker-compose -f docker-compose-app.yml up -d
 
 - 安装完成后，所有内容都会运行起来。
 - 你可以进入到 ai-agent-station-app 点 📃 文件，可以查看运行日志，它的加载情况。
+- `SELECT * FROM vector_store_openai` 可以查询 pg 库表。
 
 ### 3.4 安装联网
 

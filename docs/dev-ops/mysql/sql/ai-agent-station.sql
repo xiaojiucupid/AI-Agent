@@ -225,8 +225,8 @@ LOCK TABLES `ai_client_model` WRITE;
 
 INSERT INTO `ai_client_model` (`id`, `model_name`, `base_url`, `api_key`, `completions_path`, `embeddings_path`, `model_type`, `model_version`, `timeout`, `status`, `create_time`, `update_time`)
 VALUES
-	(1,'智能体对话','https://apis.itedus.cn','sk-d4lJnWOkhyLwmcirE3DeBeB1744d48Bf9e394e4e3578C0Bd','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:22:46'),
-	(2,'流式对话','https://apis.itedus.cn','sk-d4lJnWOkhyLwmcirE3DeBeB1744d48Bf9e394e4e3578C0Bd','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:21:59');
+	(1,'智能体对话','https://apis.itedus.cn','sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A***可以找小傅哥申请','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:22:46'),
+	(2,'流式对话','https://apis.itedus.cn','sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A***可以找小傅哥申请','v1/chat/completions','v1/embeddings','openai','gpt-4.1-mini',30,1,'2025-05-02 07:30:51','2025-05-07 09:21:59');
 
 /*!40000 ALTER TABLE `ai_client_model` ENABLE KEYS */;
 UNLOCK TABLES;
