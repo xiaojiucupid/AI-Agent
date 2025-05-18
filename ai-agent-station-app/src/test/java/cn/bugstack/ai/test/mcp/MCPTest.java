@@ -50,8 +50,6 @@ public class MCPTest {
                 .openAiApi(OpenAiApi.builder()
                         .baseUrl("https://apis.itedus.cn")
                         .apiKey("sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A1AeBc9a8eBaF8E1")
-//                        .baseUrl("https://azure.itedus.cn")
-//                        .apiKey("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")
                         .completionsPath("v1/chat/completions")
                         .embeddingsPath("v1/embeddings")
                         .build())
@@ -84,10 +82,11 @@ public class MCPTest {
 
     }
 
+    // https://console.bce.baidu.com/ai_apaas/mcpServerCenter/mcp_server_appbuilder_ai_search/detail
     public McpSyncClient sseMcpClient() {
 
         HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder("http://appbuilder.baidu.com/v2/ai_search/mcp")
-                .sseEndpoint("/sse?api_key=Bearer+bce-v3/ALTAK-3zODLb9qHozIftQlGwez5/2696e92781f5bf1ba1870e2958f239fd6dc822a4")
+                .sseEndpoint("/sse?api_key=Bearer+bce-v3/ALTAK-3zODLb9qHozIftQlGwez5/2696e92781f***")
                 .build();
         McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
         var init_sse = mcpSyncClient.initialize();
