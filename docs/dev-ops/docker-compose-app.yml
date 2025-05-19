@@ -83,8 +83,8 @@ services:
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_USERNAME=postgres
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_PASSWORD=postgres
       - SPRING_VECTORSTORE_PGVECTOR_DATASOURCE_URL=jdbc:postgresql://vector_db:5432/ai-rag-knowledge?connectTimeout=120
-      - SPRING_OPENAI_BASE_URL=https://apis.itedus.cn
-      - SPRING_OPENAI_API_KEY=sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A***可以找小傅哥申请
+      - SPRING_AI_OPENAI_BASE_URL=https://apis.itedus.cn
+      - SPRING_AI_OPENAI_API_KEY=sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A***可以找小傅哥申请
     volumes:
       - ./log:/data/log
       - ./mcp:/Users/fuzhengwei/Desktop
