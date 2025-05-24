@@ -1,0 +1,12 @@
+25-05-18.13:43:05.034 [main            ] INFO  Application            - Starting Application v1.0 using Java 17.0.2 with PID 8 (/ai-agent-station-app.jar started by root in /)
+25-05-18.13:43:05.059 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-05-18.13:43:55.496 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+25-05-18.13:43:55.667 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+25-05-18.13:43:55.822 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-05-18.13:43:55.834 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+25-05-18.13:43:57.237 [main            ] INFO  [/ai-agent-station]    - Initializing Spring embedded WebApplicationContext
+25-05-18.13:43:57.256 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 41901 ms
+25-05-18.13:44:19.631 [main            ] INFO  PgVectorStore          - Using the vector table name: vector_store_openai. Is empty: false
+25-05-18.13:44:19.688 [main            ] INFO  PgVectorStore          - Initializing PGVectorStore schema for table: vector_store_openai in schema: public
+25-05-18.13:44:19.689 [main            ] INFO  PgVectorStore          - vectorTableValidationsEnabled false
+25-05-18.13:44:22.325 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.

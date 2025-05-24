@@ -23,16 +23,6 @@ import javax.sql.DataSource;
 @Configuration
 public class AiAgentConfig {
 
-//    @Bean
-//    public VectorStore vectorStore() {
-//        OpenAiApi openAiApi = OpenAiApi.builder()
-//                .baseUrl("https://apis.itedus.cn")
-//                .apiKey("sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152")
-//                .build();
-//
-//        return SimpleVectorStore.builder(new OpenAiEmbeddingModel(openAiApi)).build();
-//    }
-
     /**
      * 为 MyBatis 创建主数据源
      */

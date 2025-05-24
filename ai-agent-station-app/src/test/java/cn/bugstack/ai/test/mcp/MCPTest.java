@@ -49,17 +49,18 @@ public class MCPTest {
         OpenAiChatModel chatModel = OpenAiChatModel.builder()
                 .openAiApi(OpenAiApi.builder()
                         .baseUrl("https://apis.itedus.cn")
-                        .apiKey("sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A1AeBc9a8eBaF8E1")
+                        .apiKey("sk-lcuTPSSKTYSYQmrSE83a5694C38742B7Bd5f959106Ad6b85")
                         .completionsPath("v1/chat/completions")
                         .embeddingsPath("v1/embeddings")
                         .build())
                 .defaultOptions(OpenAiChatOptions.builder()
                         .model("gpt-4.1")
-                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient()).getToolCallbacks())
+//                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient()).getToolCallbacks())
+                        .toolCallbacks(new SyncMcpToolCallbackProvider(sseMcpClient2auth()).getToolCallbacks())
                         .build())
                 .build();
 
-        ChatResponse call = chatModel.call(Prompt.builder().messages(new UserMessage("小傅哥博客做什么的")).build());
+        ChatResponse call = chatModel.call(Prompt.builder().messages(new UserMessage("有哪些工具可以使用")).build());
         log.info("测试结果:{}", JSON.toJSONString(call.getResult()));
     }
 
@@ -82,6 +83,34 @@ public class MCPTest {
 
     }
 
+    /**
+     * {
+     * "baseUri":"http://127.0.0.1:9999/sse?apikey=DElk89iu8Ehhnbu"
+     * }
+     */
+    // https://console.bce.baidu.com/ai_apaas/mcpServerCenter/mcp_server_appbuilder_ai_search/detail
+    public McpSyncClient sseMcpClient2auth() {
+        HttpClientSseClientTransport sseClientTransport;
+
+        sseClientTransport = HttpClientSseClientTransport.builder("http://127.0.0.1:9999")
+                .sseEndpoint("/sse?apikey=DElk89iu8Ehhnbu")
+                .build();
+
+//        sseClientTransport = HttpClientSseClientTransport.builder("http://192.168.1.108:8101")
+//                .sseEndpoint("/sse")
+//                .build();
+
+//        sseClientTransport = HttpClientSseClientTransport.builder("http://127.0.0.1:9999")
+//                .sseEndpoint("/sse")
+//                .build();
+
+
+        McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
+        var init_sse = mcpSyncClient.initialize();
+        log.info("Tool SSE MCP Initialized {}", init_sse);
+        return mcpSyncClient;
+    }
+
     // https://console.bce.baidu.com/ai_apaas/mcpServerCenter/mcp_server_appbuilder_ai_search/detail
     public McpSyncClient sseMcpClient() {
 
@@ -92,8 +121,19 @@ public class MCPTest {
         var init_sse = mcpSyncClient.initialize();
         log.info("Tool SSE MCP Initialized {}", init_sse);
         return mcpSyncClient;
-
     }
 
+    public McpSyncClient sseMcpClient2amap() {
+        HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport
+                .builder("https://mcp.amap.com")
+                .sseEndpoint("/sse?key=801aabf79ed055c2ff78603cfe851787")
+                .build();
+
+        McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(180)).build();
+        var init_sse = mcpSyncClient.initialize();
+        log.info("Tool SSE MCP Initialized {}", init_sse);
+
+        return mcpSyncClient;
+    }
 
 }

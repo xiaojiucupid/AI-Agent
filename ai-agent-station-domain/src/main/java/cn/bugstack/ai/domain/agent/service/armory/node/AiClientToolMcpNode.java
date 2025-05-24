@@ -13,6 +13,7 @@ import io.modelcontextprotocol.client.transport.ServerParameters;
 import io.modelcontextprotocol.client.transport.StdioClientTransport;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -68,7 +69,27 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
         switch (transportType) {
             case "sse" -> {
                 AiClientToolMcpVO.TransportConfigSse transportConfigSse = aiClientToolMcpVO.getTransportConfigSse();
-                HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport.builder(transportConfigSse.getBaseUri()).build();
+                // http://127.0.0.1:9999/sse?apikey=DElk89iu8Ehhnbu
+                String originalBaseUri = transportConfigSse.getBaseUri();
+                String baseUri;
+                String sseEndpoint;
+
+                int queryParamStartIndex = originalBaseUri.indexOf("sse");
+                if (queryParamStartIndex != -1) {
+                    baseUri = originalBaseUri.substring(0, queryParamStartIndex - 1);
+                    sseEndpoint = originalBaseUri.substring(queryParamStartIndex - 1);
+                } else {
+                    baseUri = originalBaseUri;
+                    sseEndpoint = transportConfigSse.getSseEndpoint();
+                }
+
+                sseEndpoint = StringUtils.isBlank(sseEndpoint) ? "/sse" : sseEndpoint;
+
+                HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport
+                        .builder(baseUri) // 使用截取后的 baseUri
+                        .sseEndpoint(sseEndpoint) // 使用截取或默认的 sseEndpoint
+                        .build();
+
                 McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(aiClientToolMcpVO.getRequestTimeout())).build();
                 var init_sse = mcpSyncClient.initialize();
                 log.info("Tool SSE MCP Initialized {}", init_sse);

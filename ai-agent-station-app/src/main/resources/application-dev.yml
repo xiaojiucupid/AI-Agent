@@ -61,7 +61,7 @@ spring:
             connection-timeout: 30000
     openai:
       base-url: https://apis.itedus.cn
-      api-key: sk-gU8CZ5ZjMhqoq7922fD7488857F44d38A***可以找小傅哥申请
+      api-key: sk-lcuTPSSKTYSYQmrSE83a5694C38742B7Bd5f959106Ad6b85
 
 # MyBatis 配置
 mybatis:

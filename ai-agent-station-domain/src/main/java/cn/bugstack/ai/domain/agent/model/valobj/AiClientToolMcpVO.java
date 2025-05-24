@@ -56,6 +56,7 @@ public class AiClientToolMcpVO {
     @NoArgsConstructor
     public static class TransportConfigSse {
         private String baseUri;
+        private String sseEndpoint;
     }
 
     /**

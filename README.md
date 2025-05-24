@@ -11,6 +11,111 @@
   
 >本项目采用了 DDD 架构进行设计开发，可以阅读以上资料了解架构。
 
+## 0. 更新说明
+
+对 ai-agent-station 增加功能；
+
+### 1. 增加sse权限配置（2025年05月24日）
+
+#### 1.1 修改代码
+
+```java
+AiClientToolMcpVO.TransportConfigSse transportConfigSse = aiClientToolMcpVO.getTransportConfigSse();
+// http://127.0.0.1:9999/sse?apikey=DElk89iu8Ehhnbu
+String originalBaseUri = transportConfigSse.getBaseUri();
+String baseUri;
+String sseEndpoint;
+
+int queryParamStartIndex = originalBaseUri.indexOf("sse");
+if (queryParamStartIndex != -1) {
+    baseUri = originalBaseUri.substring(0, queryParamStartIndex - 1);
+    sseEndpoint = originalBaseUri.substring(queryParamStartIndex - 1);
+} else {
+    baseUri = originalBaseUri;
+    sseEndpoint = transportConfigSse.getSseEndpoint();
+}
+
+sseEndpoint = StringUtils.isBlank(sseEndpoint) ? "/sse" : sseEndpoint;
+HttpClientSseClientTransport sseClientTransport = HttpClientSseClientTransport
+        .builder(baseUri) // 使用截取后的 baseUri
+        .sseEndpoint(sseEndpoint) // 使用截取或默认的 sseEndpoint
+        .build();
+
+McpSyncClient mcpSyncClient = McpClient.sync(sseClientTransport).requestTimeout(Duration.ofMinutes(aiClientToolMcpVO.getRequestTimeout())).build();
+
+var init_sse = mcpSyncClient.initialize();
+log.info("Tool SSE MCP Initialized {}", init_sse);
+```
+
+- 2025年05月24日 修改 mcp 加载逻辑，可以满足 sse 认证方式配置。
+
+#### 1.2 json 数据库表 ai_client_tool_mcp 增加可配置方式
+
+```json
+{
+	"baseUri":"http://127.0.0.1:9999/sse?apikey=DElk89iu8Ehhnbu"
+}
+```
+
+```json
+{
+  "baseUri":"https://mcp.amap.com",
+  "sseEndpoint":"/sse?key=801aabf79ed055c2ff78603cfe851787"
+}
+```
+
+以上两种配置方式都支持。
+
+### 2. 通过 nginx 给 mcp 增加认证
+
+docs/dev-ops-v2 提供 nginx 为 mcp 增加认证。
+
+```json
+# 可以负载服务
+upstream backend_servers {
+    server 192.168.1.108:8101;
+}
+
+server {
+    listen 80;
+
+    server_name 192.168.1.104;  # 修改为你的实际服务器 IP 或域名【域名需要备案】
+
+    location /sse {
+        # 验证apikey参数，这个apikey也可以对接服务端接口来处理。
+        if ($arg_apikey != "DElk89iu8Ehhnbu") {
+            return 403; # 如果apikey不正确，返回403禁止访问
+        }
+
+        # 重写URL，去掉apikey参数
+        rewrite ^(/sse/)\?apikey=.* $1 break;
+
+        proxy_pass http://backend_servers;  # 将请求代理到上游服务器组
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        chunked_transfer_encoding off;
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /mcp/message {
+        proxy_pass http://backend_servers;  # 将请求代理到上游服务器组
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+}
+```
+
+- 通过这样的方式可以为你的 ai agent mcp 服务提供认证操作。
+
 ## 1. 前置说明
 
 - 云服务器 [https://618.gaga.plus](https://618.gaga.plus) 2c4g 系统镜像 centos 7.9 / 应用镜像 docker - 防火墙开放端口；9000、8091、8899、5050。用云服务器公网IP，替换 dev-ops/nginx/html 下，admin，js，里面的接口IP地址。搜索，192.168.1.109 替换你的 IP

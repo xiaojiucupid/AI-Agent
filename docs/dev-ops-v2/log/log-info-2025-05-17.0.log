@@ -1,0 +1,167 @@
+25-05-17.13:25:22.861 [main            ] INFO  Application            - Starting Application v1.0 using Java 17.0.2 with PID 7 (/ai-agent-station-app.jar started by root in /)
+25-05-17.13:25:22.903 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-05-17.13:25:36.836 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+25-05-17.13:25:36.877 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+25-05-17.13:25:36.887 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-05-17.13:25:36.888 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+25-05-17.13:25:37.000 [main            ] INFO  [/ai-agent-station]    - Initializing Spring embedded WebApplicationContext
+25-05-17.13:25:37.005 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 11148 ms
+25-05-17.13:25:40.185 [main            ] INFO  PgVectorStore          - Using the vector table name: vector_store_openai. Is empty: false
+25-05-17.13:25:40.200 [main            ] INFO  PgVectorStore          - Initializing PGVectorStore schema for table: vector_store_openai in schema: public
+25-05-17.13:25:40.200 [main            ] INFO  PgVectorStore          - vectorTableValidationsEnabled false
+25-05-17.13:25:41.173 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+25-05-17.13:25:42.733 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+25-05-17.13:25:42.803 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/ai-agent-station'
+25-05-17.13:25:42.847 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:25:42.841 [main            ] INFO  Application            - Started Application in 26.083 seconds (process running for 34.203)
+25-05-17.13:25:42.866 [main            ] INFO  Application            - 预热AiAgent服务，开始
+25-05-17.13:25:42.923 [scheduling-1    ] INFO  HikariDataSource       - MainHikariPool - Starting...
+25-05-17.13:25:43.498 [scheduling-1    ] INFO  HikariPool             - MainHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c3f8376
+25-05-17.13:25:43.503 [scheduling-1    ] INFO  HikariDataSource       - MainHikariPool - Start completed.
+25-05-17.13:25:43.788 [scheduling-1    ] INFO  AgentTaskJob           - 开始调度任务，ID: 1, 描述: 自动发帖和通知, Cron表达式: 0 0/30 * * * ?
+25-05-17.13:25:43.801 [pool-2-thread-1 ] INFO  RootNode               - 查询配置数据(ai_client_model) [1, 2, 3, 4]
+25-05-17.13:25:43.813 [scheduling-1    ] INFO  AgentTaskJob           - 任务调度成功，ID: 1
+25-05-17.13:25:43.814 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:25:43.834 [pool-2-thread-2 ] INFO  RootNode               - 查询配置数据(ai_client_tool_mcp) [1, 2, 3, 4]
+25-05-17.13:25:43.845 [pool-2-thread-3 ] INFO  RootNode               - 查询配置数据(ai_client_advisor) [1, 2, 3, 4]
+25-05-17.13:25:43.875 [pool-2-thread-4 ] INFO  RootNode               - 查询配置数据(ai_client_system_prompt) [1, 2, 3, 4]
+25-05-17.13:25:43.896 [pool-2-thread-5 ] INFO  RootNode               - 查询配置数据(ai_client) [1, 2, 3, 4]
+25-05-17.13:25:44.803 [main            ] INFO  RootNode               - Ai Agent 构建，数据加载节点 {"clientIdList":[1,2,3,4]}
+25-05-17.13:25:44.803 [main            ] INFO  AiClientToolMcpNode    - Ai Agent 构建，tool mcp 节点 {"clientIdList":[1,2,3,4]}
+25-05-17.13:25:46.203 [HttpClient-10-Worker-2] INFO  McpAsyncClient         - Server response with Protocol: 2024-11-05, Capabilities: ServerCapabilities[experimental=null, logging=LoggingCapabilities[], prompts=null, resources=null, tools=ToolCapabilities[listChanged=true]], Info: Implementation[name=mcp-server-csdn, version=1.0.0] and Instructions null
+25-05-17.13:25:46.281 [main            ] INFO  AiClientToolMcpNode    - Tool SSE MCP Initialized InitializeResult[protocolVersion=2024-11-05, capabilities=ServerCapabilities[experimental=null, logging=LoggingCapabilities[], prompts=null, resources=null, tools=ToolCapabilities[listChanged=true]], serverInfo=Implementation[name=mcp-server-csdn, version=1.0.0], instructions=null]
+25-05-17.13:25:46.308 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientToolMcp_1
+25-05-17.13:25:47.040 [HttpClient-11-Worker-1] INFO  McpAsyncClient         - Server response with Protocol: 2024-11-05, Capabilities: ServerCapabilities[experimental=null, logging=LoggingCapabilities[], prompts=null, resources=null, tools=ToolCapabilities[listChanged=true]], Info: Implementation[name=mcp-server-weixin, version=1.0.0] and Instructions null
+25-05-17.13:25:47.068 [main            ] INFO  AiClientToolMcpNode    - Tool SSE MCP Initialized InitializeResult[protocolVersion=2024-11-05, capabilities=ServerCapabilities[experimental=null, logging=LoggingCapabilities[], prompts=null, resources=null, tools=ToolCapabilities[listChanged=true]], serverInfo=Implementation[name=mcp-server-weixin, version=1.0.0], instructions=null]
+25-05-17.13:25:47.069 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientToolMcp_2
+25-05-17.13:25:50.676 [pool-7-thread-1 ] INFO  StdioClientTransport   - STDERR Message received: Secure MCP Filesystem Server running on stdio
+25-05-17.13:25:50.679 [pool-7-thread-1 ] INFO  StdioClientTransport   - STDERR Message received: Allowed directories: [ '/Users/fuzhengwei/Desktop', '/Users/fuzhengwei/Desktop' ]
+25-05-17.13:25:50.702 [pool-4-thread-1 ] INFO  McpAsyncClient         - Server response with Protocol: 2024-11-05, Capabilities: ServerCapabilities[experimental=null, logging=null, prompts=null, resources=null, tools=ToolCapabilities[listChanged=null]], Info: Implementation[name=secure-filesystem-server, version=0.2.0] and Instructions null
+25-05-17.13:25:50.704 [main            ] INFO  AiClientToolMcpNode    - Tool Stdio MCP Initialized InitializeResult[protocolVersion=2024-11-05, capabilities=ServerCapabilities[experimental=null, logging=null, prompts=null, resources=null, tools=ToolCapabilities[listChanged=null]], serverInfo=Implementation[name=secure-filesystem-server, version=0.2.0], instructions=null]
+25-05-17.13:25:50.705 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientToolMcp_3
+25-05-17.13:25:55.272 [pool-10-thread-1] INFO  McpAsyncClient         - Server response with Protocol: 2024-11-05, Capabilities: ServerCapabilities[experimental=null, logging=null, prompts=null, resources=null, tools=ToolCapabilities[listChanged=null]], Info: Implementation[name=g-search-mcp, version=0.1.0] and Instructions null
+25-05-17.13:25:55.274 [main            ] INFO  AiClientToolMcpNode    - Tool Stdio MCP Initialized InitializeResult[protocolVersion=2024-11-05, capabilities=ServerCapabilities[experimental=null, logging=null, prompts=null, resources=null, tools=ToolCapabilities[listChanged=null]], serverInfo=Implementation[name=g-search-mcp, version=0.1.0], instructions=null]
+25-05-17.13:25:55.275 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientToolMcp_4
+25-05-17.13:25:55.276 [main            ] INFO  AiClientAdvisorNode    - Ai Agent 构建，advisor 顾问节点 {"clientIdList":[1,2,3,4]}
+25-05-17.13:25:55.280 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientAdvisor_1
+25-05-17.13:25:55.388 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientAdvisor_5
+25-05-17.13:25:55.389 [main            ] INFO  AiClientModelNode      - Ai Agent 构建，客户端构建节点 {"clientIdList":[1,2,3,4]}
+25-05-17.13:25:55.403 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientModel_1
+25-05-17.13:25:55.587 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: AiClientModel_2
+25-05-17.13:25:55.589 [main            ] INFO  AiClientNode           - Ai Agent 构建，对话模型节点 {"clientIdList":[1,2,3,4]}
+25-05-17.13:25:55.616 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: ChatClient_1
+25-05-17.13:25:55.656 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: ChatClient_2
+25-05-17.13:25:55.681 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: ChatClient_3
+25-05-17.13:25:55.689 [main            ] INFO  AbstractArmorySupport  - 成功注册Bean: ChatClient_4
+25-05-17.13:25:55.690 [main            ] INFO  Application            - 预热AiAgent服务，完成
+25-05-17.13:26:42.789 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:26:42.794 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:27:42.744 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:27:42.751 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:28:42.701 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:28:42.707 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:29:42.657 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:29:42.667 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:29:59.827 [scheduling-1    ] INFO  AgentTaskJob           - 开始清理无效的智能体任务
+25-05-17.13:29:59.827 [agent-task-scheduler-1] INFO  AgentTaskJob           - 开始执行任务，ID: 1, 描述: 自动发帖和通知
+25-05-17.13:29:59.834 [agent-task-scheduler-1] INFO  AiAgentChatService     - 智能体对话请求，参数 1 发布CSDN文章
+25-05-17.13:29:59.843 [scheduling-1    ] INFO  AgentTaskJob           - 没有发现无效的任务需要清理
+25-05-17.13:30:07.221 [agent-task-scheduler-1] INFO  HikariDataSource       - PgVectorHikariPool - Starting...
+25-05-17.13:30:08.291 [agent-task-scheduler-1] ERROR AgentTaskJob           - 执行任务时发生错误，ID: 1
+org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:653)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:723)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:754)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:767)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:825)
+	at org.springframework.ai.vectorstore.pgvector.PgVectorStore.doSimilaritySearch(PgVectorStore.java:372)
+	at org.springframework.ai.vectorstore.observation.AbstractObservationVectorStore.lambda$similaritySearch$7(AbstractObservationVectorStore.java:126)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.vectorstore.observation.AbstractObservationVectorStore.similaritySearch(AbstractObservationVectorStore.java:125)
+	at cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor.before(RagAnswerAdvisor.java:96)
+	at cn.bugstack.ai.domain.agent.service.armory.factory.element.RagAnswerAdvisor.aroundCall(RagAnswerAdvisor.java:74)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.lambda$nextAroundCall$3(DefaultAroundAdvisorChain.java:160)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.nextAroundCall(DefaultAroundAdvisorChain.java:153)
+	at org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor.aroundCall(PromptChatMemoryAdvisor.java:90)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.lambda$nextCall$1(DefaultAroundAdvisorChain.java:124)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.nextCall(DefaultAroundAdvisorChain.java:119)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.lambda$doGetObservableChatClientResponse$1(DefaultChatClient.java:513)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:511)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:494)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.content(DefaultChatClient.java:489)
+	at cn.bugstack.ai.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:67)
+	at cn.bugstack.ai.trigger.job.AgentTaskJob.executeTask(AgentTaskJob.java:166)
+	at cn.bugstack.ai.trigger.job.AgentTaskJob.lambda$scheduleTask$1(AgentTaskJob.java:142)
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
+	at org.springframework.scheduling.concurrent.ReschedulingRunnable.run(ReschedulingRunnable.java:96)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.postgresql.util.PSQLException: Connection to 192.168.1.109:15432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352)
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54)
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273)
+	at org.postgresql.Driver.makeConnection(Driver.java:446)
+	at org.postgresql.Driver.connect(Driver.java:298)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:137)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:360)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:202)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:461)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:550)
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:98)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:111)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 34 common frames omitted
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:597)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260)
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268)
+	... 48 common frames omitted
+25-05-17.13:30:42.614 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:30:42.621 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:31:42.571 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:31:42.582 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:32:42.537 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:32:42.563 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:33:42.484 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:33:42.491 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:34:42.441 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:34:42.449 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:35:42.400 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:35:42.412 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:36:42.336 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:36:42.349 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:37:42.292 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:37:42.317 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:38:42.246 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:38:42.260 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:39:42.208 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:39:42.255 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:39:59.547 [scheduling-1    ] INFO  AgentTaskJob           - 开始清理无效的智能体任务
+25-05-17.13:39:59.559 [scheduling-1    ] INFO  AgentTaskJob           - 没有发现无效的任务需要清理
+25-05-17.13:40:42.184 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:40:42.222 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:41:42.120 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:41:42.144 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:42:42.074 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:42:42.088 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:43:42.031 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:43:42.084 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
+25-05-17.13:44:41.989 [scheduling-1    ] INFO  AgentTaskJob           - 开始刷新智能体任务调度配置
+25-05-17.13:44:41.997 [scheduling-1    ] INFO  AgentTaskJob           - 智能体任务调度配置刷新完成，当前活跃任务数: 1
