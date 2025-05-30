@@ -1,5 +1,5 @@
-# 基础镜像
-FROM openjdk:17-jdk-slim
+# 基础镜像 amd openjdk:17-jdk-slim arm openjdk:17-ea-17-jdk
+FROM openjdk:17-ea-17-jdk-slim-buster
 
 # 作者
 MAINTAINER xiaofuge
