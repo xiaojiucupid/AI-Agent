@@ -84,8 +84,8 @@ public class AiAgentTest {
 
         chatModel = OpenAiChatModel.builder()
                 .openAiApi(OpenAiApi.builder()
-                        .baseUrl("https://apis.itedus.cn")
-                        .apiKey("sk-lIqVNiHon00O6veJ15Cc57DaF5Dd401f93B3A107B4B3677e")
+                        .baseUrl("https://hiapi.online/v1")
+                        .apiKey("sk-Mrf7S4HwhQDHLRextJw9moKgH6EXpluHG5xzSXa9NCGpuQN2")
                         .completionsPath("v1/chat/completions")
                         .embeddingsPath("v1/embeddings")
                         .build())
